@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/user/CSS/regist.css">
+    <script type="text/javascript" src="/common/JS/header.js"></script> 
+</head>
+<body>
+    
+    <div th:replace="common/header.html"></div>
+
+    <form class="info" action="/user/regist" method="post">
+        <table style="margin: 0 auto">
+            <tr>
+                <td style="width: 110px">아이디 </td>
+                <td><input class="userId" type="text" maxlength="50" name="id" id="id" required placeholder="아이디를 입력해주세요."></td>
+                <td style="width: 100px"><input class="btn-id" type="button" value="중복확인" id="duplicationCheck"></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input  class="userPwd" type="password" maxlength="15" id="pwd" name="pwd" required placeholder="비밀번호를 입력해주세요."></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>비밀번호확인</td>
+                <td><input class="userPwd2" type="password" maxlength="15" id="repwd" name="repwd" required placeholder="비밀번호 재확인"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>이름 </td>
+                <td><input class="userName" type="text" name="userNm" id="userNm" required placeholder="이름을 입력해주세요."></td>
+            </tr>
+            <tr>
+                <td>연락처 </td>
+                <td><input class="phone" type="tel" name="phone" id="phone" placeholder="-를 포함해서 입력해주세요." required></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>우편번호</td>
+                <td><input type="text" name="zipCode" id="zipCode" readonly></td>
+                <td><input type="button" value="검색" id="searchZipCode"></td>
+            </tr>
+            <tr>
+                <td>주소</td>
+                <td><input class="address1" type="text" name="address1" id="address1" readonly></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>상세주소</td>
+                <td><input class="address2" type="text" name="address2" id="address2" placeholder="상세주소를 입력해주세요."></td>
+                <td></td>
+
+            </tr>
+        </table>
+        <input class="btn-sign" type="submit" value="가입하기"/>
+    </form>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+		
+		const $searchZipCode = document.getElementById("searchZipCode");
+		
+		$searchZipCode.onclick = function() {
+			
+		    new daum.Postcode({
+		        oncomplete: function(data) {
+		            document.getElementById("zipCode").value = data.zonecode;
+		            document.getElementById("address1").value = data.address;
+		            document.getElementById("address2").focus();
+		        }
+		    }).open();
+		    
+		};
+	
+	</script>
+    
+</body>
+</html>

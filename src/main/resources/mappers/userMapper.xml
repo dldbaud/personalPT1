@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.sarada.user.dao.UserMapper">
+
+	<resultMap id="userResultMap" type="com.greedy.sarada.user.dto.UserDto">
+		<id property="userNo" column="USER_NO"/>
+		<result property="id" column="ID"/>
+		<result property="pwd" column="PWD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="profileNm" column="PROFILE_NM"/>
+		<result property="phone" column="PHONE"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="joinDate" column="JOIN_DATE"/>
+		<result property="quitDate" column="QUIT_DATE"/>
+		<result property="userStatus" column="USER_STATUS"/>
+		<result property="snsToken" column="SNS_TOKEN"/>
+		<result property="email" column="EMAIL"/>
+		<collection property="userRoleList" resultMap="userRoleResultMap"/>
+	</resultMap>
+	
+	<resultMap id="userRoleResultMap" type="com.greedy.sarada.user.dto.UserRoleDto">
+		<id property="authNo" column="REF_AUTH_NO"/>
+		<id property="userNo" column="REF_USER_NO"/>
+		<association property="auth" resultMap="authResultMap"/>
+	</resultMap>
+	
+	<resultMap id="authResultMap" type="com.greedy.sarada.user.dto.AuthDto">
+		<id property="authNo" column="REF_AUTH_NO2"/>
+		<result property="authNm" column="AUTH_NM"/>
+		<result property="authDesc" column="AUTH_DESC"/>
+	</resultMap>
+	
+	<resultMap id="snsResultMap" type="com.greedy.sarada.provider.SnsDto">
+		<id property="snsNo" column="SNS_NO"/>
+		<result property="snsId" column="SNS_ID"/>
+		<result property="snsNm" column="SNS_NM"/>
+		<association property="user" resultMap="userResultMap"/>
+	</resultMap>
+	
+	<select id="findByUserId" resultMap="userResultMap">
+		   SELECT
+               A.USER_NO
+		     , A.ID
+             , A.PWD
+		     , A.USER_NM
+		     , A.PROFILE_NM
+		     , A.PHONE
+		     , A.ADDRESS
+		     , A.JOIN_DATE
+		     , A.QUIT_DATE
+		     , A.USER_STATUS
+		     , A.SNS_TOKEN
+		     , A.EMAIL
+		     , B.USER_NO REF_USER_NO
+		     , B.AUTH_NO REF_AUTH_NO
+		     , C.AUTH_NO REF_AUTH_NO2
+		     , C.AUTH_NM
+		     , C.AUTH_DESC
+          FROM TB_USER A
+          LEFT JOIN TB_USER_ROLE B ON (A.USER_NO = B.USER_NO)
+		  LEFT JOIN TB_AUTH C ON (B.AUTH_NO = C.AUTH_NO)
+         WHERE A.USER_STATUS = 'Y'
+           AND A.ID = #{ id }
+	</select>
+	
+	<select id="selectById" resultType="string">
+        SELECT
+               ID
+          FROM TB_USER 
+         WHERE USER_STATUS = 'Y'
+           AND ID = #{ id }
+    </select>
+    
+    <select id="selectByProviderId" resultType="string">
+        SELECT
+               SNS_ID
+          FROM TB_SNS 
+          WHERE SNS_ID = #{ snsId }
+    </select>
+	
+	<insert id="insertUser">
+		INSERT
+		  INTO TB_USER
+		(
+	      USER_NO
+		, ID
+		, PWD
+		, USER_NM
+		, PHONE
+		, ADDRESS
+		, JOIN_DATE
+		, SNS_TOKEN
+		, EMAIL
+		)
+		VALUES
+		(
+		  'US'||(SEQ_USER.NEXTVAL)
+		, #{ id }
+		, #{ pwd }
+		, #{ userNm }
+		, #{ phone }
+		, #{ address }
+		, SYSDATE
+		, #{ snsToken }
+		, #{ email }
+		)
+		
+	</insert>
+
+
+	<insert id="insertSns">
+		INSERT
+		  INTO TB_SNS
+		(
+		  SNS_NO
+		, SNS_ID
+		, USER_NO
+		, SNS_NM
+		)
+		VALUES
+		(
+		  'SNS'||(SEQ_SNS.NEXTVAL)
+		, #{ snsId }
+		, 'US'||(SEQ_USER.CURRVAL)
+		, #{ snsNm }
+		)
+	</insert>
+	
+	<insert id="insertUserRole">
+		INSERT
+          INTO TB_USER_ROLE
+        (
+          USER_NO
+        , AUTH_NO  
+        
+        )
+        VALUES
+        (
+          'US'||(SEQ_USER.CURRVAL)
+        , 'AU2'
+        )
+	</insert>
+	
+	
+</mapper>
+
+

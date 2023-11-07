@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/common/CSS/header.css">
+    <script type="text/javascript" src="/common/JS/header.js"></script> 
+</head>
+<body>
+    <div class="main">
+        <div class="main-logo">
+            <a>로고입니다</a>
+            <!-- <a href="header.html">주소입니다.</a> -->
+        </div>
+        <ul class="main-nav">
+            <li><a href="#">가나</a></li>
+            <li><a href="#">가나</a></li>
+            <li><a href="#">가나</a></li>
+            <li><a href="#">가나</a></li>
+            <li><a href="#">가나</a></li>
+        </ul>
+        <ul class="login">
+            <th:block sec:authorize="isAnonymous()">
+                <input type="button" value="로그인" id="login">
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <input type="button" value="로그아웃" id="logout">
+            </th:block>
+        </ul>
+
+        <a href="#" class="hma">
+                야
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+}
+
+.info{
+    display: grid;
+    justify-content: center;
+    margin: 13% auto;
+    width: 70%;
+    min-width: 200px;
+}
+
+.info tr td input {
+    border: none;
+    padding: 15px;
+}
+
+.btn-sign {
+    background-color: #666;
+    color: white;
+    border: none;
+    width: 100px;
+    padding: 20px;
+    justify-content: center;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 150px;
+}
+
+/* @media screen and (max-width : 760px){
+
+    .info{
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+} */
