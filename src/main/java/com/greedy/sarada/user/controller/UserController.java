@@ -73,13 +73,26 @@ public class UserController {
 	    @GetMapping("/login")
 	    public String goLogin() {
 
-	        return "user/login";
+	        return "user/login/login";
 	    }
 	    
 	    /* 회원가입 페이지 이동 */
 	    @GetMapping("/regist")
+	    public String goAgree() {
+	    	return "user/login/registAgree";
+	    }
+	    
+	    @GetMapping("/agreeRegist")
 	    public String goRegist() {
-	    	return "user/regist";
+	    	return "user/login/regist";
+	    }
+	    /* 로그인 실패 시 */
+	    @PostMapping("/loginfail")
+	    public String loginFailed(RedirectAttributes rttr) {
+	    	
+	    	rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
+	    	
+	    	return "redirect:/user/login/login";
 	    }
 	    
 	    /* 회원 가입 */
@@ -115,5 +128,18 @@ public class UserController {
 	    	
 	    	return ResponseEntity.ok(result);
 	    }
-
+	    
+	    /*마이페이지*/
+	    @GetMapping("/myProfile")
+	    public String myProFile() {
+	    	
+	    	return "user/myPage/myProfile";
+	    }
+	    
+	    /* 사업자 등록 */
+	    @GetMapping("/sell/sellRegist")
+	    public String sellRegist() {
+	    	
+	    	return "user/sell/sellRegist";
+	    }
 }

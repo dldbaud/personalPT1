@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입 동의사항</title>
+  <script type="text/javascript" src="/common/JS/header.js"></script> 
+  <link rel="stylesheet" type="text/css" href="/user/login/CSS/registAgree.css">
+</head>
+</head>
+<body>
+
+    <div th:replace="/common/header.html"></div>
+    <div class="agreement-section">
+        <div class="section-box">
+          <h1>회원가입 약관</h1>
+          <p>서비스 이용 동의서</p>
+          <p>안녕하세요! "좋은 서비스"를 제공하는 회사에 오신 것을 환영합니다. 본 약관은 당사의 서비스를 이용함에 있어 회원과 회사 간의 권리, 의무, 책임사항을 규정하는 것을 목적으로 합니다.</p>
+        </div>
+      
+        <div class="section-box">
+          <h2>제 1조 (약관의 목적)</h2>
+          <p>이 약관은 회원이 당사에서 제공하는 서비스를 이용함에 있어 회원과 당사 간의 권리, 의무 및 책임사항을 규정합니다.</p>
+        </div>
+      
+        <div class="section-box">
+          <h2>제 2조 (서비스 이용)</h2>
+          <ul>
+            <li>당사가 제공하는 서비스는 회원에게 정보 제공, 커뮤니케이션, 상품 구매 등의 기능을 포함합니다.</li>
+            <li>회원은 당사에서 제공하는 서비스를 이용함에 있어 관련 법령, 약관 및 정책을 준수해야 합니다.</li>
+          </ul>
+        </div>
+      
+        <div class="section-box">
+          <input type="checkbox" id="agreeCheckbox" value="agree">
+          <label for="agreeCheckbox">동의합니다.</label>
+        </div>
+    </div>
+    <div class="agreeRegistArea">
+        <input type="button" id="agreeRegist" value="가입하기">
+    </div>
+</body>
+</html>

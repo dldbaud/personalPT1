@@ -6,8 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="/common/CSS/header.css">
-    <script type="text/javascript" src="/common/JS/header.js"></script> 
+    <script type="text/javascript" src="/common/JS/header.js"></script>
+    <script src="https://kit.fontawesome.com/9f6f15ccb8.js" crossorigin="anonymous"></script>
 </head>
+
+    <script>
+	    const message = '[[${message}]]';
+		message && alert(message);
+	</script>
+
 <body>
     <div class="main">
         <div class="main-logo">
@@ -26,12 +33,13 @@
                 <input type="button" value="로그인" id="login">
             </th:block>
             <th:block sec:authorize="isAuthenticated()">
+                <input type="button" value="마이프로필" id="myProfile">
                 <input type="button" value="로그아웃" id="logout">
             </th:block>
         </ul>
 
         <a href="#" class="hma">
-                야
+            <i class="fas fa-bars"></i>
         </a>
     </div>
 </body>

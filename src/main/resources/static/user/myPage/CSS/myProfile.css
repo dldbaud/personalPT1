@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+}
+
+.aside{
+    border-right: 1px solid;
+}
+
+.wrapper { 
+    margin: 0 auto; 
+    justify-content: start; /* 모든 요소 가운데 정렬 */
+    display: grid;
+    margin: 13% auto;
+    margin-top: 100px;
+    min-width: 200px;
+    margin-left: 15px;
+    list-style: none;
+    grid-template-columns: auto auto;
+}
+
+.wrapper ul {
+    list-style: none;
+    padding: 10px;
+}
+
+.wrapper ul li {
+    padding: 5px;
+}
+
+#sellRegist {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+.myPageContents{
+    margin-left: 2rem;
+}

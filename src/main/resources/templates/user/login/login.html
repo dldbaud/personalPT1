@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/user/CSS/login.css">
+    <link rel="stylesheet" type="text/css" href="/user/login/CSS/login.css">
     <script type="text/javascript" src="/common/JS/header.js"></script> 
 </head>
+
+    <script>
+	    const message = '[[${message}]]';
+		message && alert(message);
+	</script>
+	
 <body>
     
     <div th:replace="common/header.html"></div>
 
     <div class="wrapper">
-        <form class="login" action="/user/login" method="post">
+        <form class="login2" action="/user/login" method="post">
             <input type="text" class="id" name="id" placeholder="아이디"/>
             <input type="password" class="pwd" name="pwd" placeholder="비밀번호"/>
             <input type="submit" class="btn" value="로그인" id="loginSubmit">
@@ -27,6 +33,5 @@
 			<a href="/oauth2/authorization/google">구글 로그인</a>
 		</div>
     </div>
-
 </body>
 </html>
