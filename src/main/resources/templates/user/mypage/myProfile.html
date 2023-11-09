@@ -17,27 +17,27 @@
       <ul>
         <li class="menu-link">내 정보
           <ul>
-            <li><a href="#">회원 정보 수정</a></li>
-            <li><a href="#">회원 탈퇴</a></li>
-            <li><a href="#">배송지 관리</a></li>
+            <li><input type="button" id="myInfoUpdate" value="회원 정보 수정"></input></li>
+            <li><input type="button" id="myInfoUpdate" value="배송지 관리"></input></li>
+            <li><input type="button" id="myInfoUpdate" value="회원 탈퇴"></input></li>
           </ul>
         </li>
       </ul>
       <ul>
         <li class="menu-link">쇼핑 정보
           <ul>
-            <li><a href="#">주문 목록/배송 조회</a></li>
-            <li><a href="#">취소/반품/교환 내역</a></li>
-            <li><a href="#">찜 리스트</a></li>
+            <li><input type="button" id="myInfoUpdate" value="주문 목록/배송 조회"></li>
+            <li><input type="button" id="myInfoUpdate" value="취소/반품/교환 내역"></li>
+            <li><input type="button" id="myInfoUpdate" value="찜 리스트">/<li>
           </ul>
         </li>
       </ul>
       <ul>
         <li class="menu-link">내 게시글
           <ul>
-            <li><a href="#">상품 문의</a></li>
-            <li><a href="#">상품 후기</a></li>
-            <li><a href="#">1:1 문의</a></li>
+            <li><input type="button" id="myInfoUpdate" value="상품 문의"></li>
+            <li><input type="button" id="myInfoUpdate" value="상품 후기"></li>
+            <li><input type="button" id="myInfoUpdate" value="1:1 문의"></li>
           </ul>
         </li>
       </ul>
@@ -46,7 +46,72 @@
       </ul>
     </div>
     <div class="myPageContents">
-      야
+      <div class="mYConetentsBar">
+        <h2>내 주문현황</h2>
+        <table class="contentsBar">
+          <thead>
+            <tr>
+              <th>상품 준비중</th>
+              <th>배송중</th>
+              <th>배송완료</th>
+              <th>취소 교환 반품</th>
+            </tr>
+            <tr>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </thead>
+        </table>
+        <div class="contentsBoard">
+          <table class="">
+            <thead>
+              <tr>
+                <th  colspan="2">상품 문의</th>
+              </tr>
+              <tr>
+                <td>답변대기</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>답변완료</td>
+                <td>0</td>
+              </tr>
+            </thead>
+          </table>
+          <table class="">
+            <thead>
+              <tr>
+                <th  colspan="2">상품 후기</th>
+              </tr>
+              <tr>
+                <td>답변대기</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>답변완료</td>
+                <td>0</td>
+              </tr>
+            </thead>
+          </table>
+          <table class="">
+            <thead>
+              <tr>
+                <th  colspan="2">1:1 게시글</th>
+              </tr>
+              <tr>
+                <td>답변대기</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>답변완료</td>
+                <td>0</td>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </body>

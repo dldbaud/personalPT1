@@ -2,12 +2,15 @@ package com.greedy.sarada.user.controller;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
 import com.greedy.sarada.user.dto.UserDto;
 import com.greedy.sarada.user.service.AuthenticationService;
@@ -136,10 +140,53 @@ public class UserController {
 	    	return "user/myPage/myProfile";
 	    }
 	    
-	    /* 사업자 등록 */
+	    /*회원 정보 수정 화면이동*/
+	    @GetMapping("/myProfile/update")
+	    public String myProfileUpdate(@AuthenticationPrincipal UserDto loginUser, Model model) {
+	    	
+	    	String[] address = loginUser.getAddress().split("\\$");
+	    	
+	    	model.addAttribute("address", address);
+	    	
+	    	return "user/myPage/profileUpdate";
+	    }
+	    
+	    /*회원 정보 수정*/
+	    @PostMapping("/update")
+	    public String modifyUser(@ModelAttribute UserDto updateUser,
+	    		@RequestParam String zipCode, @RequestParam String address1, @RequestParam String address2,
+	    		@AuthenticationPrincipal UserDto loginUser,
+	    		RedirectAttributes rttr) throws MemberModifyException {
+	    
+	    	String address = zipCode + "$" + address1 + "$" + address2;
+	    	updateUser.setAddress(address);
+	    	
+	    	updateUser.setUserNo(loginUser.getId());
+	    	
+	    	log.info("[UserController] modifyUser : {}",updateUser);
+	    	
+	    	userService.modifyUser(updateUser);
+	    	
+	    	SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(loginUser.getId()));
+	    	
+	    	rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("user.modify"));
+	    	return "redirect:/";
+	    }
+	    
+	    /* 회원 정보 수정 시 세션에 저장 된 정보 업데이트 */
+	    private Authentication createNewAuthentication(String id) {
+	    	
+	    	UserDetails newPrincipal = authenticationService.loadUserByUsername(id);
+	    	UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, newPrincipal.getPassword(), newPrincipal.getAuthorities());
+
+	        return newAuth;
+		}
+
+		/* 사업자 등록 페이지*/
 	    @GetMapping("/sell/sellRegist")
 	    public String sellRegist() {
 	    	
 	    	return "user/sell/sellRegist";
 	    }
+	    
 }

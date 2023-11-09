@@ -12,4 +12,13 @@ window.addEventListener('load', function () {
             location.href="/user/sell/sellRegist";
         }
     }
+
+    if(document.getElementById("myInfoUpdate")){
+
+        const $myInfoUpdate = document.getElementById("myInfoUpdate");
+
+        $myInfoUpdate.onclick = function() {
+            location.href="/user/myProfile/update";
+        }
+    }
 });

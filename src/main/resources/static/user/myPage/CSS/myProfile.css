@@ -17,7 +17,7 @@ body {
     min-width: 200px;
     margin-left: 15px;
     list-style: none;
-    grid-template-columns: auto auto;
+    grid-template-columns: 200px 1fr;
 }
 
 .wrapper ul {
@@ -29,7 +29,7 @@ body {
     padding: 5px;
 }
 
-#sellRegist {
+input[type=button] {
     border: none;
     background-color: white;
     cursor: pointer;
@@ -37,4 +37,41 @@ body {
 
 .myPageContents{
     margin-left: 2rem;
+    /* 전체 마진 빼기 마진 하는 보여야 한다.*/
+    width: calc(100% - 6rem);
+}
+
+.contentsBar {
+    border: 1px solid gray;
+    width: 100%;
+    text-align: center;
+    padding: 3rem;
+}
+
+.contentsBoard {
+    display: grid;
+    margin-top: 2rem;
+    grid-template-columns: auto auto auto;
+    grid-gap: 2rem;
+}
+
+.contentsBoard table {
+    border: 1px solid gray;
+    /* width를 rem으로 하면 grid풀림*/
+    width: 100%;
+    height: 3rem;
+    text-align: center;
+}
+
+
+
+.contentsBoard table th{
+    border-bottom: 1px gray dotted;
+    padding: 1rem;
+}
+
+
+.contentsBoard table td {
+    text-align: start;
+    padding: 10px;
 }

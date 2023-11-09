@@ -3,6 +3,7 @@ package com.greedy.sarada.user.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
 import com.greedy.sarada.provider.SnsDto;
 import com.greedy.sarada.user.controller.UserController;
@@ -58,6 +59,16 @@ public class UserService {
 		String result = mapper.selectByProviderId(userName);
 		log.info("프로바이더 확인 : " + userName);
 		return result == null ? true : false;
+	}
+
+	public void modifyUser(UserDto user) throws MemberModifyException {
+		
+		int result = mapper.modifyUser(user);
+		
+		if(!(result>0)) {
+			 throw new MemberModifyException("회원 정보 수정에 실패하셨습니다.");
+		}
+		
 	}
 
 

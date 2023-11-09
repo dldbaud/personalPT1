@@ -141,7 +141,14 @@
         )
 	</insert>
 	
-	
+	<update id="modifyUser">
+		UPDATE
+		      TB_USER
+		  SET PHONE = #{ phone }
+		    , ADDRESS = #{ address }
+		WHERE USER_STATUS = 'Y'
+		  AND ID = #{ id }
+	</update>
 </mapper>
 
 

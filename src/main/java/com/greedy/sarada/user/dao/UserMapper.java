@@ -20,6 +20,9 @@ public interface UserMapper {
 
 	String selectByProviderId(String id);
 
+	int modifyUser(UserDto user);
+
+
 //	String findByEmail(String email);
 
 //	int insertEmail(String email);
