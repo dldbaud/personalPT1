@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+}
+
+.aside{
+    border-right: 1px solid;
+}
+
+.wrapper ul {
+    list-style: none;
+    padding: 10px;
+}
+
+.wrapper ul li {
+    padding: 5px;
+}

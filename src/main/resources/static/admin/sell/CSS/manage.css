@@ -4,10 +4,6 @@ body {
     margin: 0;
 }
 
-.aside{
-    border-right: 1px solid;
-}
-
 .wrapper { 
     margin: 0 auto; 
     justify-content: start; 
@@ -18,21 +14,6 @@ body {
     margin-left: 15px;
     list-style: none;
     grid-template-columns: 200px 1fr;
-}
-
-.wrapper ul {
-    list-style: none;
-    padding: 10px;
-}
-
-.wrapper ul li {
-    padding: 5px;
-}
-
-input[type=button] {
-    border: none;
-    background-color: white;
-    cursor: pointer;
 }
 
 .myPageContents{
@@ -55,24 +36,16 @@ input[type=button] {
     grid-gap: 2rem;
 }
 
-.contentsBoard table {
-    border: 1px solid gray;
-    /* width를 rem으로 하면 grid풀림*/
-    width: 100%;
-    height: 3rem;
-    text-align: center;
+.search{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-
-
-.contentsBoard table th{
-    border-bottom: 1px gray dotted;
-    padding: 1rem;
+.searchDiv{
+    margin-top: 2%;
 }
 
-
-.contentsBoard table td {
-    text-align: start;
-    padding: 10px;
+#searchButton {
+    padding: 0;
 }
-

@@ -6,8 +6,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/myPage/CSS/profileUpdate.css">
 </head>
 <body>
+    <script type="text/javascript" src="/user/myPage/JS/myProfile.js"></script>
+    <div class="wrapper">
+      <div th:replace="user/myPage/myProfileSideBar.html"></div>
+      <div class="myPageContents">
+        <form id="" class="info" action="/user/update" method="post">
+          <table>
+              <tr>
+                  <td style="width: 110px">아이디 </td>
+                  <td><input class="userId" name="id" th:value="${ #authentication.principal.id }" readonly></td>
+              </tr>
+              <tr>
+                  <td>이름</td>
+                  <td><input class="userNm" name="userNm" th:value="${ #authentication.principal.userNm }" readonly></input></td>
+              </tr>
+              <tr>
+                  <td>연락처 </td>
+                  <td><input type="text" name="phone" th:value="${ #authentication.principal.phone }" required></p></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>현재 주소</td>
+                <td><p th:text="${ #authentication.principal.address.replaceAll('[$]', ' ') }"></p></td>
+            </tr>
+              <tr>
+                  <td>우편번호</td>
+                  <td><input type="text" name="zipCode" id="zipCode" readonly></td>
+                  <td><input type="button" value="검색" id="searchZipCode"></td>
+              </tr>
+              <tr>
+                  <td>주소</td>
+                  <td><input class="address1" type="text" name="address1" id="address1" readonly></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td>상세주소</td>
+                  <td><input class="address2" type="text" name="address2" id="address2" placeholder="상세주소를 입력해주세요."></td>
+                  <td></td>
+              </tr>
+              <input type="hidden" name="userStatus" th:value="${ #authentication.principal.userStatus }">
+          </table>
+          <input id="proModify" class="btn-sign" type="submit" value="수정하기"/>
+      </form>
+      </div>
+    </div>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+      
+      const $searchZipCode = document.getElementById("searchZipCode");
+      
+      $searchZipCode.onclick = function() {
+        
+          new daum.Postcode({
+              oncomplete: function(data) {
+                  document.getElementById("zipCode").value = data.zonecode;
+                  document.getElementById("address1").value = data.address;
+                  document.getElementById("address2").focus();
+              }
+          }).open();
+          
+      };
     
+    </script>
 </body>
 </html>

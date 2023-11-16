@@ -1,0 +1,86 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+}
+
+.wrapper { 
+    margin: 0 auto; 
+    justify-content: start; 
+    display: grid;
+    margin: 13% auto;
+    margin-top: 100px;
+    min-width: 200px;
+    margin-left: 15px;
+    list-style: none;
+    grid-template-columns: 200px 1fr;
+}
+
+.myPageContents{
+    /* margin-left: 2rem;
+    width: calc(100% - 6rem); */
+}
+
+.contentsBar {
+    border: 1px solid gray;
+    text-align: center;
+    padding: 3rem;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-content: center;
+}
+
+table {
+    width: 70%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    margin-top: 2%;
+}
+
+table th, td{
+    border: 1px solid #ddd;
+}
+
+table td {
+    min-width: 5%;
+}
+
+.sellInput, textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    padding: 5%;
+}
+
+select {
+    width: 100%;
+    padding: 5%;
+    box-sizing: border-box;
+    border: none;
+    text-align: center;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    width: 10%;
+    border: none;
+    cursor: pointer;
+    margin: 0 auto;
+    display: block;
+    margin: 3% auto;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#searchZipCode {
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+#searchZip {
+    cursor: pointer;
+}

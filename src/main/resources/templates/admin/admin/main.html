@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/admin/admin/CSS/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script type="text/javascript" src="/admin/admin/JS/admin.js"></script>
+</head>
+<body>
+
+    <div class="wrapper">
+
+        <div th:replace="admin/common/adminHeader.html"></div>
+
+        <div class="content">
+            <div class="cards user">
+                <i class="bi bi-file-earmark-person"></i>
+                <div class="text">회원 관리</div>
+            </div>
+            <div id="sellerManage" class="cards seller">
+                <i class="bi bi-person"></i>
+                <div class="text">판매자 관리</div>
+            </div>
+            <div class="cards product">
+                <i class="bi bi-box"></i>
+                <div class="text">상품 관리</div>
+            </div>
+            <div class="cards order">
+                <i class="bi bi-cart"></i>
+                <div class="text">주문 관리</div>
+            </div>
+            <div class="cards settlement">
+                <i class="bi bi-calculator"></i>
+                <div class="text">매출 관리</div>
+            </div>
+            <div class="cards board" >
+                <i class="bi bi-pencil-square"></i>
+                <div class="text">게시판 관리</div>
+            </div>
+        </div>   
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/admin/common/CSS/adminSideBar.css">
+</head>
+<body>
+    <div th:replace="admin/common/adminHeader.html"></div>
+    <script type="text/javascript" src="/admin/admin/JS/admin.js"></script>
+    <div class="">
+      <div class="aside">
+        <ul>
+          <li class="menu-link">회원 관리
+          </li>
+        </ul>
+        <ul>
+          <li id="sellerManage" class="menu-link">판매자 관리
+          </li>
+        </ul>
+        <ul>
+          <li class="menu-link">상품 관리
+          </li>
+        </ul>
+        <ul>
+          <li class="menu-link">주문 관리
+          </li>
+        </ul>
+        <ul>
+          <li class="menu-link">매출 관리
+          </li>
+        </ul>
+        <ul>
+          <li class="menu-link">게시판 관리
+          </li>
+        </ul>
+      </div>
+     </div>  
+</body>
+</html>

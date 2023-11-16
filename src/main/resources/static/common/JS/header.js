@@ -97,10 +97,21 @@ window.onload = function () {
     const $login = document.querySelector('.login');
     const $toggleB = document.querySelector('.hma');
 
-    $toggleB.addEventListener('click', () => {
-        $menu.classList.toggle('active');
-        $login.classList.toggle('active');
+        if(document.getElementById('toggleB')){
+            $toggleB.addEventListener('click', () => {
+                $menu.classList.toggle('active');
+                $login.classList.toggle('active');
+        
+        })
+    }
 
-})
+    if(document.getElementById('adminButton')){
 
+        $adminButton = document.getElementById('adminButton');
+
+        $adminButton.onclick = function() {
+            location.href="/admin/main";
+        }
+    }
 }
+

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.sarada.admin.dao.AdminMapper">
+
+	<resultMap id="sellCategoryResultMap" type="com.greedy.sarada.sell.dto.CategoryDto">
+		<id property="categoryCode" column="CATEGORY_CODE"/>
+		<result property="categoryName" column="CATEGORY_NAME"/>
+		<result property="refCategory" column="REF_CATEGORY"/>
+	</resultMap>
+	
+	<resultMap id="RefCategoryResultMap" type="com.greedy.sarada.sell.dto.RefCategoryDto">
+		<id property="refCategory" column="REF_CATEGORY"/>
+		<result property="refCategoryNm" column="REF_CATEGORY_NM"/>
+	</resultMap>
+	
+	<resultMap id="sellDtoResultMap" type="com.greedy.sarada.sell.dto.SellDto">
+		<id property="sellNo" column="SELL_NO"/>
+		<result property="sellNm" column="SELL_NM"/>
+		<result property="sellAddress" column="SELL_ADDRESS"/>
+		<result property="sellCategoryNm" column="SELL_CATEGORY"/>
+		<result property="sellType" column="SELL_TYPE"/>
+		<result property="sellPhone" column="SELL_PHONE"/>
+		<result property="sellStatus" column="SELL_STATUS"/>
+		<association property="user" resultMap="userResultMap"/>
+	</resultMap>
+	
+	<resultMap id="userResultMap" type="com.greedy.sarada.user.dto.UserDto">
+		<id property="userNo" column="USER_NO"/>
+		<result property="id" column="ID"/>
+		<result property="pwd" column="PWD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="profileNm" column="PROFILE_NM"/>
+		<result property="phone" column="PHONE"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="joinDate" column="JOIN_DATE"/>
+		<result property="quitDate" column="QUIT_DATE"/>
+		<result property="userStatus" column="USER_STATUS"/>
+		<result property="snsToken" column="SNS_TOKEN"/>
+		<result property="email" column="EMAIL"/>
+		<collection property="userRoleList" resultMap="userRoleResultMap"/>
+	</resultMap>
+	
+	<resultMap id="userRoleResultMap" type="com.greedy.sarada.user.dto.UserRoleDto">
+		<id property="authNo" column="REF_AUTH_NO"/>
+		<id property="userNo" column="REF_USER_NO"/>
+		<association property="auth" resultMap="authResultMap"/>
+	</resultMap>
+	
+	<resultMap id="authResultMap" type="com.greedy.sarada.user.dto.AuthDto">
+		<id property="authNo" column="REF_AUTH_NO2"/>
+		<result property="authNm" column="AUTH_NM"/>
+		<result property="authDesc" column="AUTH_DESC"/>
+	</resultMap>
+	
+		<select id="findSellRegistList" resultMap="sellDtoResultMap">
+		SELECT
+		        A.SELL_NO
+			 ,  A.USER_NO
+			 ,  A.SELL_NM
+			 ,  A.SELL_ADDRESS
+			 ,  A.SELL_CATEGORY_NM
+			 ,  A.SELL_TYPE
+			 ,  A.SELL_PHONE
+			 ,  A.SELL_STATUS
+			 ,  B.ID
+			 ,  B.USER_NM
+		  FROM  TB_SELL A
+		  JOIN  TB_USER B ON (A.USER_NO = B.USER_NO)
+	</select>
+
+</mapper>

@@ -181,12 +181,27 @@ public class UserController {
 
 	        return newAuth;
 		}
+	    
+	    /*주문 목록 페이지*/
+	    @GetMapping("/myOrderList")
+	    public String myOrderList() {
+	    	
+	    	return "user/myPage/myOrderList";
+	    }
 
 		/* 사업자 등록 페이지*/
 	    @GetMapping("/sell/sellRegist")
-	    public String sellRegist() {
+	    public String sellSellRegist() {
 	    	
 	    	return "user/sell/sellRegist";
+	    }
+	    
+	    
+	    /*판매자 등록*/
+	    @PostMapping("/sell/Regist")
+	    public String sellRegist() {
+	    	
+	    	return "null";
 	    }
 	    
 }
