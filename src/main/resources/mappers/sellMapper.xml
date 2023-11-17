@@ -21,6 +21,8 @@
 		<result property="sellType" column="SELL_TYPE"/>
 		<result property="sellPhone" column="SELL_PHONE"/>
 		<result property="sellStatus" column="SELL_STATUS"/>
+		<result property="sellReqDate" column="SELL_REQ_DATE" />
+		<result property="sellRegiDate" column="SELL_REGI_DATE" />
 		<association property="user" resultMap="userResultMap"/>
 	</resultMap>
 	
@@ -77,7 +79,8 @@
 		,  SELL_CATEGORY_NM
 		,  SELL_TYPE
 		,  SELL_PHONE
-		,  SELL_STATUS)
+		,  SELL_STATUS
+		,  SELL_REQ_DATE)
 		VALUES
 		(  #{ sellNo }
 		,  #{ user.userNo}
@@ -87,6 +90,7 @@
 		,  #{ sellType }
 		,  #{ sellPhone }
 		,  #{ sellStatus }
+		, SYSDATE
 		)
 	
 	</insert>

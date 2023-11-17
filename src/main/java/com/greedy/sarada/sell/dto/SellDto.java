@@ -1,5 +1,7 @@
 package com.greedy.sarada.sell.dto;
 
+import java.sql.Date;
+
 import com.greedy.sarada.user.dto.UserDto;
 
 import lombok.Data;
@@ -15,5 +17,7 @@ public class SellDto {
 	private String sellType;
 	private String sellPhone;
 	private String sellStatus;
+	private Date sellReqDate;
+	private Date sellRegiDate;
 		
 }

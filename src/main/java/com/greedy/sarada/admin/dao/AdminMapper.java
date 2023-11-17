@@ -15,6 +15,6 @@ public interface AdminMapper {
 
 	int selectTotalCount(Map<String, String> searchMap);
 
-	List<SellDto> selectBoardList(SelectCriteria selectCriteria);
+	List<SellDto> selectSellList(SelectCriteria selectCriteria);
 
 }

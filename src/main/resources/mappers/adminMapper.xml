@@ -2,70 +2,177 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.greedy.sarada.admin.dao.AdminMapper">
 
-	<resultMap id="sellCategoryResultMap" type="com.greedy.sarada.sell.dto.CategoryDto">
-		<id property="categoryCode" column="CATEGORY_CODE"/>
-		<result property="categoryName" column="CATEGORY_NAME"/>
-		<result property="refCategory" column="REF_CATEGORY"/>
+	<resultMap id="sellCategoryResultMap"
+		type="com.greedy.sarada.sell.dto.CategoryDto">
+		<id property="categoryCode" column="CATEGORY_CODE" />
+		<result property="categoryName" column="CATEGORY_NAME" />
+		<result property="refCategory" column="REF_CATEGORY" />
 	</resultMap>
-	
-	<resultMap id="RefCategoryResultMap" type="com.greedy.sarada.sell.dto.RefCategoryDto">
-		<id property="refCategory" column="REF_CATEGORY"/>
-		<result property="refCategoryNm" column="REF_CATEGORY_NM"/>
+
+	<resultMap id="RefCategoryResultMap"
+		type="com.greedy.sarada.sell.dto.RefCategoryDto">
+		<id property="refCategory" column="REF_CATEGORY" />
+		<result property="refCategoryNm" column="REF_CATEGORY_NM" />
 	</resultMap>
-	
-	<resultMap id="sellDtoResultMap" type="com.greedy.sarada.sell.dto.SellDto">
-		<id property="sellNo" column="SELL_NO"/>
-		<result property="sellNm" column="SELL_NM"/>
-		<result property="sellAddress" column="SELL_ADDRESS"/>
-		<result property="sellCategoryNm" column="SELL_CATEGORY"/>
-		<result property="sellType" column="SELL_TYPE"/>
-		<result property="sellPhone" column="SELL_PHONE"/>
-		<result property="sellStatus" column="SELL_STATUS"/>
-		<association property="user" resultMap="userResultMap"/>
+
+	<resultMap id="sellDtoResultMap"
+		type="com.greedy.sarada.sell.dto.SellDto">
+		<id property="sellNo" column="SELL_NO" />
+		<result property="sellNm" column="SELL_NM" />
+		<result property="sellAddress" column="SELL_ADDRESS" />
+		<result property="sellCategoryNm" column="SELL_CATEGORY_NM" />
+		<result property="sellType" column="SELL_TYPE" />
+		<result property="sellPhone" column="SELL_PHONE" />
+		<result property="sellStatus" column="SELL_STATUS" />
+		<result property="sellReqDate" column="SELL_REQ_DATE" />
+		<result property="sellRegiDate" column="SELL_REGI_DATE" />
+		<association property="user" resultMap="userResultMap" />
 	</resultMap>
-	
-	<resultMap id="userResultMap" type="com.greedy.sarada.user.dto.UserDto">
-		<id property="userNo" column="USER_NO"/>
-		<result property="id" column="ID"/>
-		<result property="pwd" column="PWD"/>
-		<result property="userNm" column="USER_NM"/>
-		<result property="profileNm" column="PROFILE_NM"/>
-		<result property="phone" column="PHONE"/>
-		<result property="address" column="ADDRESS"/>
-		<result property="joinDate" column="JOIN_DATE"/>
-		<result property="quitDate" column="QUIT_DATE"/>
-		<result property="userStatus" column="USER_STATUS"/>
-		<result property="snsToken" column="SNS_TOKEN"/>
-		<result property="email" column="EMAIL"/>
-		<collection property="userRoleList" resultMap="userRoleResultMap"/>
+
+	<resultMap id="userResultMap"
+		type="com.greedy.sarada.user.dto.UserDto">
+		<id property="userNo" column="USER_NO" />
+		<result property="id" column="ID" />
+		<result property="pwd" column="PWD" />
+		<result property="userNm" column="USER_NM" />
+		<result property="profileNm" column="PROFILE_NM" />
+		<result property="phone" column="PHONE" />
+		<result property="address" column="ADDRESS" />
+		<result property="joinDate" column="JOIN_DATE" />
+		<result property="quitDate" column="QUIT_DATE" />
+		<result property="userStatus" column="USER_STATUS" />
+		<result property="snsToken" column="SNS_TOKEN" />
+		<result property="email" column="EMAIL" />
+		<collection property="userRoleList"
+			resultMap="userRoleResultMap" />
 	</resultMap>
-	
-	<resultMap id="userRoleResultMap" type="com.greedy.sarada.user.dto.UserRoleDto">
-		<id property="authNo" column="REF_AUTH_NO"/>
-		<id property="userNo" column="REF_USER_NO"/>
-		<association property="auth" resultMap="authResultMap"/>
+
+	<resultMap id="userRoleResultMap"
+		type="com.greedy.sarada.user.dto.UserRoleDto">
+		<id property="authNo" column="REF_AUTH_NO" />
+		<id property="userNo" column="REF_USER_NO" />
+		<association property="auth" resultMap="authResultMap" />
 	</resultMap>
-	
-	<resultMap id="authResultMap" type="com.greedy.sarada.user.dto.AuthDto">
-		<id property="authNo" column="REF_AUTH_NO2"/>
-		<result property="authNm" column="AUTH_NM"/>
-		<result property="authDesc" column="AUTH_DESC"/>
+
+	<resultMap id="authResultMap"
+		type="com.greedy.sarada.user.dto.AuthDto">
+		<id property="authNo" column="REF_AUTH_NO2" />
+		<result property="authNm" column="AUTH_NM" />
+		<result property="authDesc" column="AUTH_DESC" />
 	</resultMap>
-	
-		<select id="findSellRegistList" resultMap="sellDtoResultMap">
+
+	<select id="findSellRegistList" resultMap="sellDtoResultMap">
 		SELECT
-		        A.SELL_NO
-			 ,  A.USER_NO
-			 ,  A.SELL_NM
-			 ,  A.SELL_ADDRESS
-			 ,  A.SELL_CATEGORY_NM
-			 ,  A.SELL_TYPE
-			 ,  A.SELL_PHONE
-			 ,  A.SELL_STATUS
-			 ,  B.ID
-			 ,  B.USER_NM
-		  FROM  TB_SELL A
-		  JOIN  TB_USER B ON (A.USER_NO = B.USER_NO)
+		A.SELL_NO
+		, A.USER_NO
+		, A.SELL_NM
+		, A.SELL_ADDRESS
+		, A.SELL_CATEGORY_NM
+		, A.SELL_TYPE
+		, A.SELL_PHONE
+		, A.SELL_STATUS
+		, A.SELL_REQ_DATE
+		, A.SELL_REGI_DATE
+		, B.ID
+		, B.USER_NM
+		FROM TB_SELL A
+		JOIN TB_USER B ON (A.USER_NO = B.USER_NO)
 	</select>
 
+	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+		SELECT
+			   COUNT(*)
+		FROM TB_SELL A
+	    JOIN TB_USER B ON(A.USER_NO = B.USER_NO)
+		<where>
+			<if test="searchCondition == 'req'">
+				A.SELL_STATUS = '대기'
+			</if>
+			<if test="searchCondition == 'regist'">
+				A.SELL_STATUS = '승인'
+			</if>
+			AND (
+				A.SELL_CATEGORY_NM LIKE '%' || #{ searchValue } || '%' OR
+				A.SELL_NO LIKE '%' || #{ searchValue } || '%' OR
+				A.USER_NO LIKE '%' || #{ searchValue } || '%' OR
+				A.SELL_NM LIKE '%' || #{ searchValue } || '%' OR
+				A.SELL_ADDRESS LIKE '%' || #{ searchValue } || '%' OR
+				A.SELL_TYPE LIKE '%' || #{ searchValue } || '%' OR
+				A.SELL_PHONE LIKE '%' || #{ searchValue } || '%' OR
+				B.ID LIKE '%' || #{ searchValue } || '%'
+			)
+		</where>
+	</select>
+
+<select id="selectSellList" resultMap="sellDtoResultMap">
+    SELECT
+        A.SELL_NO,
+        A.USER_NO,
+        A.SELL_NM,
+        A.SELL_ADDRESS,
+        A.SELL_CATEGORY_NM,
+        A.SELL_TYPE,
+        A.SELL_PHONE,
+        A.SELL_STATUS,
+        A.SELL_REQ_DATE,
+        A.SELL_REGI_DATE,
+        A.ID
+    FROM (
+        SELECT
+            ROWNUM RNUM,
+            B.SELL_NO,
+            B.USER_NO,
+            B.SELL_NM,
+            B.SELL_ADDRESS,
+            B.SELL_CATEGORY_NM,
+            B.SELL_TYPE,
+            B.SELL_PHONE,
+            B.SELL_STATUS,
+            B.SELL_REQ_DATE,
+        	B.SELL_REGI_DATE,
+            B.ID
+        FROM (
+            SELECT
+                C.SELL_NO,
+                C.USER_NO,
+                C.SELL_NM,
+                C.SELL_ADDRESS,
+                C.SELL_CATEGORY_NM,
+                C.SELL_TYPE,
+                C.SELL_PHONE,
+                C.SELL_STATUS,
+                C.SELL_REQ_DATE,
+        		C.SELL_REGI_DATE,
+                D.ID
+            FROM TB_SELL C
+            JOIN TB_USER D ON (C.USER_NO = D.USER_NO)
+            <where>
+                <if test="searchCondition == 'req'">
+                    C.SELL_STATUS = '대기'
+                </if>
+                <if test="searchCondition == 'regist'">
+                    C.SELL_STATUS = '승인'
+                </if>
+                AND (
+                    C.SELL_CATEGORY_NM LIKE '%' || #{ searchValue } || '%' OR
+                    C.SELL_NO LIKE '%' || #{ searchValue } || '%' OR
+                    C.USER_NO LIKE '%' || #{ searchValue } || '%' OR
+                    C.SELL_NM LIKE '%' || #{ searchValue } || '%' OR
+                    C.SELL_ADDRESS LIKE '%' || #{ searchValue } || '%' OR
+                    C.SELL_TYPE LIKE '%' || #{ searchValue } || '%' OR
+                    C.SELL_PHONE LIKE '%' || #{ searchValue } || '%' OR
+                    D.ID LIKE '%' || #{ searchValue } || '%'
+                )
+            </where>
+            ORDER BY C.SELL_NO DESC
+        ) B
+        <![CDATA[
+            WHERE ROWNUM <= #{ endRow }
+        ]]>
+    ) A
+    WHERE A.RNUM >= #{ startRow }
+    ORDER BY 1 DESC
+</select>
 </mapper>
+
+<!-- JOIN TB_USER E ON(D.USER_NO = E.USER_NO) -->

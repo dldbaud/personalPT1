@@ -47,15 +47,25 @@ public class AdminController {
 	
 	@GetMapping("/sellSearchList")
 	public String sellSearchList(@RequestParam(defaultValue="1") int page, 
+			@RequestParam(required=false) String searchCondition, 
 			@RequestParam(required=false) String searchValue,
 			Model model) {
 		Map<String, String> searchMap = new HashMap<>();
+		searchMap.put("searchCondition", searchCondition);
+		searchMap.put("searchValue", searchValue);
 		
-		Map<String, Object> boardListAndPaging = adminService.selectBoardList(searchMap, page);
+		Map<String, Object> boardListAndPaging = adminService.selectSellList(searchMap, page);
 		
 		model.addAttribute("paging", boardListAndPaging.get("paging"));
-		model.addAttribute("boardList", boardListAndPaging.get("boardList"));
-
+		model.addAttribute("sellList", boardListAndPaging.get("sellList"));
+		
+		log.info("[AdminController] searchMap : {}", searchMap);
 		return "admin/seller/manage";
+	}
+	
+	@GetMapping("/reqDetail")
+	public String sellReqDetail(@RequestParam Long sellNo, Model model) {
+		
+		return "admin/seller/SellReqDetail";
 	}
 }

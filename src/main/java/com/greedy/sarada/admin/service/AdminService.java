@@ -28,7 +28,7 @@ public class AdminService {
 		return adminMapper.findSellRegistList();
 	}
 
-	public Map<String, Object> selectBoardList(Map<String, String> searchMap, int page) {
+	public Map<String, Object> selectSellList(Map<String, String> searchMap, int page) {
 		
 		/* 1. 전체 게시글 수 확인 (검색어가 있는 경우 포함) => 페이징 처리 계산을 위해서 */
 		int totalCount = adminMapper.selectTotalCount(searchMap);
@@ -41,15 +41,15 @@ public class AdminService {
 		
 		/* 2. 페이징 처리와 연관 된 값을 계산하여 SelectCriteria 타입의 객체에 담는다. */
 		SelectCriteria selectCriteria = Pagenation.getSelectCriteria(page, totalCount, limit, buttonAmount, searchMap);
-		log.info("[BoardService] selectCriteria : {}", selectCriteria);
+		log.info("[AdminService] selectCriteria : {}", selectCriteria);
 		
 		/* 3. 요청 페이지와 검색 기준에 맞는 게시글을 조회해온다. */
-		List<SellDto> boardList = adminMapper.selectBoardList(selectCriteria);
-		log.info("[BoardService] boardList : {}", boardList);
+		List<SellDto> sellList = adminMapper.selectSellList(selectCriteria);
+		log.info("[BoardService] boardList : {}", sellList);
 		
 		Map<String, Object> boardListAndPaging = new HashMap<>();
 		boardListAndPaging.put("paging", selectCriteria);
-		boardListAndPaging.put("boardList", boardList);
+		boardListAndPaging.put("sellList", sellList);
 		
 		return boardListAndPaging;
 
