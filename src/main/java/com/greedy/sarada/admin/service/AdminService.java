@@ -55,4 +55,11 @@ public class AdminService {
 
 	}
 
+	public SellDto selectSellDetail(String sellNo) {
+		
+		return adminMapper.selectSellDetail(sellNo);
+	}
+
+	
+
 }

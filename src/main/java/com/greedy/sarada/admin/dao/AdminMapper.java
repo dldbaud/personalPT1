@@ -17,4 +17,7 @@ public interface AdminMapper {
 
 	List<SellDto> selectSellList(SelectCriteria selectCriteria);
 
+	SellDto selectSellDetail(String sellNo);
+
+
 }

@@ -13,14 +13,55 @@
         <div th:replace="admin/common/adminSideBar.html"></div>
         <div class="myPageContents">
             <div class="mYConetentsBar">
-                <table class="contentsBar">
+                <table>
+                    <caption>판매 신청자 정보</caption>
                     <tr>
-                        <th>야</th>
+                        <th>상호 (영업명)</th>
+                        <td colspan="3"><input id="sellNm" class="sellInput" type="text" name="sellNm" th:value ="${sellDetail.sellNm}" readonly></td>
+                    </tr>
+                    
+                    <tr>
+                        <th>사업자 등록번호</th>
+                        <td colspan="3"><input id="sellNo" class="sellInput" type="text" name="sellNo" th:value ="${sellDetail.sellNo}" readonly></td>
+                    </tr>
+                    
+                    <tr>
+                        <th>업종 및 업태</th>
+                        <td colspan="3"><input id="sellCategoryNm" class="sellInput" name="sellCategoryNm" th:value ="${sellDetail.sellCategoryNm}" readonly></td>
+                    </tr>
+                    
+                    <tr>
+                        <th>사업자 종류</th>
+                        <td colspan="3"><input name="sellType" class="sellInput" th:value ="${sellDetail.sellType}" readonly></td>
+                    </tr>
+                    
+                    <tr>
+                        <th>사업자 연락처</th>
+                        <td colspan="3"><input id="sellPhone" class="sellInput" type="tel" name="sellPhone" th:value ="${sellDetail.sellPhone}" readonly></td>
                     </tr>
                     <tr>
-
+                        <th>우편번호</th>
+                        <td><input class="sellInput" type="text" name="zipCode" id="zipCode" 
+                            th:value="${ #lists.size(address) > 0 ? address[0] : '' }" 
+                            readonly></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td colspan="2"><input class="sellInput" type="text" name="address1" id="address1" 
+                            th:value="${ #lists.size(address) > 1 ? address[1] : '' }"
+                            readonly></td>
+                    </tr>
+                    <tr>
+                        <th>상세주소</th>
+                        <td colspan="2"><input class="sellInput" type="text" name="address2" id="address2" 
+                            th:value="${ #lists.size(address) > 2 ? address[2] : '' }"
+                            readonly></td>
                     </tr>
                 </table>
+                <div class="buttonBox">
+                    <button id="buttonBox1" class="buttonBox1" type="button">승인</button>
+                    <button id="buttonBox2" class="buttonBox2" type="button">반려</button>
+                </div>
             </div>
         </div>
     </div>

@@ -4,15 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.greedy.sarada.admin.service.AdminService;
 import com.greedy.sarada.sell.dto.SellDto;
 import com.greedy.sarada.sell.service.SellService;
+import com.greedy.sarada.user.dto.UserDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,8 +68,33 @@ public class AdminController {
 	}
 	
 	@GetMapping("/reqDetail")
-	public String sellReqDetail(@RequestParam Long sellNo, Model model) {
+	public String sellReqDetail(@RequestParam String sellNo, Model model) {
+		
+		log.info("[AdminController] sellDetail sellNo {}", sellNo);
+		SellDto sellDetail = adminService.selectSellDetail(sellNo);
+		
+		String[] address = sellDetail.getSellAddress().split("\\$");
+		
+		model.addAttribute("sellDetail", sellDetail);
+		model.addAttribute("address", address);
+		
+		
+		log.info("[AdminController] sellDetail{}", sellDetail);
 		
 		return "admin/seller/SellReqDetail";
 	}
+	
+    @PostMapping("/sellRegist")
+    public ResponseEntity<String> checkDuplication(@RequestBody SellDto seller){
+    	
+    	String result = "사용 가능한 아이디입니다.";
+    	log.info("[MemberController] Request Check ID : {}", seller);
+    	
+//    	if(userService.selectUserById(user.getId())) {
+//    		log.info("[UserController] Already Exist");
+//    		result = "중복 된 아이디가 존재합니다.";
+//    	}    	
+    	
+    	return ResponseEntity.ok(result);
+    }
 }

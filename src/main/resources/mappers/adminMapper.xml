@@ -104,75 +104,93 @@
 		</where>
 	</select>
 
-<select id="selectSellList" resultMap="sellDtoResultMap">
-    SELECT
-        A.SELL_NO,
-        A.USER_NO,
-        A.SELL_NM,
-        A.SELL_ADDRESS,
-        A.SELL_CATEGORY_NM,
-        A.SELL_TYPE,
-        A.SELL_PHONE,
-        A.SELL_STATUS,
-        A.SELL_REQ_DATE,
-        A.SELL_REGI_DATE,
-        A.ID
-    FROM (
-        SELECT
-            ROWNUM RNUM,
-            B.SELL_NO,
-            B.USER_NO,
-            B.SELL_NM,
-            B.SELL_ADDRESS,
-            B.SELL_CATEGORY_NM,
-            B.SELL_TYPE,
-            B.SELL_PHONE,
-            B.SELL_STATUS,
-            B.SELL_REQ_DATE,
-        	B.SELL_REGI_DATE,
-            B.ID
-        FROM (
-            SELECT
-                C.SELL_NO,
-                C.USER_NO,
-                C.SELL_NM,
-                C.SELL_ADDRESS,
-                C.SELL_CATEGORY_NM,
-                C.SELL_TYPE,
-                C.SELL_PHONE,
-                C.SELL_STATUS,
-                C.SELL_REQ_DATE,
-        		C.SELL_REGI_DATE,
-                D.ID
-            FROM TB_SELL C
-            JOIN TB_USER D ON (C.USER_NO = D.USER_NO)
-            <where>
-                <if test="searchCondition == 'req'">
-                    C.SELL_STATUS = '대기'
-                </if>
-                <if test="searchCondition == 'regist'">
-                    C.SELL_STATUS = '승인'
-                </if>
-                AND (
-                    C.SELL_CATEGORY_NM LIKE '%' || #{ searchValue } || '%' OR
-                    C.SELL_NO LIKE '%' || #{ searchValue } || '%' OR
-                    C.USER_NO LIKE '%' || #{ searchValue } || '%' OR
-                    C.SELL_NM LIKE '%' || #{ searchValue } || '%' OR
-                    C.SELL_ADDRESS LIKE '%' || #{ searchValue } || '%' OR
-                    C.SELL_TYPE LIKE '%' || #{ searchValue } || '%' OR
-                    C.SELL_PHONE LIKE '%' || #{ searchValue } || '%' OR
-                    D.ID LIKE '%' || #{ searchValue } || '%'
-                )
-            </where>
-            ORDER BY C.SELL_NO DESC
-        ) B
-        <![CDATA[
-            WHERE ROWNUM <= #{ endRow }
-        ]]>
-    ) A
-    WHERE A.RNUM >= #{ startRow }
-    ORDER BY 1 DESC
-</select>
+	<select id="selectSellList" resultMap="sellDtoResultMap">
+	    SELECT
+	        A.SELL_NO,
+	        A.USER_NO,
+	        A.SELL_NM,
+	        A.SELL_ADDRESS,
+	        A.SELL_CATEGORY_NM,
+	        A.SELL_TYPE,
+	        A.SELL_PHONE,
+	        A.SELL_STATUS,
+	        A.SELL_REQ_DATE,
+	        A.SELL_REGI_DATE,
+	        A.ID
+	    FROM (
+	        SELECT
+	            ROWNUM RNUM,
+	            B.SELL_NO,
+	            B.USER_NO,
+	            B.SELL_NM,
+	            B.SELL_ADDRESS,
+	            B.SELL_CATEGORY_NM,
+	            B.SELL_TYPE,
+	            B.SELL_PHONE,
+	            B.SELL_STATUS,
+	            B.SELL_REQ_DATE,
+	        	B.SELL_REGI_DATE,
+	            B.ID
+	        FROM (
+	            SELECT
+	                C.SELL_NO,
+	                C.USER_NO,
+	                C.SELL_NM,
+	                C.SELL_ADDRESS,
+	                C.SELL_CATEGORY_NM,
+	                C.SELL_TYPE,
+	                C.SELL_PHONE,
+	                C.SELL_STATUS,
+	                C.SELL_REQ_DATE,
+	        		C.SELL_REGI_DATE,
+	                D.ID
+	            FROM TB_SELL C
+	            JOIN TB_USER D ON (C.USER_NO = D.USER_NO)
+	            <where>
+	                <if test="searchCondition == 'req'">
+	                    C.SELL_STATUS = '대기'
+	                </if>
+	                <if test="searchCondition == 'regist'">
+	                    C.SELL_STATUS = '승인'
+	                </if>
+	                AND (
+	                    C.SELL_CATEGORY_NM LIKE '%' || #{ searchValue } || '%' OR
+	                    C.SELL_NO LIKE '%' || #{ searchValue } || '%' OR
+	                    C.USER_NO LIKE '%' || #{ searchValue } || '%' OR
+	                    C.SELL_NM LIKE '%' || #{ searchValue } || '%' OR
+	                    C.SELL_ADDRESS LIKE '%' || #{ searchValue } || '%' OR
+	                    C.SELL_TYPE LIKE '%' || #{ searchValue } || '%' OR
+	                    C.SELL_PHONE LIKE '%' || #{ searchValue } || '%' OR
+	                    D.ID LIKE '%' || #{ searchValue } || '%'
+	                )
+	            </where>
+	            ORDER BY C.SELL_NO DESC
+	        ) B
+	        <![CDATA[
+	            WHERE ROWNUM <= #{ endRow }
+	        ]]>
+	    ) A
+	    WHERE A.RNUM >= #{ startRow }
+	    ORDER BY 1 DESC
+	</select>
+
+	<select id="selectSellDetail" resultMap="sellDtoResultMap">
+	    SELECT
+	          A.SELL_NO
+	        , A.USER_NO
+	        , A.SELL_NM
+	        , A.SELL_ADDRESS
+	        , A.SELL_CATEGORY_NM
+	        , A.SELL_TYPE
+	        , A.SELL_PHONE
+	        , A.SELL_STATUS
+	        , A.SELL_REQ_DATE
+	        , A.SELL_REGI_DATE
+	        , B.ID
+	   FROM TB_SELL A
+       LEFT JOIN TB_USER B ON (A.USER_NO = B.USER_NO)
+       WHERE A.SELL_NO = #{ sellNo }
+	</select>
 </mapper>
 
 <!-- JOIN TB_USER E ON(D.USER_NO = E.USER_NO) -->
