@@ -18,11 +18,14 @@
                     <tr>
                         <th>상호 (영업명)</th>
                         <td colspan="3"><input id="sellNm" class="sellInput" type="text" name="sellNm" th:value ="${sellDetail.sellNm}" readonly></td>
+                        <input  hidden id="sellNo" th:value ="${sellDetail.sellNo}"></input>
+                        <input  hidden id="sellReqDate" th:value ="${sellDetail.sellReqDate}"></input>
+                        <input  hidden id="userNo" th:value ="${sellDetail.user.userNo}"></input>
                     </tr>
                     
                     <tr>
                         <th>사업자 등록번호</th>
-                        <td colspan="3"><input id="sellNo" class="sellInput" type="text" name="sellNo" th:value ="${sellDetail.sellNo}" readonly></td>
+                        <td colspan="3"><input id="sellerNo" class="sellInput" type="text" name="sellerNo" th:value ="${sellDetail.sellerNo}" readonly></td>
                     </tr>
                     
                     <tr>
@@ -32,7 +35,7 @@
                     
                     <tr>
                         <th>사업자 종류</th>
-                        <td colspan="3"><input name="sellType" class="sellInput" th:value ="${sellDetail.sellType}" readonly></td>
+                        <td colspan="3"><input id="sellType" name="sellType" class="sellInput" th:value ="${sellDetail.sellType}" readonly></td>
                     </tr>
                     
                     <tr>

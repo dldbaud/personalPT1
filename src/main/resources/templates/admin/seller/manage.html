@@ -44,7 +44,7 @@
                 th:onclick="|location.href='@{/admin/reqDetail?(sellNo=${sell.sellNo})}'|"
                 >
                     <td th:text="${#strings.substring(sell.sellReqDate, 0, 10)}"></td>
-                    <td th:text="${ sell.sellNo }"></td>
+                    <td th:text="${ sell.sellerNo }"></td>
                     <td th:text="${ sell.sellNm }"></td>
                     <td th:text="${ sell.sellAddress.replaceAll('[$]', ' ') }"></td>
                     <td th:text="${ sell.sellCategoryNm }"></td>

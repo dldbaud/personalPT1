@@ -43,7 +43,7 @@ window.addEventListener('load', function () {
                         
                         const $categoryCode = $("#sellCategory");
                         for (let index in data) {
-                            $categoryCode.append($("<option>").val(data[index].refCategory).text(data[index].refCategoryNm));
+                            $categoryCode.append($("<option>").val(data[index].refCategoryNm).text(data[index].refCategoryNm));
                         }
                     },
                     error: function (xhr) { console.log(xhr); }
