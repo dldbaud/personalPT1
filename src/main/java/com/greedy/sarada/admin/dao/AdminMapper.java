@@ -19,5 +19,9 @@ public interface AdminMapper {
 
 	SellDto selectSellDetail(String sellNo);
 
+	int insertSeller(SellDto seller);
+
+	int rejectSeller(SellDto seller);
+
 
 }

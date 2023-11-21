@@ -23,6 +23,7 @@
 		<result property="sellStatus" column="SELL_STATUS"/>
 		<result property="sellReqDate" column="SELL_REQ_DATE" />
 		<result property="sellRegiDate" column="SELL_REGI_DATE" />
+		<result property="sellerNo" column="SELLER_NO" />
 		<association property="user" resultMap="userResultMap"/>
 	</resultMap>
 	
@@ -80,9 +81,10 @@
 		,  SELL_TYPE
 		,  SELL_PHONE
 		,  SELL_STATUS
-		,  SELL_REQ_DATE)
+		,  SELL_REQ_DATE
+		,  SELLER_NO)
 		VALUES
-		(  #{ sellNo }
+		(  'SE'||(SEQ_SELL.NEXTVAL)
 		,  #{ user.userNo}
 		,  #{ sellNm }
 		,  #{ sellAddress }
@@ -91,6 +93,7 @@
 		,  #{ sellPhone }
 		,  #{ sellStatus }
 		, SYSDATE
+		,  #{ sellerNo } 
 		)
 	
 	</insert>

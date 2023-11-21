@@ -19,5 +19,6 @@ public class SellDto {
 	private String sellStatus;
 	private Date sellReqDate;
 	private Date sellRegiDate;
+	private String sellerNo;
 		
 }

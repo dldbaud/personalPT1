@@ -60,6 +60,25 @@ public class AdminService {
 		return adminMapper.selectSellDetail(sellNo);
 	}
 
+	public int insertSeller(SellDto seller) {
+		
+		int result = adminMapper.insertSeller(seller);
+		
+		log.info("[insertSller] result{}", result);
+		
+		return result;
+	}
+
+	public int rejectSeller(SellDto seller) {
+		
+		int result = adminMapper.rejectSeller(seller);
+		
+		log.info("[insertSller] result{}", result);
+		
+		return result;
+	}
+
+
 	
 
 }

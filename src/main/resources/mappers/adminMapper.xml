@@ -26,6 +26,7 @@
 		<result property="sellStatus" column="SELL_STATUS" />
 		<result property="sellReqDate" column="SELL_REQ_DATE" />
 		<result property="sellRegiDate" column="SELL_REGI_DATE" />
+		<result property="sellerNo" column="SELLER_NO" />
 		<association property="user" resultMap="userResultMap" />
 	</resultMap>
 
@@ -60,7 +61,7 @@
 		<result property="authNm" column="AUTH_NM" />
 		<result property="authDesc" column="AUTH_DESC" />
 	</resultMap>
-
+	
 	<select id="findSellRegistList" resultMap="sellDtoResultMap">
 		SELECT
 		A.SELL_NO
@@ -117,6 +118,7 @@
 	        A.SELL_REQ_DATE,
 	        A.SELL_REGI_DATE,
 	        A.ID
+	      , A.SELLER_NO
 	    FROM (
 	        SELECT
 	            ROWNUM RNUM,
@@ -130,6 +132,7 @@
 	            B.SELL_STATUS,
 	            B.SELL_REQ_DATE,
 	        	B.SELL_REGI_DATE,
+	            B.SELLER_NO,
 	            B.ID
 	        FROM (
 	            SELECT
@@ -143,6 +146,7 @@
 	                C.SELL_STATUS,
 	                C.SELL_REQ_DATE,
 	        		C.SELL_REGI_DATE,
+	        		C.SELLER_NO,
 	                D.ID
 	            FROM TB_SELL C
 	            JOIN TB_USER D ON (C.USER_NO = D.USER_NO)
@@ -155,7 +159,7 @@
 	                </if>
 	                AND (
 	                    C.SELL_CATEGORY_NM LIKE '%' || #{ searchValue } || '%' OR
-	                    C.SELL_NO LIKE '%' || #{ searchValue } || '%' OR
+	                    C.SELLER_NO LIKE '%' || #{ searchValue } || '%' OR
 	                    C.USER_NO LIKE '%' || #{ searchValue } || '%' OR
 	                    C.SELL_NM LIKE '%' || #{ searchValue } || '%' OR
 	                    C.SELL_ADDRESS LIKE '%' || #{ searchValue } || '%' OR
@@ -186,11 +190,45 @@
 	        , A.SELL_STATUS
 	        , A.SELL_REQ_DATE
 	        , A.SELL_REGI_DATE
+	        , A.SELLER_NO
 	        , B.ID
 	   FROM TB_SELL A
        LEFT JOIN TB_USER B ON (A.USER_NO = B.USER_NO)
        WHERE A.SELL_NO = #{ sellNo }
 	</select>
+	
+	<insert id="insertSeller">
+		UPDATE TB_SELL
+           SET SELL_STATUS = '승인', SELL_REGI_DATE = SYSDATE
+		 WHERE SELL_NO = #{ sellNo }
+	</insert>
+	
+	<insert id="rejectSeller">
+		INSERT 
+				INTO TB_SELL
+		(  SELL_NO
+		,  USER_NO
+		,  SELL_NM
+		,  SELL_ADDRESS
+		,  SELL_CATEGORY_NM
+		,  SELL_TYPE
+		,  SELL_PHONE
+		,  SELL_STATUS
+		,  SELL_REQ_DATE
+		,  SELLER_NO)
+		VALUES
+		(  'SE'||(SEQ_SELL.NEXTVAL)
+		,  #{ user.userNo}
+		,  #{ sellNm }
+		,  #{ sellAddress }
+		,  #{ sellCategoryNm }
+		,  #{ sellType }
+		,  #{ sellPhone }
+		,  #{ sellStatus }
+		, SYSDATE
+		,  #{ sellerNo } 
+		)
+	</insert>
 </mapper>
 
 <!-- JOIN TB_USER E ON(D.USER_NO = E.USER_NO) -->

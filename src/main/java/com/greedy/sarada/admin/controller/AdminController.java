@@ -85,15 +85,27 @@ public class AdminController {
 	}
 	
     @PostMapping("/sellRegist")
-    public ResponseEntity<String> checkDuplication(@RequestBody SellDto seller){
+    public ResponseEntity<String> insertSeller(@RequestBody SellDto seller){
     	
-    	String result = "사용 가능한 아이디입니다.";
-    	log.info("[MemberController] Request Check ID : {}", seller);
+    	String result = "승인 실패";
+    	log.info("[MemberController] Request Check seller : {}", seller);
     	
-//    	if(userService.selectUserById(user.getId())) {
-//    		log.info("[UserController] Already Exist");
-//    		result = "중복 된 아이디가 존재합니다.";
-//    	}    	
+    	if(adminService.insertSeller(seller) == 1) {
+    		result = "등록 승인";
+    	};
+    	
+    	return ResponseEntity.ok(result);
+    }
+    
+    @PostMapping("/sellReject")
+    public ResponseEntity<String> rejectSeller(@RequestBody SellDto seller){
+    	
+    	String result = "거절 실패";
+    	log.info("[MemberController] Request Check seller : {}", seller);
+    	
+    	if(adminService.rejectSeller(seller) == 1) {
+    		result = "거절 완료";
+    	};
     	
     	return ResponseEntity.ok(result);
     }
