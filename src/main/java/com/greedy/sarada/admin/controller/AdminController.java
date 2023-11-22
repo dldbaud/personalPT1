@@ -42,7 +42,7 @@ public class AdminController {
 		
 		List<SellDto> sellRegistList = adminService.findSellRegistList();
 		
-		model.addAttribute("sellRegistList", sellRegistList);
+		model.addAttribute("sellList", sellRegistList);
 		
 		log.info("[AdminController] sellRegistList{}", sellRegistList);
 		
@@ -63,6 +63,7 @@ public class AdminController {
 		model.addAttribute("paging", boardListAndPaging.get("paging"));
 		model.addAttribute("sellList", boardListAndPaging.get("sellList"));
 		
+		log.info("[AdminController] boardListAndPaging : {}", boardListAndPaging);
 		log.info("[AdminController] searchMap : {}", searchMap);
 		return "admin/seller/manage";
 	}
@@ -88,8 +89,14 @@ public class AdminController {
     public ResponseEntity<String> insertSeller(@RequestBody SellDto seller){
     	
     	String result = "승인 실패";
-    	log.info("[MemberController] Request Check seller : {}", seller);
+    	log.info("[AdminController] Request Check seller : {}", seller);
+    	log.info("[AdminController] seller.user.userNo Check seller : {}", seller.getUser().getUserNo());
     	
+    	UserDto user = new UserDto();
+    	user.setUserNo(seller.getUser().getUserNo());
+    	seller.setUser(user);
+
+    	log.info("[AdminController] user.setUserNo(seller.getUser().getUserNo()) : {}", user.getUserNo());
     	if(adminService.insertSeller(seller) == 1) {
     		result = "등록 승인";
     	};
@@ -102,6 +109,7 @@ public class AdminController {
     	
     	String result = "거절 실패";
     	log.info("[MemberController] Request Check seller : {}", seller);
+    	seller.setSellStatus("거절");
     	
     	if(adminService.rejectSeller(seller) == 1) {
     		result = "거절 완료";

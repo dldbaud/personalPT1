@@ -149,6 +149,14 @@
 		WHERE USER_STATUS = 'Y'
 		  AND ID = #{ id }
 	</update>
+	
+	<select id="findByUserById" resultMap="userResultMap">
+		SELECT
+		       ID
+		  FROM TB_USER
+		 WHERE USER_NM = #{ userNm }
+		   AND PHONE = #{ phone } 
+	</select>
 </mapper>
 
 

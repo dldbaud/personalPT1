@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/login/CSS/findId.css">
+</head>
+<body>
+
+    <script>
+        const id = '[[${id}]]';
+        id && alert(id);
+    </script>
+
+    <div th:replace="common/header.html"></div>
+
+    <div class="wrapper">
+        <form class="login2" action="/user/findId" method="post">
+            <input type="text" class="id" name="userNm" placeholder="이름"/>
+            <input type="password" class="phone" name="phone" placeholder="휴대전화"/>
+            <input type="submit" class="btn" value="아이디 찾기" id="find_Id">
+        </form>
+    </div>
+</body>
+</html>

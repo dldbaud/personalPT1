@@ -3,6 +3,7 @@ package com.greedy.sarada.sell.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.greedy.sarada.common.exception.sell.SellRegistException;
 import com.greedy.sarada.sell.dao.SellMapper;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@Transactional
 public class SellService {
 	
 	private final SellMapper sellMapper;

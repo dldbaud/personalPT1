@@ -23,5 +23,7 @@ public interface AdminMapper {
 
 	int rejectSeller(SellDto seller);
 
+	int insertAuthSell(SellDto seller);
+
 
 }

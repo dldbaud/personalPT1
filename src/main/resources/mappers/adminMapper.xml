@@ -78,6 +78,7 @@
 		, B.USER_NM
 		FROM TB_SELL A
 		JOIN TB_USER B ON (A.USER_NO = B.USER_NO)
+	   WHERE A.SELL_STATUS = '대기'
 	</select>
 
 	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
@@ -157,6 +158,9 @@
 	                <if test="searchCondition == 'regist'">
 	                    C.SELL_STATUS = '승인'
 	                </if>
+	                <if test="searchCondition == 'reject'">
+	                    C.SELL_STATUS = '거절'
+	                </if>
 	                AND (
 	                    C.SELL_CATEGORY_NM LIKE '%' || #{ searchValue } || '%' OR
 	                    C.SELLER_NO LIKE '%' || #{ searchValue } || '%' OR
@@ -197,38 +201,26 @@
        WHERE A.SELL_NO = #{ sellNo }
 	</select>
 	
-	<insert id="insertSeller">
+	<update id="insertSeller">
 		UPDATE TB_SELL
            SET SELL_STATUS = '승인', SELL_REGI_DATE = SYSDATE
 		 WHERE SELL_NO = #{ sellNo }
-	</insert>
+	</update>
 	
-	<insert id="rejectSeller">
+	<update id="rejectSeller">
+		UPDATE TB_SELL
+		  SET SELL_STATUS = '거절', SELL_REGI_DATE = SYSDATE
+		WHERE SELL_NO = #{ sellNo }
+	</update>
+	
+	<insert id="insertAuthSell">
 		INSERT 
-				INTO TB_SELL
-		(  SELL_NO
-		,  USER_NO
-		,  SELL_NM
-		,  SELL_ADDRESS
-		,  SELL_CATEGORY_NM
-		,  SELL_TYPE
-		,  SELL_PHONE
-		,  SELL_STATUS
-		,  SELL_REQ_DATE
-		,  SELLER_NO)
+		    INTO TB_USER_ROLE
+		( AUTH_NO
+		, USER_NO)
 		VALUES
-		(  'SE'||(SEQ_SELL.NEXTVAL)
-		,  #{ user.userNo}
-		,  #{ sellNm }
-		,  #{ sellAddress }
-		,  #{ sellCategoryNm }
-		,  #{ sellType }
-		,  #{ sellPhone }
-		,  #{ sellStatus }
-		, SYSDATE
-		,  #{ sellerNo } 
+		(  'AU3'
+		,  #{ user.userNo }
 		)
 	</insert>
 </mapper>
-
-<!-- JOIN TB_USER E ON(D.USER_NO = E.USER_NO) -->

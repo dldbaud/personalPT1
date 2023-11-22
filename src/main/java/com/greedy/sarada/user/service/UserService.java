@@ -1,5 +1,8 @@
 package com.greedy.sarada.user.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +72,13 @@ public class UserService {
 			 throw new MemberModifyException("회원 정보 수정에 실패하셨습니다.");
 		}
 		
+	}
+
+
+	public String findUserById(String userNm, String phone) {
+		
+		return mapper.findByUserById(userNm,phone);
+	
 	}
 
 

@@ -70,4 +70,16 @@ public class SellController {
     	
     	return "redirect:/";
     }
+    
+    @GetMapping("/manage")
+    public String sellManage() {
+    	
+    	return "user/sell/sellManage";
+    }
+    
+    @GetMapping("/addProduct")
+    public String addProduct() {
+    	
+    	return "user/sell/addProduct";
+    }
 }

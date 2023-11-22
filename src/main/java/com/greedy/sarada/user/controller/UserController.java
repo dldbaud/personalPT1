@@ -1,5 +1,10 @@
 package com.greedy.sarada.user.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -204,4 +209,38 @@ public class UserController {
 	    	return "null";
 	    }
 	    
+		/* 아이디 찾기 */
+		@GetMapping("/findId")
+		public String goSearchId(Model model) {
+			
+			
+			return "user/login/findId";
+		}
+		
+		@PostMapping("/findId")
+		public String doFindIdSearch(@ModelAttribute UserDto user, Model model) {
+			log.info("[UserController] user findId : " + user);
+			
+			String id = userService.findUserById(user.getUserNm(), user.getPhone());
+			
+			log.info("[UserController] user findId : " + id);
+			
+			String result = "";
+			if(id != null) {
+				model.addAttribute("id", id);
+				result = "/user/login/findIdResult";
+			} else {
+				model.addAttribute("id", "아이디가 없습니다.");
+				result = "/user/login/findId";
+			}
+			
+			return result;
+		}
+	    
+		/* 비밀번호 찾기 */
+		@GetMapping("/findPwd")
+		public String goSearchPwd() {
+
+			return "user/login/findPwd";
+		}
 }

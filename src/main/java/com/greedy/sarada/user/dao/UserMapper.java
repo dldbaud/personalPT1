@@ -1,5 +1,7 @@
 package com.greedy.sarada.user.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.greedy.sarada.provider.SnsDto;
@@ -21,6 +23,8 @@ public interface UserMapper {
 	String selectByProviderId(String id);
 
 	int modifyUser(UserDto user);
+
+	String findByUserById(String userNm, String phone);
 
 
 //	String findByEmail(String email);
