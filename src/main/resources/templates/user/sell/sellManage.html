@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/user/sell/CSS/sellManage.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+      <div th:replace="user/sell/sellSideBar.html"></div>
+      <div class="myPageContents">
+        <div class="mYConetentsBar">
+          <h2>내 주문현황</h2>
+          <table class="contentsBar">
+            <thead>
+              <tr>
+                <th>상품 준비중</th>
+                <th>배송중</th>
+                <th>배송완료</th>
+                <th>취소 교환 반품</th>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>5</td>
+                <td>20</td>
+                <td>3</td>
+              </tr>
+            </thead>
+          </table>
+          <div class="contentsBoard">
+            <table class="">
+              <thead>
+                <tr>
+                  <th colspan="2">상품 문의</th>
+                </tr>
+                <tr>
+                  <td>답변대기</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td>답변완료</td>
+                  <td>8</td>
+                </tr>
+              </thead>
+            </table>
+            <table class="">
+              <thead>
+                <tr>
+                  <th colspan="2">상품 후기</th>
+                </tr>
+                <tr>
+                  <td>답변대기</td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td>답변완료</td>
+                  <td>9</td>
+                </tr>
+              </thead>
+            </table>
+            <table class="">
+              <thead>
+                <tr>
+                  <th colspan="2">1:1 게시글</th>
+                </tr>
+                <tr>
+                  <td>답변대기</td>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <td>답변완료</td>
+                  <td>15</td>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

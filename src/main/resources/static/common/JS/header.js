@@ -113,5 +113,32 @@ window.onload = function () {
             location.href="/admin/main";
         }
     }
+
+    if(document.getElementById('sellButton')){
+
+        $adminButton = document.getElementById('sellButton');
+
+        $adminButton.onclick = function() {
+            location.href="/sell/manage";
+        }
+    }
+
+    if(document.getElementById('findId')) {
+
+        $findId = document.getElementById('findId');
+
+        $findId.onclick = function() {
+            location.href="/user/findId";
+        }
+    }
+
+    if(document.getElementById('findPwd')) {
+
+        $findPwd = document.getElementById('findPwd');
+
+        $findPwd.onclick = function() {
+            location.href="/user/findPwd";
+        }
+    }
 }
 

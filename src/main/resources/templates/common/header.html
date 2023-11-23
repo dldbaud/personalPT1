@@ -35,6 +35,9 @@
             <th:block sec:authorize="hasRole('ROLE_ADMIN')">
                 <input type="button" value="관리자 버튼" id="adminButton">
             </th:block>
+            <th:block sec:authorize="hasRole('ROLE_SELL')">
+                <input type="button" value="판매자 버튼" id="sellButton">
+            </th:block>
             <th:block sec:authorize="isAuthenticated()">
                 <input type="button" value="마이프로필" id="myProfile">
                 <input type="button" value="로그아웃" id="logout">

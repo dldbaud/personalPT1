@@ -15,14 +15,27 @@
         <div th:replace="admin/common/adminSideBar.html"></div>
         <div class="myPageContents">
             <div class="mYConetentsBar">
-              <div class="search"> 
-                  <h2>판매자 신청 리스트</h2>
+              <div class="search">
+                <th:block th:if="${paging != null}">
+                  <th:block th:if="${paging.searchCondition eq 'req'}">
+                      <h2>판매자 신청 리스트</h2>
+                  </th:block>
+                  <th:block th:if="${paging.searchCondition eq 'regist'}">
+                      <h2>판매자 승인 리스트</h2>
+                  </th:block>
+                  <th:block th:if="${paging.searchCondition eq 'reject'}">
+                      <h2>판매자 거절 리스트</h2>
+                  </th:block>
+                </th:block>
+                <th:block th:if="${paging == null}">
+                    <h2>판매자 신청 리스트</h2>
+                </th:block>
                   <div class="searchDiv">
                   <form action="/admin/sellSearchList" method="get">
                     <select id="searchCondition" name="searchCondition">
                         <option value="regist">승인</option>
-                        <option value="req">신청</option>
-                        <option value="">반려</option>
+                        <option value="req" selected>신청</option>
+                        <option value="reject">반려</option>
                     </select>
                       <input type="search" name="searchValue">
                         <button id="searchButton" type="submit">검색</button>

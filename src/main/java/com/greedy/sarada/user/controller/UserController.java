@@ -101,7 +101,7 @@ public class UserController {
 	    	
 	    	rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
 	    	
-	    	return "redirect:/user/login/login";
+	    	return "redirect:/user/login";
 	    }
 	    
 	    /* 회원 가입 */
@@ -218,7 +218,7 @@ public class UserController {
 		}
 		
 		@PostMapping("/findId")
-		public String doFindIdSearch(@ModelAttribute UserDto user, Model model) {
+		public String doFindIdSearch(@ModelAttribute UserDto user, Model model, RedirectAttributes rttr) {
 			log.info("[UserController] user findId : " + user);
 			
 			String id = userService.findUserById(user.getUserNm(), user.getPhone());
@@ -230,8 +230,8 @@ public class UserController {
 				model.addAttribute("id", id);
 				result = "/user/login/findIdResult";
 			} else {
-				model.addAttribute("id", "아이디가 없습니다.");
-				result = "/user/login/findId";
+				rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("user.noId"));
+				result = "redirect:/user/findId";
 			}
 			
 			return result;

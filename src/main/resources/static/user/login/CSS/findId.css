@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+}
+
+.wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 15rem;
+}
+
+.id, .phone {
+    width: 20rem;
+    background-color: #EEEFF1;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ccc; /* 둥근 테두리 추가 */
+    border-radius: 8px; /* 둥근 테두리 추가 */
+}
+
+.btn {
+    width: 20rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px; 
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #217dbb; 
+}
+
+.btn1 {
+    /* background-color:white; */
+    background: none;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* .btn1:hover {
+    background-color: #d40b0b;
+} */
+
+@media screen and (max-width : 760px){
+    .id, .pwd, .btn, .btn1 {
+        width: 80%; 
+    }
+
+}

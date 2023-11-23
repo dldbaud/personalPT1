@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/sell/CSS/addProduct.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div th:replace="user/sell/sellSideBar.html"></div>
+        <div class="myPageContents">
+            <div class="mYConetentsBar">
+                <h2>판매 등록</h2>              
+                <form id="sellForm" enctype="multipart/form-data">
+                    <label for="sellName">판매글 제목:</label>
+                    <input type="text" id="sellName" name="sellName" required>
+                                         
+                    <label for="sellDescription">판매 설명:</label>
+                    <textarea id="sellDescription" name="sellDescription" required></textarea>
+                    
+                    <label for="sellCategory">카테고리:</label>
+                    <select id="sellCategory" name="sellCategory" required>
+                        <option value="electronics">전자제품</option>
+                        <option value="clothing">의류</option>
+                    </select>
+                    
+                    <div id="itemsContainer">
+                        <div class="item">
+                            <label>상품 등록</label>
+                            
+                            <label for="itemNm">이름</label>
+                            <input type="text" class="itemInput" name="itemNm[0]" required>
+
+                            <label for="main-image" class="upload">파일 올리기</label>
+                            <input type="file" id="main-image[0]" name="mainImage[0]" accept="image/jpg, image/png" multiple required>
+                            
+                            <label for="fileView">파일 미리보기</label>
+                            <div class="image-area" name="fileView[0]">
+                                <img style="width: 120px; height: 100px;">
+                            </div>
+
+                            <label for="main-image" class="upload">파일 올리기</label>
+                            <input type="file" id="main-image[0]" name="mainImage[0]" accept="image/jpg, image/png" multiple required>
+
+                            <label for="fileView">파일 미리보기</label>
+                            <div class="image-area" name="fileView[0]">
+                                <img style="width: 120px; height: 100px;">
+                            </div>
+
+                            <label for="main-image" class="upload">파일 올리기</label>
+                            <input type="file" id="main-image[0]" name="mainImage[0]" accept="image/jpg, image/png" multiple required>
+                            
+                            <label for="fileView">파일 미리보기</label>
+                            <div class="image-area" name="fileView[0]">
+                                <img style="width: 120px; height: 100px;">
+                            </div>
+    
+                            <label for="itemDescription">상품 설명</label>
+                            <textarea class="itemInput" name="itemDescription[0]" required></textarea>
+                            
+                            <label for="itemPrice">가격</label>
+                            <input type="number" class="itemInput" name="itemPrice[0]" required>
+                            
+                            <label for="ST_COUNT">재고</label>
+                            <input type="number" class="itemInput" name="ST_COUNT[0]" required>
+
+                            <button type="button" class="removeItemBtn">상품 삭제</button>
+                        </div>
+                    </div>
+                
+                    <button type="button" id="addItemBtn">상품 추가</button>
+                    <button type="submit">판매 등록</button>
+                </form>
+            </div>
+    </div>
+</body>
+</html>

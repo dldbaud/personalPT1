@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/sell/CSS/sellSideBar.css">
+    <script type="text/javascript" src="/user/sell/JS/sellJs.js"></script>
+</head>
+
+<body>
+    <div>
+        <div th:replace="common/header.html"></div>
+        <div>
+            <div class="aside">
+                <ul>
+                    <li class="menu-link">사업장 정보
+                        <ul>
+                            <li><input type="button" id="updateSellerInfo" value="판매자 정보 수정"></li>
+                            <li><input type="button" id="manageShipping" value="배송지 관리"></li>
+                            <li><input type="button" id="withdrawSeller" value="회원 탈퇴"></li>
+                        </ul>
+                    </li>
+                    <li class="menu-link">상품 관리
+                        <ul>
+                            <li><input type="button" id="addProduct" value="상품 추가"></li>
+                            <li><input type="button" id="manageProducts" value="상품 관리"></li>
+                            <li><input type="button" id="manageOrders" value="주문 관리"></li>
+                            <li><input type="button" id="productRegist" value="판매 등록"></li>
+                        </ul>
+                    </li>
+                    <li class="menu-link">통계 및 리포트
+                        <ul>
+                            <li><input type="button" id="viewStats" value="매출 통계"></li>
+                            <li><input type="button" id="generateReport" value="리포트 생성"></li>
+                        </ul>
+                    </li>
+                    <li class="menu-link">고객 관리
+                        <ul>
+                            <li><input type="button" id="customerList" value="고객 목록"></li>
+                            <li><input type="button" id="customerFeedback" value="고객 피드백"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

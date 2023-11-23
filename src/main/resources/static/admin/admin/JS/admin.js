@@ -11,7 +11,6 @@ window.addEventListener('load', function () {
 
     if(document.getElementById('buttonBox1')){
 
-        console.log("클릭");
 
         const sellNo = document.getElementById('sellNo').value;
         const sellerNo = document.getElementById('sellerNo').value;
@@ -22,14 +21,20 @@ window.addEventListener('load', function () {
         const zipCode = document.getElementById('zipCode').value;
         const address1 = document.getElementById('address1').value;
         const address2 = document.getElementById('address2').value;
+        const userNo = document.getElementById('userNo').value;
 
         const sellAddress = zipCode + "$" + address1 + "$" +  address2;
 
+        const userDto = {
+            userNo: userNo,
+        };
+
         const $buttonBox1 = document.getElementById('buttonBox1');
-        const sellDto = { sellNo, sellerNo, sellNm, sellCategoryNm, sellType, sellPhone, sellAddress}
+        const sellDto = { sellNo, sellerNo, sellNm, sellCategoryNm, sellType, sellPhone, sellAddress, user: userDto}
         const $json = JSON.stringify(sellDto);
         
         $buttonBox1.onclick = function(){
+            console.log("클릭");
             fetch("/admin/sellRegist", {
                 method : "post",
                 headers: {
@@ -48,7 +53,7 @@ window.addEventListener('load', function () {
 
     if(document.getElementById('buttonBox2')){
 
-        console.log("클릭");
+        
 
         const sellNo = document.getElementById('sellNo').value;
         const sellerNo = document.getElementById('sellerNo').value;
@@ -64,16 +69,16 @@ window.addEventListener('load', function () {
 
         const userDto = {
             userNo: userNo,
-            // 다른 필요한 필드들을 추가로 채워넣기
         };
 
         const sellAddress = zipCode + "$" + address1 + "$" +  address2;
 
-        const $buttonBox2 = document.getElementById('buttonBox1');
+        const $buttonBox2 = document.getElementById('buttonBox2');
         const sellDto = { sellNo, sellerNo, sellNm, sellCategoryNm, sellType, sellPhone, sellAddress, sellReqDate, user: userDto}
         const $json = JSON.stringify(sellDto);
         
         $buttonBox2.onclick = function(){
+            console.log("클릭");
             fetch("/admin/sellReject", {
                 method : "post",
                 headers: {
