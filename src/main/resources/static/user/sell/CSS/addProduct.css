@@ -81,7 +81,7 @@ h2 {
 }
 
 form {
-    max-width: 400px;
+    max-width: 80%;
     margin: 0 auto;
 }
 
@@ -114,43 +114,27 @@ button:hover {
     background-color: #45a049;
 }
 
-form {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
-label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-}
 
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
 
-input[type="file"] {
-    margin-bottom: 20px;
-}
+
+
+
+
+
+
+
+
+
+
+
 
 .button-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 
 button {
     background-color: #4CAF50;
@@ -165,14 +149,6 @@ button:hover {
     background-color: #45a049;
 }
 
-.item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 .removeItemBtn {
     background-color: #ff3333;
     color: white;
@@ -185,3 +161,4 @@ button:hover {
 .removeItemBtn:hover {
     background-color: #cc0000;
 }
+

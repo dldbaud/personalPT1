@@ -23,11 +23,11 @@ window.addEventListener('load', function () {
             newItem.innerHTML = `
                 <label>상품 등록</label>
                 
-                <label for="itemNm">이름</label>
-                <input type="text" class="itemInput" name="itemNm[${itemCount}]" required>
+                <label for="ptNm">이름</label>
+                <input type="text" id="ptNm" class="itemInput" name="ptList[${itemCount}].ptNm" required>
 
                 <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="mainImage[0]" accept="image/jpg, image/png" multiple required>
+                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
                 
                 <label for="fileView">파일 미리보기</label>
                 <div class="image-area" name="fileView[0]">
@@ -35,7 +35,7 @@ window.addEventListener('load', function () {
                 </div>
 
                 <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="mainImage[0]" accept="image/jpg, image/png" multiple required>
+                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
 
                 <label for="fileView">파일 미리보기</label>
                 <div class="image-area" name="fileView[0]">
@@ -43,21 +43,21 @@ window.addEventListener('load', function () {
                 </div>
 
                 <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="mainImage[0]" accept="image/jpg, image/png" multiple required>
+                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
                 
                 <label for="fileView">파일 미리보기</label>
                 <div class="image-area" name="fileView[0]">
                     <img style="width: 120px; height: 100px;">
                 </div>
 
-                <label for="itemDescription">상품 설명</label>
-                <textarea class="itemInput" name="itemDescription[${itemCount}]" required></textarea>
+                <label for="ptDescrip">상품 설명</label>
+                <textarea class="itemInput" id="ptDescrip" name="ptList[${itemCount}].ptDescrip" required></textarea>
                 
-                <label for="itemPrice">가격</label>
-                <input type="number" class="itemInput" name="itemPrice[${itemCount}]" required>
+                <label for="price">가격</label>
+                <input type="number" id="price" class="itemInput" name="ptList[${itemCount}].price" required>
                 
-                <label for="ST_COUNT">재고</label>
-                            <input type="number" class="itemInput" name="ST_COUNT[${itemCount}]" required>
+                <label for="stCount">재고</label>
+                <input type="number" id="stCount" class="itemInput" name="ptList[${itemCount}].stCount" required>
     
                 <button type="button" class="removeItemBtn">상품 삭제</button>
             `;
