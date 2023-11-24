@@ -11,4 +11,5 @@ public class FileDto {
 	private String originalFileNm;
 	private String savedFileNm;
 	private String filePath;
+	private String mainFilePath;
 }
