@@ -13,7 +13,7 @@ public class PtDto {
 	private String ptNm;
 	private int price;
 	private int stCount;
-	private UserDto user;
+	private SellDto sell;
 	private String ptDescrip;
 	private String listNo;
 	private List<FileDto> fileList;

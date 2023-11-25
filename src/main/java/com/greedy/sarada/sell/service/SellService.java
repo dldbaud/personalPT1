@@ -49,15 +49,12 @@ public class SellService {
 		
 	}
 	public void registSellList(ListDto list) {
-		
+			
 		/* 2. file 테이블에 데이터 저장(첨부된 파일만큼) */
 		for(FileDto file : list.getFileImageList()) {
 			sellMapper.insertImage(file);
 		}
 		
-		for(PtDto pt : list.getPtList()) {
-			sellMapper.insertPt(pt);
-		}
 	}
 	
 	public void registSellMainImage(ListDto list) {
@@ -67,6 +64,10 @@ public class SellService {
 		
 		sellMapper.insertSellMainImage(list.getFileMain());
 		
+	}
+	public void insertPt(PtDto pt) {
+		
+		sellMapper.insertPt(pt);
 	}
 	
 }

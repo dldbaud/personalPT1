@@ -76,7 +76,7 @@
 		<result property="stCount" column="ST_COUNT"/>
 		<result property="ptDescrip" column="PT_DESCRIP"/>
 		<result property="listNo" column="LIST_NO"/>		
-		<association property="user" resultMap="userResultMap"/>
+		<association property="sell" resultMap="sellDtoResultMap"/>
 		<association property="fileList" resultMap="fileResultMap"/>
 	</resultMap>
 	
@@ -143,7 +143,12 @@
 		, SELL_NO
 		)VALUES
 		(
-		  
+		  'LI'||(SEQ_LIST.NEXTVAL)
+		, #{ categoryCode.refCategory}
+		, #{ listNm }
+		, #{ registDate }
+		, #{ description }
+		, #{ sell.sellNo }
 		)
 	</insert>
 	<insert id="insertImage">
@@ -155,27 +160,17 @@
 		, ORIGINAL_FILE_NM
 		, SAVED_FILE_NM
 		, FILE_PATH
-		, MAIN_FILE_PATH
 		)VALUES
 		(
-		  
+		  'FI'||(SEQ_FILE.NEXTVAL)
+		, #{ 'PT'||(SEQ_PT.CURRVAL}
+		, #{ fileType }
+		, #{ originalFileNm }
+		, #{ savedFileNm }
+		, #{ filePath }
 		)
 	</insert>
-	<insert id="insertSellMainImage">
-		INSERT 
-			INTO TB_FILE
-		( FILE_NO
-		, PT_NO
-		, FILE_TYPE
-		, ORIGINAL_FILE_NM
-		, SAVED_FILE_NM
-		, FILE_PATH
-		, MAIN_FILE_PATH
-		)VALUES
-		(
-		  
-		)
-	</insert>
+	
 	<insert id="insertPt">
 		INSERT 
 			INTO TB_PT
@@ -188,7 +183,33 @@
 		, LIST_NO
 		)VALUES
 		(
-		  
+		  'PT'||(SEQ_PT.NEXTVAL)
+		, #{ ptNm }
+		, #{ price }
+		, #{ stCount }
+		, #{ sell.sellNo }
+		, #{ ptDescrip }
+		, 'LI'||(SEQ_LIST.CURRVAL)
+		)
+	</insert>
+	
+	<insert id="insertSellMainImage">
+		INSERT 
+			INTO TB_FILE
+		( FILE_NO
+		, PT_NO
+		, FILE_TYPE
+		, ORIGINAL_FILE_NM
+		, SAVED_FILE_NM
+		, MAIN_FILE_PATH
+		)VALUES
+		(
+		  'FI'||(SEQ_FILE.NEXTVAL)
+		, #{ 'PT'||(SEQ_PT.CURRVAL}
+		, #{ fileType }
+		, #{ originalFileNm }
+		, #{ savedFileNm }
+		, #{ mainFilePath }
 		)
 	</insert>
 	
