@@ -98,8 +98,8 @@ public class SellController {
 	}
 
 	@PostMapping("/addProduct")
-	public String addProduct(@RequestParam("attachImageMain") List<MultipartFile> attachImageMain,
-			HttpServletRequest request, ListDto list, PtDto pt, @AuthenticationPrincipal UserDto user,
+	public String addProduct(@RequestParam("attachImageMain") MultipartFile attachImageMain,
+			HttpServletRequest request, ListDto list, List<PtDto> pt, @AuthenticationPrincipal UserDto user,
 			RedirectAttributes rttr) {
 
 		String fileUploadDir = IMAGE_DIR + "original";
@@ -136,10 +136,15 @@ public class SellController {
 		log.info("[sellController] dynamicAttachImages{}", dynamicAttachImagesMap);
 		log.info("[sellController] ListDto{}", list);
 		log.info("[sellController] attachImageMain{}", attachImageMain);
-
+		
+		/* 상품 이미지 리스트*/
 		Map<String, List<FileDto>> savedAttachImagesMap = new HashMap<>();
 		List<FileDto> savedAttachmentList = new ArrayList<>();
-
+		
+		boolean isFirstMainImage = true;
+		
+		/*대표이미지*/
+		FileDto fileInfo2 = new FileDto();
 		try {
 
 			for (int i = 0; i < dynamicAttachImagesMap.size(); i++) {
@@ -160,19 +165,40 @@ public class SellController {
 
 						/* DB에 저장할 파일의 정보 처리 */
 						FileDto fileInfo = new FileDto();
+						fileInfo.setFileType("상품");
 						fileInfo.setOriginalFileNm(originalFileName);
 						fileInfo.setSavedFileNm(savedFileName);
 						fileInfo.setFilePath("/upload/original/");
 
 						savedAttachmentList.add(fileInfo);
+						list.setFileImageList(savedAttachmentList);
+						
+						sellService.registSellList(list);
+						
+						if(attachImageMain != null && isFirstMainImage) {
+							originalFileName = attachImageMain.getOriginalFilename();
+							ext = originalFileName.substring(originalFileName.lastIndexOf("."));
+							savedFileName = UUID.randomUUID().toString() + ext;
+							
+							attachImageMain.transferTo(new File(fileUploadDir + "/" + savedFileName));
+							
+
+							fileInfo2.setFileType("대표이미지");
+							fileInfo2.setOriginalFileNm(originalFileName);
+							fileInfo2.setSavedFileNm(savedFileName);
+							fileInfo2.setMainFilePath("/upload/mainImage/");
+							sellService.registSellMainImage(list);
+							
+							isFirstMainImage = false;
+						}
 					}
-					savedAttachImagesMap.put("attachImage[" + i + "]", savedAttachmentList);
 				}
 			}
 		} catch (Exception e) {
 			
 		}
 
+//					savedAttachImagesMap.put("attachImage[" + i + "]", savedAttachmentList);
 //		for (Map.Entry<String, List<MultipartFile>> entry : dynamicAttachImagesMap.entrySet()) {
 //		    String key = entry.getKey();
 //		    List<MultipartFile> fileList = entry.getValue();

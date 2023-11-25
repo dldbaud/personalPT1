@@ -55,6 +55,40 @@
 		<result property="authDesc" column="AUTH_DESC"/>
 	</resultMap>
 	
+	<resultMap id="listResultMap" type="com.greedy.sarada.sell.dto.ListDto">
+		<id property="listNo" column="LIST_NO"/>
+		<result property="listNm" column="LIST_NM"/>
+		<result property="registDate" column="REGIST_DATE"/>
+		<result property="description" column="DESCRIPTION"/>
+		<result property="listNm" column="LIST_NM"/>
+		<association property="categoryCode" resultMap="RefCategoryResultMap"/>
+		<association property="sell" resultMap="sellDtoResultMap"/>
+		<association property="fileMain" resultMap="fileResultMap"/>
+		<collection property="ptList" resultMap="ptResultMap"/>
+		<collection property="fileImageList" resultMap="fileResultMap"/>
+	</resultMap>
+	
+	
+	<resultMap id="ptResultMap" type="com.greedy.sarada.sell.dto.PtDto">
+		<id property="ptNo" column="PT_NO"/>
+		<result property="ptNm" column="PT_NM"/>
+		<result property="price" column="PRICE"/>
+		<result property="stCount" column="ST_COUNT"/>
+		<result property="ptDescrip" column="PT_DESCRIP"/>
+		<result property="listNo" column="LIST_NO"/>		
+		<association property="user" resultMap="userResultMap"/>
+		<association property="fileList" resultMap="fileResultMap"/>
+	</resultMap>
+	
+	<resultMap id="fileResultMap" type="com.greedy.sarada.sell.dto.FileDto">
+		<id property="fileNo" column="FILE_NO"/>
+		<result property="fileType" column="FILE_TYPE"/>
+		<result property="originalFileNm" column="ORIGINAL_FILE_NM"/>
+		<result property="savedFileNm" column="SAVED_FILE_NM"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="mainFilePath" column="MAIN_FILE_PATH"/>
+	</resultMap>
+	
 	<select id="findAllCategory" resultMap="sellCategoryResultMap">
 		SELECT
 				CATEGORY_CODE
@@ -97,4 +131,66 @@
 		)
 	
 	</insert>
+	
+	<insert id="insertSellList">
+		INSERT 
+			INTO TB_LIST
+		( LIST_NO
+		, CATEGORY_CODE
+		, LIST_NM
+		, REGIST_DATE
+		, DESCRIPTION
+		, SELL_NO
+		)VALUES
+		(
+		  
+		)
+	</insert>
+	<insert id="insertImage">
+		INSERT 
+			INTO TB_FILE
+		( FILE_NO
+		, PT_NO
+		, FILE_TYPE
+		, ORIGINAL_FILE_NM
+		, SAVED_FILE_NM
+		, FILE_PATH
+		, MAIN_FILE_PATH
+		)VALUES
+		(
+		  
+		)
+	</insert>
+	<insert id="insertSellMainImage">
+		INSERT 
+			INTO TB_FILE
+		( FILE_NO
+		, PT_NO
+		, FILE_TYPE
+		, ORIGINAL_FILE_NM
+		, SAVED_FILE_NM
+		, FILE_PATH
+		, MAIN_FILE_PATH
+		)VALUES
+		(
+		  
+		)
+	</insert>
+	<insert id="insertPt">
+		INSERT 
+			INTO TB_PT
+		( PT_NO
+		, PT_NM
+		, PRICE
+		, ST_COUNT
+		, SELL_NO
+		, PT_DESCRIP
+		, LIST_NO
+		)VALUES
+		(
+		  
+		)
+	</insert>
+	
+	
 </mapper>
