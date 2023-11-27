@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.greedy.comprehensive.board.dto.AttachmentDTO;
 import com.greedy.sarada.common.exception.sell.SellRegistException;
 import com.greedy.sarada.sell.dao.SellMapper;
 import com.greedy.sarada.sell.dto.CategoryDto;
@@ -17,6 +16,7 @@ import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.sell.dto.RefCategoryDto;
 import com.greedy.sarada.sell.dto.SellDto;
+import com.greedy.sarada.user.dto.UserDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +48,7 @@ public class SellService {
 	        }
 		
 	}
-	public void registSellList(ListDto list) {
+	public void insertProdectFileList(ListDto list) {
 			
 		/* 2. file 테이블에 데이터 저장(첨부된 파일만큼) */
 		for(FileDto file : list.getFileImageList()) {
@@ -59,8 +59,6 @@ public class SellService {
 	
 	public void registSellMainImage(ListDto list) {
 		
-		/* 1. list 테이블에 데이터 저장 */
-		sellMapper.insertSellList(list);
 		
 		sellMapper.insertSellMainImage(list.getFileMain());
 		
@@ -68,6 +66,16 @@ public class SellService {
 	public void insertPt(PtDto pt) {
 		
 		sellMapper.insertPt(pt);
+	}
+	public SellDto selectSeller(UserDto user) {
+		
+		return sellMapper.selectSeller(user);
+	}
+	public void insertList(ListDto list) {
+		
+		/* 1. list 테이블에 데이터 저장 */
+		sellMapper.insertSellList(list);
+		
 	}
 	
 }

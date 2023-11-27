@@ -16,7 +16,7 @@ public class ListDto {
 	private String listNm;
 	private Date registDate; 
 	private String description;
-	private UserDto sell;
+	private SellDto sell;
 	private FileDto fileMain;
 	private List<PtDto> ptList;  //1:N
 	private List<FileDto> fileImageList;

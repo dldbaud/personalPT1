@@ -10,6 +10,7 @@ import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.sell.dto.RefCategoryDto;
 import com.greedy.sarada.sell.dto.SellDto;
+import com.greedy.sarada.user.dto.UserDto;
 
 @Mapper
 public interface SellMapper {
@@ -30,5 +31,7 @@ public interface SellMapper {
 	void insertSellMainImage(FileDto fileMain);
 
 	void insertPt(PtDto pt);
+
+	SellDto selectSeller(UserDto user);
 
 }

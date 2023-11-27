@@ -104,33 +104,22 @@
 		  FROM TB_REF_CATEGORY
 	</select>
 	
-	<insert id="sellRegist">
-		INSERT 
-				INTO TB_SELL
-		(  SELL_NO
-		,  USER_NO
-		,  SELL_NM
-		,  SELL_ADDRESS
-		,  SELL_CATEGORY_NM
-		,  SELL_TYPE
-		,  SELL_PHONE
-		,  SELL_STATUS
-		,  SELL_REQ_DATE
-		,  SELLER_NO)
-		VALUES
-		(  'SE'||(SEQ_SELL.NEXTVAL)
-		,  #{ user.userNo}
-		,  #{ sellNm }
-		,  #{ sellAddress }
-		,  #{ sellCategoryNm }
-		,  #{ sellType }
-		,  #{ sellPhone }
-		,  #{ sellStatus }
-		, SYSDATE
-		,  #{ sellerNo } 
-		)
-	
-	</insert>
+	<select id="selectSeller" resultMap="sellDtoResultMap">
+		SELECT  
+			   SELL_NO
+			,  USER_NO
+			,  SELL_NM
+			,  SELL_ADDRESS
+			,  SELL_CATEGORY_NM
+			,  SELL_TYPE
+			,  SELL_PHONE
+			,  SELL_STATUS
+			,  SELL_REQ_DATE
+			,  SELLER_NO
+		 FROM TB_SELL 
+		WHERE USER_NO = #{ userNo }
+	</select>
+
 	
 	<insert id="insertSellList">
 		INSERT 
@@ -163,7 +152,7 @@
 		)VALUES
 		(
 		  'FI'||(SEQ_FILE.NEXTVAL)
-		, #{ 'PT'||(SEQ_PT.CURRVAL}
+		, 'PT'||(SEQ_PT.CURRVAL)
 		, #{ fileType }
 		, #{ originalFileNm }
 		, #{ savedFileNm }
@@ -205,7 +194,7 @@
 		)VALUES
 		(
 		  'FI'||(SEQ_FILE.NEXTVAL)
-		, #{ 'PT'||(SEQ_PT.CURRVAL}
+		, 'PT'||(SEQ_PT.CURRVAL)
 		, #{ fileType }
 		, #{ originalFileNm }
 		, #{ savedFileNm }

@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.greedy.comprehensive.board.dto.AttachmentDTO;
 import com.greedy.sarada.common.exception.sell.SellRegistException;
 import com.greedy.sarada.sell.dto.FileDto;
 import com.greedy.sarada.sell.dto.ListDto;
@@ -99,9 +98,8 @@ public class SellController {
 	}
 
 	@PostMapping("/addProduct")
-	public String addProduct(@RequestParam("attachImageMain") MultipartFile attachImageMain,
-			HttpServletRequest request, ListDto list, @AuthenticationPrincipal UserDto user,
-			RedirectAttributes rttr) {
+	public String addProduct(@RequestParam("attachImageMain") MultipartFile attachImageMain, HttpServletRequest request,
+			ListDto list, @AuthenticationPrincipal UserDto user, RedirectAttributes rttr) {
 
 		String fileUploadDir = IMAGE_DIR + "original";
 		String mainImage = IMAGE_DIR + "mainImage";
@@ -137,86 +135,103 @@ public class SellController {
 		log.info("[sellController] dynamicAttachImages{}", dynamicAttachImagesMap);
 		log.info("[sellController] ListDto{}", list);
 		log.info("[sellController] attachImageMain{}", attachImageMain);
-		
-		/* 상품 이미지 리스트*/
+
+		/* 상품 이미지 리스트 */
 		Map<String, List<FileDto>> savedAttachImagesMap = new HashMap<>();
 		List<FileDto> savedAttachmentList = new ArrayList<>();
-		
+
+		boolean isFirestList = true;
 		boolean isFirstMainImage = true;
-		
-		/*대표이미지*/
+
+		SellDto seller = sellService.selectSeller(user);
+
+		log.info("[sellController] 판매자의 유저정보 확인 selectSellNo{}", seller);
+
+		list.setSell(seller);
+		/* 대표이미지 */
 		FileDto fileInfo2 = new FileDto();
+
+		if (isFirestList) {
+			sellService.insertList(list);
+			isFirestList = false;
+		}
 		try {
-			
+
 			String originalFileName = "";
 			log.info("[sellController] originalFileName : {}", originalFileName);
-			
+
 			String ext = "";
 			String savedFileName = "";
-			
+
 			for (int i = 0; i < dynamicAttachImagesMap.size(); i++) {
 				if (dynamicAttachImagesMap.get("attachImage[" + i + "]").size() > 0) {
+
+					PtDto pt = list.getPtList().get(i);
 					List<MultipartFile> fileList = dynamicAttachImagesMap.get("attachImage[" + i + "]");
+
+					pt.setSell(seller);
+					sellService.insertPt(pt);
 					
-					if(attachImageMain != null && isFirstMainImage) {
+					savedAttachmentList = new ArrayList<>();
+
+					if (attachImageMain != null && isFirstMainImage) {
 						originalFileName = attachImageMain.getOriginalFilename();
 						ext = originalFileName.substring(originalFileName.lastIndexOf("."));
 						savedFileName = UUID.randomUUID().toString() + ext;
-						
+
 						attachImageMain.transferTo(new File(mainImage + "/" + savedFileName));
-							
+						
+						log.info("[sellController] originalFileName : {}", originalFileName);
+						
+						log.info("[sellController] savedFileName : {}", savedFileName);
 						fileInfo2.setFileType("대표이미지");
 						fileInfo2.setOriginalFileNm(originalFileName);
 						fileInfo2.setSavedFileNm(savedFileName);
 						fileInfo2.setMainFilePath("/upload/mainImage/");
-						
-						/*메인 이미지 및 판매 등록*/
+
+						list.setFileMain(fileInfo2);
+						/* 메인 이미지 및 판매 등록 */
 						sellService.registSellMainImage(list);
-						
+
 						isFirstMainImage = false;
 					}
-					
-					for(PtDto pt : list.getPtList()) {
-						
-						sellService.insertPt(pt);
-						
-						for (MultipartFile file : fileList) {
-							originalFileName = file.getOriginalFilename();
-							log.info("[sellController] originalFileName : {}", originalFileName);
-							
-							ext = originalFileName.substring(originalFileName.lastIndexOf("."));
-							savedFileName = UUID.randomUUID().toString() + ext;
-							
-							log.info("[sellController] savedFileName : {}", savedFileName);
-							
-							/* 서버의 설정 디렉토리에 파일 저장하기 */
-							file.transferTo(new File(fileUploadDir + "/" + savedFileName));
-							
-							/* DB에 저장할 파일의 정보 처리 */
-							FileDto fileInfo = new FileDto();
-							fileInfo.setFileType("상품");
-							fileInfo.setOriginalFileNm(originalFileName);
-							fileInfo.setSavedFileNm(savedFileName);
-							fileInfo.setFilePath("/upload/original/");
-							
-							savedAttachmentList.add(fileInfo);
-							list.setFileImageList(savedAttachmentList);
-							
-							/*이미지 및 상품*/
-							sellService.registSellList(list);
-							
-						}
+
+					for (MultipartFile file : fileList) {
+						originalFileName = file.getOriginalFilename();
+						log.info("[sellController] originalFileName : {}", originalFileName);
+
+						ext = originalFileName.substring(originalFileName.lastIndexOf("."));
+						savedFileName = UUID.randomUUID().toString() + ext;
+
+						log.info("[sellController] savedFileName : {}", savedFileName);
+
+						/* 서버의 설정 디렉토리에 파일 저장하기 */
+						file.transferTo(new File(fileUploadDir + "/" + savedFileName));
+
+						/* DB에 저장할 파일의 정보 처리 */
+						FileDto fileInfo = new FileDto();
+						fileInfo.setFileType("상품");
+						fileInfo.setOriginalFileNm(originalFileName);
+						fileInfo.setSavedFileNm(savedFileName);
+						fileInfo.setFilePath("/upload/original/");
+
+						savedAttachmentList.add(fileInfo);
+
 					}
+					list.setFileImageList(savedAttachmentList);
+
+					/* 이미지 및 상품 */
+					sellService.insertProdectFileList(list);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			/* 실패 시 이미 저장 된 파일을 삭제한다. */
-			for(FileDto attachment : savedAttachmentList) {
-				
+			for (FileDto attachment : savedAttachmentList) {
+
 				File deleteFile = new File(attachment.getSavedFileNm() + "/" + attachment.getSavedFileNm());
 				File deleteMainImage = new File(mainImage + "/mainImage" + attachment.getSavedFileNm());
-				
+
 				deleteFile.delete();
 				deleteMainImage.delete();
 			}
