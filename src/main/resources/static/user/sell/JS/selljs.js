@@ -30,7 +30,7 @@ window.addEventListener('load', function () {
                 <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
                 
                 <label for="fileView">파일 미리보기</label>
-                <div class="image-area" name="fileView[0]">
+                <div class="image-area" name="fileView[${itemCount}]">
                     <img style="width: 120px; height: 100px;">
                 </div>
 
@@ -38,7 +38,7 @@ window.addEventListener('load', function () {
                 <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
 
                 <label for="fileView">파일 미리보기</label>
-                <div class="image-area" name="fileView[0]">
+                <div class="image-area" name="fileView[${itemCount}]">
                     <img style="width: 120px; height: 100px;">
                 </div>
 
@@ -46,7 +46,7 @@ window.addEventListener('load', function () {
                 <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
                 
                 <label for="fileView">파일 미리보기</label>
-                <div class="image-area" name="fileView[0]">
+                <div class="image-area" name="fileView[${itemCount}]">
                     <img style="width: 120px; height: 100px;">
                 </div>
 
