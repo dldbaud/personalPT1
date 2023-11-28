@@ -13,7 +13,7 @@
 
     <div class="wrapper">
         <form class="login2" action="/user/findId" method="post">
-            <input type="text" class="id" name="id" th:value="${ id }" readonly/>
+            <input type="text" class="id" name="id" th:value="[[${ id }]]" readonly/>
         </form>
     </div>
 </body>

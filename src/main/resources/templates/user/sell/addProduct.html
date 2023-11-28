@@ -18,7 +18,7 @@
                     <input type="text" id="listNm" name="listNm" required>
                     
                     <label for="main-image" class="upload">대표 사진</label>
-                    <input type="file" id="main-image[0]" name="attachImageMain" accept="image/jpg, image/png" multiple required>
+                    <input type="file" id="main-image[0]" name="attachImageMain" accept="image/gif, image/jpeg, image/png" multiple required>
                     
                     <label for="fileView">파일 미리보기</label>
                     <div class="image-area" name="fileView[0]">
@@ -26,7 +26,7 @@
                     </div>
 
                     <label for="sellDescription">판매 설명:</label>
-                    <textarea id="sellDescription" name="sellDescription" required></textarea>
+                    <textarea id="sellDescription" name="sellDescription"></textarea>
                     
                     <label for="sellCategory">카테고리:</label>
                     <select id="sellCategory" name="refCategoryCode.refCategory" required>
@@ -43,7 +43,7 @@
                             <select id="sellPtCategory" class="sellPtCategory" name="ptList[0].category.categoryCode" required>
 
                             <label for="main-image" class="upload">상품 사진</label>
-                            <input type="file" id="main-image[0]" name="attachImage[0]" accept="image/jpg, image/png" multiple>
+                            <input type="file" id="main-image[0]" name="attachImage[0]" accept="image/gif, image/jpeg, image/png" multiple>
 
                             <label for="fileView">파일 미리보기</label>
                             <div class="image-area" name="fileView[0]">
@@ -51,7 +51,7 @@
                             </div>
 
                             <label for="main-image" class="upload">상품 사진</label>
-                            <input type="file" id="main-image[0]" name="attachImage[0]" accept="image/jpg, image/png" multiple>
+                            <input type="file" id="main-image[0]" name="attachImage[0]" accept="image/gif, image/jpeg, image/png" multiple>
                             
                             <label for="fileView">파일 미리보기</label>
                             <div class="image-area" name="fileView[0]">
@@ -61,8 +61,18 @@
                             <button type="button" id="fileAdd">파일 추가</button>
                             
                             <label for="ptDescrip">상품 설명</label>
-                            <textarea class="itemInput" id="ptDescrip" name="ptList[0].ptDescrip" required></textarea>
+                            <textarea class="itemInput" id="ptDescrip" name="ptList[0].ptDescrip"></textarea>
                             
+                            <label for="ptSize" class="ptSizeLabel">사이즈</label>
+                            <select id="ptSize" class="ptSize" name="ptList[0].ptSize" required>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="X">X</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
+
                             <label for="price">가격</label>
                             <input type="number" id="price" class="itemInput" name="ptList[0].price" required>
                             
