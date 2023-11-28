@@ -29,7 +29,7 @@
                     <textarea id="sellDescription" name="sellDescription" required></textarea>
                     
                     <label for="sellCategory">카테고리:</label>
-                    <select id="sellCategory" name="categoryCode.refCategory" required>
+                    <select id="sellCategory" name="refCategoryCode.refCategory" required>
                     </select>
                     
                     <div id="itemsContainer">
@@ -38,6 +38,9 @@
                             
                             <label for="ptNm">이름</label>
                             <input type="text" id="ptNm" class="itemInput" name="ptList[0].ptNm" required>
+
+                            <label for="sellPtCategory">카테고리:</label>
+                            <select id="sellPtCategory" class="sellPtCategory" name="ptList[0].category.categoryCode" required>
 
                             <label for="main-image" class="upload">상품 사진</label>
                             <input type="file" id="main-image[0]" name="attachImage[0]" accept="image/jpg, image/png" multiple>
