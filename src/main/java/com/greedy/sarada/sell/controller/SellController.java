@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.greedy.sarada.common.exception.sell.SellRegistException;
+import com.greedy.sarada.sell.dto.CategoryDto;
 import com.greedy.sarada.sell.dto.FileDto;
 import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.PtDto;
@@ -57,11 +59,20 @@ public class SellController {
 
 		return "user/sell/sellRegist";
 	}
-
+	
+	/*상위카테고리 코드 조회*/
 	@GetMapping(value = "/RefCategory", produces = "application/json; charset=UTF-8")
 	public @ResponseBody List<RefCategoryDto> findRefCategoryList() {
-
+		
 		return sellService.findAllRefCategory();
+	}
+
+	@GetMapping(value = "/category/{categoryCode}", produces = "application/json; charset=UTF-8")
+	public @ResponseBody List<CategoryDto> findCategoryList(@PathVariable String categoryCode) {
+		
+		log.info("categoryCode{}", categoryCode);
+		
+		return sellService.findAllCategoryList(categoryCode);
 	}
 
 	/* 판매자 등록 */

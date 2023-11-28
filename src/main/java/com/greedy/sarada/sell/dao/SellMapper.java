@@ -34,4 +34,6 @@ public interface SellMapper {
 
 	SellDto selectSeller(UserDto user);
 
+	List<CategoryDto> findAllCategoryList(String categoryCode);
+
 }

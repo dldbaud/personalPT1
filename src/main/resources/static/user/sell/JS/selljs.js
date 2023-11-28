@@ -12,7 +12,12 @@ window.addEventListener('load', function () {
         }
     }
 
+    /* 상위 카테고리 코드 조회 */
+    let selectedRefCategory;  // 전역 변수 선언
+    //전역 배열
+    let $sellPtCategory = document.querySelectorAll('.sellPtCategory');
     if (document.getElementById("sellCategory")) {
+        // 스크립트가 여러 번 로드되는 것을 방지하고, 초기화 코드가 한 번만 실행
         if (!window.loadedScript) {
 
             if (document.getElementById("sellCategory")) {
@@ -26,12 +31,49 @@ window.addEventListener('load', function () {
                         for (let index in data) {
                             $categoryCode.append($("<option>").val(data[index].refCategory).text(data[index].refCategoryNm));
                         }
+
+                        selectedRefCategory = data[0].refCategory;
+
+                        categoryView(data[0].refCategory);
                     },
                     error: function (xhr) { console.log(xhr); }
                 });
             }
 
             window.loadedScript = true;
+        }
+
+        $("#sellCategory").on("change", function () {
+            // 선택된 카테고리 코드 가져오기
+            const selectedCategoryCode = $(this).val();
+            
+            selectedRefCategory = selectedCategoryCode;
+            // 클릭 이벤트 발생 (원하는 함수 호출 등)
+            if (selectedCategoryCode) {
+                // 선택된 카테고리 코드를 이용하여 원하는 작업 수행
+                // 예: categoryView 함수 호출
+                categoryView(selectedCategoryCode);
+            }
+        });
+
+        /* 하위 카테고리 코드 조회 */
+        function categoryView(categoryCode) {
+            $.ajax({
+                url: `/sell/category/${categoryCode}`,
+                    //응답 데이타 그대로 전송
+                    success: function (data) {
+                        console.log(data); //배열 전송 
+
+                        $sellPtCategory.forEach((element) => {
+                            $(element).empty();
+            
+                            for (let index in data) {
+                                $(element).append($("<option>").val(data[index].categoryCode).text(data[index].categoryName));
+                            }
+                        });
+                    },
+                    error: function (xhr) { console.log(xhr); }
+            });
         }
     }
 
@@ -105,7 +147,10 @@ window.addEventListener('load', function () {
                 
                 <label for="ptNm">이름</label>
                 <input type="text" id="ptNm" class="itemInput" name="ptList[${itemCount}].ptNm" required>
-        
+
+                <label for="sellPtCategory">카테고리:</label>
+                <select id="sellPtCategory" class="sellPtCategory" name="ptList[${itemCount}].category.categoryCode" required>
+
                 <label for="main-image" class="upload">파일 올리기</label>
                 <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
                 
@@ -158,7 +203,11 @@ window.addEventListener('load', function () {
 
             fileElements = document.querySelectorAll("[type=file]");
 
+            $sellPtCategory = document.querySelectorAll('.sellPtCategory');
             attachEventListeners();
+
+            categoryView(selectedRefCategory);
+            console.log('selectedRefCategory확인', selectedRefCategory);
         });
     }
     

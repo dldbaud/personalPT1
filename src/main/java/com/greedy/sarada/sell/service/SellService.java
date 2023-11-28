@@ -77,5 +77,9 @@ public class SellService {
 		sellMapper.insertSellList(list);
 		
 	}
+	public List<CategoryDto> findAllCategoryList(String categoryCode) {
+		// TODO Auto-generated method stub
+		return sellMapper.findAllCategoryList(categoryCode);
+	}
 	
 }

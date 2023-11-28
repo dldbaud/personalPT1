@@ -12,7 +12,7 @@ import lombok.Data;
 public class ListDto {
 	
 	private String listNo;
-	private RefCategoryDto categoryCode;
+	private RefCategoryDto refCategoryCode;
 	private String listNm;
 	private Date registDate; 
 	private String description;
