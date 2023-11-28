@@ -16,7 +16,12 @@ window.addEventListener('load', function () {
     let selectedRefCategory;  // 전역 변수 선언
     //전역 배열
     let $sellPtCategory = document.querySelectorAll('.sellPtCategory');
+
+    /* 셀렉트박스 전역숨김 */
+    let $ptSizeLabel = document.querySelectorAll('.ptSizeLabel');
+    let $ptSize = document.querySelectorAll('.ptSize');
     if (document.getElementById("sellCategory")) {
+
         // 스크립트가 여러 번 로드되는 것을 방지하고, 초기화 코드가 한 번만 실행
         if (!window.loadedScript) {
 
@@ -35,6 +40,16 @@ window.addEventListener('load', function () {
                         selectedRefCategory = data[0].refCategory;
 
                         categoryView(data[0].refCategory);
+
+                        if( selectedRefCategory == 1){
+                            $ptSizeLabel.forEach((element) => {
+                                element.style.display = 'block';
+                            });
+                    
+                            $ptSize.forEach((element) => {
+                                element.style.display = 'block';
+                            }); 
+                        } 
                     },
                     error: function (xhr) { console.log(xhr); }
                 });
@@ -47,12 +62,30 @@ window.addEventListener('load', function () {
             // 선택된 카테고리 코드 가져오기
             const selectedCategoryCode = $(this).val();
             
+            /*전역 변수 설정 */
             selectedRefCategory = selectedCategoryCode;
             // 클릭 이벤트 발생 (원하는 함수 호출 등)
             if (selectedCategoryCode) {
-                // 선택된 카테고리 코드를 이용하여 원하는 작업 수행
-                // 예: categoryView 함수 호출
+
                 categoryView(selectedCategoryCode);
+            }
+
+            if( selectedRefCategory == 1){
+                $ptSizeLabel.forEach((element) => {
+                    element.style.display = 'block';
+                });
+        
+                $ptSize.forEach((element) => {
+                    element.style.display = 'block';
+                }); 
+            } else {
+                $ptSizeLabel.forEach((element) => {
+                    element.style.display = 'none';
+                })
+        
+                $ptSize.forEach((element) => {
+                    element.style.display = 'none';
+                })
             }
         });
 
@@ -102,7 +135,7 @@ window.addEventListener('load', function () {
 
             
             const fileInputHTML = `<label for="main-image" class="upload">상품 사진</label>
-            <input type="file" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple>
+            <input type="file" name="attachImage[${itemCount}]" accept="image/jpeg, image/png" multiple>
             `;
             
             const fileViewHTML = `<label for="fileView">파일 미리보기</label>
@@ -152,7 +185,7 @@ window.addEventListener('load', function () {
                 <select id="sellPtCategory" class="sellPtCategory" name="ptList[${itemCount}].category.categoryCode" required>
 
                 <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple required>
+                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/gif, image/jpeg, image/png" multiple>
                 
                 <label for="fileView">파일 미리보기</label>
                 <div class="image-area" name="fileView[${itemCount}]">
@@ -160,7 +193,7 @@ window.addEventListener('load', function () {
                 </div>
         
                 <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple>
+                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/gif, image/jpeg, image/png" multiple>
         
                 <label for="fileView">파일 미리보기</label>
                 <div class="image-area" name="fileView[${itemCount}]">
@@ -168,7 +201,7 @@ window.addEventListener('load', function () {
                 </div>
         
                 <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/jpg, image/png" multiple>
+                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/gif, image/jpeg, image/png" multiple>
                 
                 <label for="fileView">파일 미리보기</label>
                 <div class="image-area" name="fileView[${itemCount}]">
@@ -178,8 +211,18 @@ window.addEventListener('load', function () {
                 <button type="button" id="fileAdd" class="fileAdd">파일 추가</button>
         
                 <label for="ptDescrip">상품 설명</label>
-                <textarea class="itemInput" id="ptDescrip" name="ptList[${itemCount}].ptDescrip" required></textarea>
+                <textarea class="itemInput" id="ptDescrip" name="ptList[${itemCount}].ptDescrip"></textarea>
                 
+                <label for="ptSize" class="ptSizeLabel">사이즈</label>
+                            <select id="ptSize" class="ptSize" name="ptList[${itemCount}].ptSize" required>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="X">X</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
+
                 <label for="price">가격</label>
                 <input type="number" id="price" class="itemInput" name="ptList[${itemCount}].price" required>
                 
@@ -202,6 +245,9 @@ window.addEventListener('load', function () {
             imageArea = document.querySelectorAll(".image-area");
 
             fileElements = document.querySelectorAll("[type=file]");
+
+            $ptSizeLabel = document.querySelectorAll('.ptSizeLabel');
+            $ptSize = document.querySelectorAll('.ptSize');
 
             $sellPtCategory = document.querySelectorAll('.sellPtCategory');
             attachEventListeners();
@@ -227,9 +273,9 @@ window.addEventListener('load', function () {
             reader.onload = function () {
                 console.log(reader.result);
                 if (index === 0) {
-                    imageArea[index].innerHTML = `<img src='${reader.result}' style='width: 350px; height: 200px'>`;
+                    imageArea[index].innerHTML = `<img src='${reader.result}' style='width: 650px; height: 450px'>`;
                 } else {
-                    imageArea[index].innerHTML = `<img src='${reader.result}' style='width: 350px; height: 200px'>`;
+                    imageArea[index].innerHTML = `<img src='${reader.result}' style='width: 650px; height: 450px'>`;
                 }
             };
         }

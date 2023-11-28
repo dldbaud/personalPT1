@@ -16,6 +16,7 @@ public class PtDto {
 	private SellDto sell;
 	private String ptDescrip;
 	private String listNo;
+	private String ptSize;
 	private CategoryDto category;
 	private List<FileDto> fileList;
 }

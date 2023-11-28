@@ -76,6 +76,7 @@
 		<result property="stCount" column="ST_COUNT"/>
 		<result property="ptDescrip" column="PT_DESCRIP"/>
 		<result property="listNo" column="LIST_NO"/>				
+		<result property="ptSize" column="PT_SIZE"/>				
 		<association property="category" resultMap="sellCategoryResultMap"/>
 		<association property="sell" resultMap="sellDtoResultMap"/>
 		<association property="fileList" resultMap="fileResultMap"/>
@@ -145,7 +146,7 @@
 		  'LI'||(SEQ_LIST.NEXTVAL)
 		, #{ refCategoryCode.refCategory}
 		, #{ listNm }
-		, #{ registDate }
+		, SYSDATE
 		, #{ description }
 		, #{ sell.sellNo }
 		)
@@ -181,6 +182,7 @@
 		, PT_DESCRIP
 		, LIST_NO
 		, CATEGORY_CODE
+		, PT_SIZE
 		)VALUES
 		(
 		  'PT'||(SEQ_PT.NEXTVAL)
@@ -191,6 +193,7 @@
 		, #{ ptDescrip }
 		, 'LI'||(SEQ_LIST.CURRVAL)
 		, #{ category.categoryCode }
+		, #{ ptSize }
 		)
 	</insert>
 	
