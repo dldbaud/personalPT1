@@ -305,7 +305,7 @@ window.addEventListener('load', function () {
             $sellPtCategory = document.querySelectorAll('.sellPtCategory');
 
             attachEventListeners();
-
+            inputView();
             categoryView(selectedRefCategory);
             console.log('selectedRefCategory확인', selectedRefCategory);
         });
