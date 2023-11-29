@@ -17,6 +17,7 @@ public class PtDto {
 	private String ptDescrip;
 	private String listNo;
 	private String ptSize;
+	private String ptAuthor;
 	private CategoryDto category;
 	private List<FileDto> fileList;
 }

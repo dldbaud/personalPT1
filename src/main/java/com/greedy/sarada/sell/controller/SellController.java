@@ -179,7 +179,10 @@ public class SellController {
 
 					PtDto pt = list.getPtList().get(i);
 					List<MultipartFile> fileList = dynamicAttachImagesMap.get("attachImage[" + i + "]");
-
+					
+					log.info("[sellController] fileList size: {}", fileList.size());
+					log.info("[sellController] Is fileList empty?: {}", fileList.isEmpty());
+					
 					pt.setSell(seller);
 					sellService.insertPt(pt);
 					
@@ -208,6 +211,7 @@ public class SellController {
 					}
 					
 					for (MultipartFile file : fileList) {
+						
 						/* 빈 파일 정보 확인 */
 						if (!file.isEmpty()) {
 							log.info("[sellController] file : {}", file);

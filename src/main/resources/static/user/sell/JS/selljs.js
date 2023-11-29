@@ -20,6 +20,9 @@ window.addEventListener('load', function () {
     /* 셀렉트박스 전역숨김 */
     let $ptSizeLabel = document.querySelectorAll('.ptSizeLabel');
     let $ptSize = document.querySelectorAll('.ptSize');
+    let $author = document.querySelectorAll('.author');
+    let $authorLabel = document.querySelectorAll('.authorLabel');
+
     if (document.getElementById("sellCategory")) {
 
         // 스크립트가 여러 번 로드되는 것을 방지하고, 초기화 코드가 한 번만 실행
@@ -48,7 +51,15 @@ window.addEventListener('load', function () {
                     
                             $ptSize.forEach((element) => {
                                 element.style.display = 'block';
-                            }); 
+                            });
+
+                            $author.forEach((element) => {
+                                element.style.display = 'none';
+                            });
+
+                            $authorLabel.forEach((element) => {
+                                element.style.display = 'none';
+                            });
                         } 
                     },
                     error: function (xhr) { console.log(xhr); }
@@ -56,6 +67,61 @@ window.addEventListener('load', function () {
             }
 
             window.loadedScript = true;
+        }
+
+        function inputView(){
+            if (selectedRefCategory == 1) {
+                // Category 1에 대한 처리
+                $ptSizeLabel.forEach((element) => {
+                    element.style.display = 'block';
+                });
+            
+                $ptSize.forEach((element) => {
+                    element.style.display = 'block';
+                });
+            
+                $author.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            
+                $authorLabel.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            } else if (selectedRefCategory == 4) {
+                // Category 4에 대한 처리
+                $ptSizeLabel.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            
+                $ptSize.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            
+                $author.forEach((element) => {
+                    element.style.display = 'block';
+                });
+            
+                $authorLabel.forEach((element) => {
+                    element.style.display = 'block';
+                });
+            } else {
+                // 기타 Category에 대한 처리
+                $ptSizeLabel.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            
+                $ptSize.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            
+                $author.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            
+                $authorLabel.forEach((element) => {
+                    element.style.display = 'none';
+                });
+            }
         }
 
         $("#sellCategory").on("change", function () {
@@ -70,24 +136,10 @@ window.addEventListener('load', function () {
                 categoryView(selectedCategoryCode);
             }
 
-            if( selectedRefCategory == 1){
-                $ptSizeLabel.forEach((element) => {
-                    element.style.display = 'block';
-                });
-        
-                $ptSize.forEach((element) => {
-                    element.style.display = 'block';
-                }); 
-            } else {
-                $ptSizeLabel.forEach((element) => {
-                    element.style.display = 'none';
-                })
-        
-                $ptSize.forEach((element) => {
-                    element.style.display = 'none';
-                })
-            }
+            inputView(selectedRefCategory);
         });
+
+
 
         /* 하위 카테고리 코드 조회 */
         function categoryView(categoryCode) {
@@ -97,11 +149,22 @@ window.addEventListener('load', function () {
                     success: function (data) {
                         console.log(data); //배열 전송 
 
-                        $sellPtCategory.forEach((element) => {
-                            $(element).empty();
-            
-                            for (let index in data) {
-                                $(element).append($("<option>").val(data[index].categoryCode).text(data[index].categoryName));
+                        $sellPtCategory.forEach((element) => { 
+                            const selectedValue = element.value; // 기존에 선택한 값 저장
+                            $(element).empty(); // 모든 옵션 제거
+                        
+                            // 새로운 데이터 추가
+                            data.forEach(item => {
+                                const option = $("<option>").val(item.categoryCode).text(item.categoryName);
+                                $(element).append(option);
+                                console.log(item.categoryCode);
+                            });
+                        
+                            // 기존에 선택한 값이 새로운 데이터에도 존재하면 선택 상태로 변경
+                            // some 배열에서 하나라도 만족하면 true toStirng으로 타입 변환
+                            if (data.some(item => item.categoryCode.toString() === selectedValue)) {
+                                $(element).val(selectedValue);
+                                console.log(selectedValue);
                             }
                         });
                     },
@@ -192,20 +255,6 @@ window.addEventListener('load', function () {
                     <img style="width: 120px; height: 100px;">
                 </div>
         
-                <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/gif, image/jpeg, image/png" multiple>
-        
-                <label for="fileView">파일 미리보기</label>
-                <div class="image-area" name="fileView[${itemCount}]">
-                    <img style="width: 120px; height: 100px;">
-                </div>
-        
-                <label for="main-image" class="upload">파일 올리기</label>
-                <input type="file" id="main-image[0]" name="attachImage[${itemCount}]" accept="image/gif, image/jpeg, image/png" multiple>
-                
-                <label for="fileView">파일 미리보기</label>
-                <div class="image-area" name="fileView[${itemCount}]">
-                    <img style="width: 120px; height: 100px;">
                 </div>
         
                 <button type="button" id="fileAdd" class="fileAdd">파일 추가</button>
@@ -214,14 +263,17 @@ window.addEventListener('load', function () {
                 <textarea class="itemInput" id="ptDescrip" name="ptList[${itemCount}].ptDescrip"></textarea>
                 
                 <label for="ptSize" class="ptSizeLabel">사이즈</label>
-                            <select id="ptSize" class="ptSize" name="ptList[${itemCount}].ptSize" required>
+                            <select id="ptSize" class="ptSize" name="ptList[${itemCount}].ptSize">
                                 <option value="S">S</option>
                                 <option value="M">M</option>
                                 <option value="L">L</option>
                                 <option value="X">X</option>
                                 <option value="XL">XL</option>
                                 <option value="XXL">XXL</option>
-                            </select>
+                </select>
+
+                <label for="author" class="authorLabel">저자</label>
+                <input type="text" id="author" class="author" ptList[${itemCount}].ptAuthor>
 
                 <label for="price">가격</label>
                 <input type="number" id="price" class="itemInput" name="ptList[${itemCount}].price" required>
@@ -248,8 +300,10 @@ window.addEventListener('load', function () {
 
             $ptSizeLabel = document.querySelectorAll('.ptSizeLabel');
             $ptSize = document.querySelectorAll('.ptSize');
-
+            $author = document.querySelectorAll('.author');
+            $authorLabel = document.querySelectorAll('.authorLabel');
             $sellPtCategory = document.querySelectorAll('.sellPtCategory');
+            
             attachEventListeners();
 
             categoryView(selectedRefCategory);
@@ -287,4 +341,38 @@ window.addEventListener('load', function () {
     }
     
     attachEventListeners();
+
+    /* 폼 제출시 필수 입력 확인  */
+    if(document.getElementById("sellRegistInfo")){
+        document.getElementById("sellRegistInfo").addEventListener('submit', function(event) {
+            
+            if ($ptSize[0].style.display === 'block') {
+                let ptSizeValues = [];
+                document.querySelectorAll('.ptSize').forEach((element) => {
+                    ptSizeValues.push(element.value);
+                });
+            
+                if (ptSizeValues.some((item) => item === null || item.trim() === '')) {
+                    alert("사이즈를 입력하세요");
+                    event.preventDefault(); // 서브밋 방지
+                } else {
+                    this.submit();
+                }
+            }
+
+            if ($author[0].style.display === 'block') {
+                let authorValues = [];
+                document.querySelectorAll('.ptAuthor').forEach((element) => {
+                    authorValues.push(element.value);
+                });
+            
+                if (authorValues.some((item) => item === null || item.trim() === '')) {
+                    alert("저자를 입력하세요");
+                    event.preventDefault(); // 서브밋 방지
+                } else {
+                    this.submit();
+                }
+            }
+        });
+    }
 });

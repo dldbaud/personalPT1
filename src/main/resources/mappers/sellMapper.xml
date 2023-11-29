@@ -76,7 +76,8 @@
 		<result property="stCount" column="ST_COUNT"/>
 		<result property="ptDescrip" column="PT_DESCRIP"/>
 		<result property="listNo" column="LIST_NO"/>				
-		<result property="ptSize" column="PT_SIZE"/>				
+		<result property="ptSize" column="PT_SIZE"/>			
+		<result property="ptAuthor" column="PT_AUTHOR"/>			
 		<association property="category" resultMap="sellCategoryResultMap"/>
 		<association property="sell" resultMap="sellDtoResultMap"/>
 		<association property="fileList" resultMap="fileResultMap"/>
@@ -183,6 +184,7 @@
 		, LIST_NO
 		, CATEGORY_CODE
 		, PT_SIZE
+		, PT_AUTHOR
 		)VALUES
 		(
 		  'PT'||(SEQ_PT.NEXTVAL)
@@ -194,6 +196,7 @@
 		, 'LI'||(SEQ_LIST.CURRVAL)
 		, #{ category.categoryCode }
 		, #{ ptSize }
+		, #{ ptAuthor } 
 		)
 	</insert>
 	
