@@ -64,7 +64,7 @@
                             <textarea class="itemInput" id="ptDescrip" name="ptList[0].ptDescrip"></textarea>
                             
                             <label for="ptSize" class="ptSizeLabel">사이즈</label>
-                            <select id="ptSize" class="ptSize" name="ptList[0].ptSize" required>
+                            <select id="ptSize" class="ptSize" name="ptList[0].ptSize">
                                 <option value="S">S</option>
                                 <option value="M">M</option>
                                 <option value="L">L</option>
@@ -73,6 +73,9 @@
                                 <option value="XXL">XXL</option>
                             </select>
 
+                            <label for="author" class="authorLabel">저자</label>
+                            <input type="text" id="author" class="author" name="ptList[0].ptAuthor">
+                            
                             <label for="price">가격</label>
                             <input type="number" id="price" class="itemInput" name="ptList[0].price" required>
                             
@@ -84,7 +87,7 @@
                     </div>
                 
                     <button type="button" id="addItemBtn">상품 추가</button>
-                    <button type="submit">판매 등록</button>
+                    <button type="submit" id="sellRegistInfo">판매 등록</button>
                 </form>
             </div>
         </div>
