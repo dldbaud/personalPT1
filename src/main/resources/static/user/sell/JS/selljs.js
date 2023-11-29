@@ -44,11 +44,11 @@ window.addEventListener('load', function () {
 
                         categoryView(data[0].refCategory);
 
-                        if( selectedRefCategory == 1){
+                        if (selectedRefCategory == 1) {
                             $ptSizeLabel.forEach((element) => {
                                 element.style.display = 'block';
                             });
-                    
+
                             $ptSize.forEach((element) => {
                                 element.style.display = 'block';
                             });
@@ -60,7 +60,7 @@ window.addEventListener('load', function () {
                             $authorLabel.forEach((element) => {
                                 element.style.display = 'none';
                             });
-                        } 
+                        }
                     },
                     error: function (xhr) { console.log(xhr); }
                 });
@@ -69,21 +69,21 @@ window.addEventListener('load', function () {
             window.loadedScript = true;
         }
 
-        function inputView(){
+        function inputView() {
             if (selectedRefCategory == 1) {
                 // Category 1에 대한 처리
                 $ptSizeLabel.forEach((element) => {
                     element.style.display = 'block';
                 });
-            
+
                 $ptSize.forEach((element) => {
                     element.style.display = 'block';
                 });
-            
+
                 $author.forEach((element) => {
                     element.style.display = 'none';
                 });
-            
+
                 $authorLabel.forEach((element) => {
                     element.style.display = 'none';
                 });
@@ -92,15 +92,15 @@ window.addEventListener('load', function () {
                 $ptSizeLabel.forEach((element) => {
                     element.style.display = 'none';
                 });
-            
+
                 $ptSize.forEach((element) => {
                     element.style.display = 'none';
                 });
-            
+
                 $author.forEach((element) => {
                     element.style.display = 'block';
                 });
-            
+
                 $authorLabel.forEach((element) => {
                     element.style.display = 'block';
                 });
@@ -109,15 +109,15 @@ window.addEventListener('load', function () {
                 $ptSizeLabel.forEach((element) => {
                     element.style.display = 'none';
                 });
-            
+
                 $ptSize.forEach((element) => {
                     element.style.display = 'none';
                 });
-            
+
                 $author.forEach((element) => {
                     element.style.display = 'none';
                 });
-            
+
                 $authorLabel.forEach((element) => {
                     element.style.display = 'none';
                 });
@@ -127,7 +127,7 @@ window.addEventListener('load', function () {
         $("#sellCategory").on("change", function () {
             // 선택된 카테고리 코드 가져오기
             const selectedCategoryCode = $(this).val();
-            
+
             /*전역 변수 설정 */
             selectedRefCategory = selectedCategoryCode;
             // 클릭 이벤트 발생 (원하는 함수 호출 등)
@@ -145,30 +145,30 @@ window.addEventListener('load', function () {
         function categoryView(categoryCode) {
             $.ajax({
                 url: `/sell/category/${categoryCode}`,
-                    //응답 데이타 그대로 전송
-                    success: function (data) {
-                        console.log(data); //배열 전송 
+                //응답 데이타 그대로 전송
+                success: function (data) {
+                    console.log(data); //배열 전송 
 
-                        $sellPtCategory.forEach((element) => { 
-                            const selectedValue = element.value; // 기존에 선택한 값 저장
-                            $(element).empty(); // 모든 옵션 제거
-                        
-                            // 새로운 데이터 추가
-                            data.forEach(item => {
-                                const option = $("<option>").val(item.categoryCode).text(item.categoryName);
-                                $(element).append(option);
-                                console.log(item.categoryCode);
-                            });
-                        
-                            // 기존에 선택한 값이 새로운 데이터에도 존재하면 선택 상태로 변경
-                            // some 배열에서 하나라도 만족하면 true toStirng으로 타입 변환
-                            if (data.some(item => item.categoryCode.toString() === selectedValue)) {
-                                $(element).val(selectedValue);
-                                console.log(selectedValue);
-                            }
+                    $sellPtCategory.forEach((element) => {
+                        const selectedValue = element.value; // 기존에 선택한 값 저장
+                        $(element).empty(); // 모든 옵션 제거
+
+                        // 새로운 데이터 추가
+                        data.forEach(item => {
+                            const option = $("<option>").val(item.categoryCode).text(item.categoryName);
+                            $(element).append(option);
+                            console.log(item.categoryCode);
                         });
-                    },
-                    error: function (xhr) { console.log(xhr); }
+
+                        // 기존에 선택한 값이 새로운 데이터에도 존재하면 선택 상태로 변경
+                        // some 배열에서 하나라도 만족하면 true toStirng으로 타입 변환
+                        if (data.some(item => item.categoryCode.toString() === selectedValue)) {
+                            $(element).val(selectedValue);
+                            console.log(selectedValue);
+                        }
+                    });
+                },
+                error: function (xhr) { console.log(xhr); }
             });
         }
     }
@@ -196,25 +196,25 @@ window.addEventListener('load', function () {
 
         if (lastImageArea) {
 
-            
+
             const fileInputHTML = `<label for="main-image" class="upload">상품 사진</label>
             <input type="file" name="attachImage[${itemCount}]" accept="image/jpeg, image/png" multiple>
             `;
-            
+
             const fileViewHTML = `<label for="fileView">파일 미리보기</label>
             <div class="image-area" name="fileView[${itemCount}]">
             <img style="width: 120px; height: 100px;">
             </div>
             `;
-            
+
             lastImageArea.insertAdjacentHTML('afterend', fileViewHTML);
             lastImageArea.insertAdjacentHTML('afterend', fileInputHTML);
             console.log("파일추가동작 확인");
             console.log(fileViewHTML, 'fileViewHTML 확인');
-            
+
             imageArea = document.querySelectorAll(".image-area");
             fileElements = document.querySelectorAll("[type=file]");
-    
+
             attachEventListeners();
 
         }
@@ -303,55 +303,91 @@ window.addEventListener('load', function () {
             $author = document.querySelectorAll('.author');
             $authorLabel = document.querySelectorAll('.authorLabel');
             $sellPtCategory = document.querySelectorAll('.sellPtCategory');
-            
+
             attachEventListeners();
 
             categoryView(selectedRefCategory);
             console.log('selectedRefCategory확인', selectedRefCategory);
         });
     }
-    
+
     function open() {
         console.log('this확인', this);
         const index = Array.from(imageArea).indexOf(this);
         fileElements[index].click();
     }
-    
+
     function preview() {
         const index = Array.from(fileElements).indexOf(this);
+
         console.log(this);
         console.log(this.files, this.files[0]);
+
+
         if (this.files && this.files[0]) {
+
+            const self = this; // this를 다른 변수에 저장 this 바인딩
             const reader = new FileReader();
             reader.readAsDataURL(this.files[0]);
             reader.onload = function () {
                 console.log(reader.result);
-                if (index === 0) {
-                    imageArea[index].innerHTML = `<img src='${reader.result}' style='width: 650px; height: 450px'>`;
-                } else {
-                    imageArea[index].innerHTML = `<img src='${reader.result}' style='width: 650px; height: 450px'>`;
-                }
-            };
+
+                //function() 으로 this를 쓰면 function(){}안의 호출 시점에서 this 를 찾는데
+                // 현재 reader.onload = function () 내부에 this를 정의한게 없다
+                // 변수에 담거나 화살표 함수를 써야한다.
+
+                //파일 크기 구해서 <100 등으로 크기마다 조절 가능
+                // const fileSizeInBytes = self.files[0].size;
+                // const fileSizeInKB = fileSizeInBytes / 1024;
+
+                // let width, height;
+
+                // // 파일 크기에 따라 동적으로 스타일 설정
+                // if (fileSizeInKB < 100) {
+                //     width = 300;
+                //     height = 200;
+                // } else if (fileSizeInKB < 300){
+                //     width = 500;
+                //     height = 600;
+                // } else {
+                //     width = 700;
+                //     height = 1000;
+                // }
+
+                const image = new Image();
+                image.src = reader.result;
+
+                image.onload = function () {
+                    const imageWidth = image.width;
+                    const imageHeight = image.height;
+                    let width, height;
+
+                    // 비율에 따라 동적으로 크기 조절
+                    width = imageWidth;
+                    height = imageHeight;
+                    imageArea[index].innerHTML = `<img src='${reader.result}' style='width: ${width}px; height: ${height}px'>`;
+                };
+            }
         }
     }
-    
+
     function attachEventListeners() {
         imageArea.forEach(item => item.addEventListener('click', open));
         fileElements.forEach(item => item.addEventListener('change', preview));
     }
-    
+
     attachEventListeners();
 
     /* 폼 제출시 필수 입력 확인  */
-    if(document.getElementById("sellRegistInfo")){
-        document.getElementById("sellRegistInfo").addEventListener('submit', function(event) {
-            
+    if (document.getElementById("sellRegistInfo")) {
+        document.getElementById("sellRegistInfo").addEventListener('submit', function (event) {
+
             if ($ptSize[0].style.display === 'block') {
                 let ptSizeValues = [];
                 document.querySelectorAll('.ptSize').forEach((element) => {
                     ptSizeValues.push(element.value);
                 });
-            
+
                 if (ptSizeValues.some((item) => item === null || item.trim() === '')) {
                     alert("사이즈를 입력하세요");
                     event.preventDefault(); // 서브밋 방지
@@ -365,7 +401,7 @@ window.addEventListener('load', function () {
                 document.querySelectorAll('.ptAuthor').forEach((element) => {
                     authorValues.push(element.value);
                 });
-            
+
                 if (authorValues.some((item) => item === null || item.trim() === '')) {
                     alert("저자를 입력하세요");
                     event.preventDefault(); // 서브밋 방지
