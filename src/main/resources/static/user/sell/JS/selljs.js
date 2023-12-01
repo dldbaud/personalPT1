@@ -339,23 +339,11 @@ window.addEventListener('load', function () {
                 //파일 크기 구해서 <100 등으로 크기마다 조절 가능
                 // const fileSizeInBytes = self.files[0].size;
                 // const fileSizeInKB = fileSizeInBytes / 1024;
-
-                // let width, height;
-
-                // // 파일 크기에 따라 동적으로 스타일 설정
-                // if (fileSizeInKB < 100) {
-                //     width = 300;
-                //     height = 200;
-                // } else if (fileSizeInKB < 300){
-                //     width = 500;
-                //     height = 600;
-                // } else {
-                //     width = 700;
-                //     height = 1000;
-                // }
-
+                
                 const image = new Image();
+                const maxwidth = 'calc(100% - 6rem)';
                 image.src = reader.result;
+
 
                 image.onload = function () {
                     const imageWidth = image.width;
@@ -365,6 +353,10 @@ window.addEventListener('load', function () {
                     // 비율에 따라 동적으로 크기 조절
                     width = imageWidth;
                     height = imageHeight;
+
+                    if(width > maxwidth) {
+                        width = maxwidth;
+                    }
                     imageArea[index].innerHTML = `<img src='${reader.result}' style='width: ${width}px; height: ${height}px'>`;
                 };
             }

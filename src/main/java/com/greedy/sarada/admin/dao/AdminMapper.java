@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.greedy.sarada.common.paging.SelectCriteria;
+import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.SellDto;
 
 @Mapper
@@ -24,6 +25,8 @@ public interface AdminMapper {
 	int rejectSeller(SellDto seller);
 
 	int insertAuthSell(SellDto seller);
+
+	List<ListDto> findListView();
 
 
 }

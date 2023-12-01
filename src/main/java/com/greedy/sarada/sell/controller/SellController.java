@@ -202,6 +202,7 @@ public class SellController {
 						fileInfo2.setOriginalFileNm(originalFileName);
 						fileInfo2.setSavedFileNm(savedFileName);
 						fileInfo2.setMainFilePath("/upload/mainImage/");
+						/* 원래는 fileInfo2.setThumbnailPath("/upload/thumbnail/thumbnail_" + savedFileName) 이런식으로도 가능*/
 
 						list.setFileMain(fileInfo2);
 						/* 메인 이미지 및 판매 등록 */

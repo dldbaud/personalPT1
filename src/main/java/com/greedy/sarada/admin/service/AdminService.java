@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.greedy.sarada.admin.dao.AdminMapper;
 import com.greedy.sarada.common.paging.Pagenation;
 import com.greedy.sarada.common.paging.SelectCriteria;
+import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.SellDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +81,11 @@ public class AdminService {
 		log.info("[insertSller] result{}", result);
 		
 		return result;
+	}
+
+	public List<ListDto> findListView() {
+
+		return adminMapper.findListView();
 	}
 
 

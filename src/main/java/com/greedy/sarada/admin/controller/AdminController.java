@@ -3,7 +3,9 @@ package com.greedy.sarada.admin.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.greedy.sarada.admin.service.AdminService;
+import com.greedy.sarada.sell.dto.FileDto;
+import com.greedy.sarada.sell.dto.ListDto;
+import com.greedy.sarada.sell.dto.RefCategoryDto;
 import com.greedy.sarada.sell.dto.SellDto;
 import com.greedy.sarada.sell.service.SellService;
 import com.greedy.sarada.user.dto.UserDto;
@@ -116,5 +122,27 @@ public class AdminController {
     	};
     	
     	return ResponseEntity.ok(result);
+    }
+    
+    /* 메인 페이지 이미지 비동기 로드*/
+//    @GetMapping(value = "/listView", produces = "application/json; charset=UTF-8")
+//	public @ResponseBody List<ListDto> findListView() {
+//		
+//		return adminService.findListView();
+//	}
+    /* 메인 페이지 이미지 비동기 로드*/
+    @GetMapping(value = "/listView", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<List<ListDto>> getListView() {
+        // 서버에서 필요한 작업 수행 후 ItemDTO 리스트를 생성
+        List<ListDto> itemList = adminService.findListView();
+
+        // 이미지 파일 경로 추가
+        for (ListDto item : itemList) {
+        	FileDto file = item.getFileMain();
+        	file.setMainFilePath(file.getMainFilePath() + file.getSavedFileNm());
+        	item.setFileMain(file);
+        }
+
+        return new ResponseEntity<>(itemList, HttpStatus.OK);
     }
 }

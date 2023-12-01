@@ -62,6 +62,43 @@
 		<result property="authDesc" column="AUTH_DESC" />
 	</resultMap>
 	
+	<resultMap id="listResultMap" type="com.greedy.sarada.sell.dto.ListDto">
+		<id property="listNo" column="LIST_NO"/>
+		<result property="listNm" column="LIST_NM"/>
+		<result property="registDate" column="REGIST_DATE"/>
+		<result property="description" column="DESCRIPTION"/>
+		<result property="listNm" column="LIST_NM"/>
+		<association property="refCategoryCode" resultMap="RefCategoryResultMap"/>
+		<association property="sell" resultMap="sellDtoResultMap"/>
+		<association property="fileMain" resultMap="fileResultMap"/>
+		<collection property="ptList" resultMap="ptResultMap"/>
+		<collection property="fileImageList" resultMap="fileResultMap"/>
+	</resultMap>
+	
+	
+	<resultMap id="ptResultMap" type="com.greedy.sarada.sell.dto.PtDto">
+		<id property="ptNo" column="PT_NO"/>
+		<result property="ptNm" column="PT_NM"/>
+		<result property="price" column="PRICE"/>
+		<result property="stCount" column="ST_COUNT"/>
+		<result property="ptDescrip" column="PT_DESCRIP"/>
+		<result property="listNo" column="LIST_NO"/>				
+		<result property="ptSize" column="PT_SIZE"/>			
+		<result property="ptAuthor" column="PT_AUTHOR"/>			
+		<association property="category" resultMap="sellCategoryResultMap"/>
+		<association property="sell" resultMap="sellDtoResultMap"/>
+		<association property="fileList" resultMap="fileResultMap"/>
+	</resultMap>
+	
+	<resultMap id="fileResultMap" type="com.greedy.sarada.sell.dto.FileDto">
+		<id property="fileNo" column="FILE_NO"/>
+		<result property="fileType" column="FILE_TYPE"/>
+		<result property="originalFileNm" column="ORIGINAL_FILE_NM"/>
+		<result property="savedFileNm" column="SAVED_FILE_NM"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="mainFilePath" column="MAIN_FILE_PATH"/>
+	</resultMap>
+	
 	<select id="findSellRegistList" resultMap="sellDtoResultMap">
 		SELECT
 		A.SELL_NO
@@ -199,6 +236,32 @@
 	   FROM TB_SELL A
        LEFT JOIN TB_USER B ON (A.USER_NO = B.USER_NO)
        WHERE A.SELL_NO = #{ sellNo }
+	</select>
+	
+	<select id="findListView" resultMap="listResultMap">
+		SELECT DISTINCT
+		       A.LIST_NO
+			 , A.REF_CATEGORY_CODE
+			 , A.LIST_NM
+			 , A.REGIST_DATE
+			 , A.SELL_NO
+             , C.PRICE
+             , D.FILE_PATH
+             , D.SAVED_FILE_NM
+             , D.MAIN_FILE_PATH
+	     FROM (SELECT 
+                      B.PT_NO
+                    , B.PRICE
+                    , B.SELL_NO
+                    , B.LIST_NO
+                    , ROW_NUMBER() OVER (PARTITION BY B.LIST_NO ORDER BY B.PRICE ASC) AS PriceRank
+                FROM TB_PT B) C
+	     JOIN TB_LIST A ON (A.SELL_NO = C.SELL_NO)
+	     JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
+        WHERE A.LIST_NO = C.LIST_NO
+          AND A.SELL_NO = C.SELL_NO
+          AND D.FILE_PATH IS NULL
+          AND C.PriceRank = 1
 	</select>
 	
 	<update id="insertSeller">
