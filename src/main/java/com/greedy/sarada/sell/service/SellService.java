@@ -81,5 +81,17 @@ public class SellService {
 		// TODO Auto-generated method stub
 		return sellMapper.findAllCategoryList(categoryCode);
 	}
+	public Map<String, Object> findCategory() {
+		
+		List<RefCategoryDto> refCategory = sellMapper.findAllRefCategory();
+		List<CategoryDto> category = sellMapper.findAllCategory();
+		
+		Map<String, Object> categoryList = new HashMap<>();
+		
+		categoryList.put("refCategory", refCategory);
+		categoryList.put("category", category);
+		
+		return categoryList;
+	}
 	
 }

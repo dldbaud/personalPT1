@@ -41,7 +41,6 @@ window.addEventListener('load', function () {
                         }
 
                         selectedRefCategory = data[0].refCategory;
-
                         categoryView(data[0].refCategory);
 
                         if (selectedRefCategory == 1) {
@@ -51,6 +50,22 @@ window.addEventListener('load', function () {
 
                             $ptSize.forEach((element) => {
                                 element.style.display = 'block';
+                            });
+
+                            $author.forEach((element) => {
+                                element.style.display = 'none';
+                            });
+
+                            $authorLabel.forEach((element) => {
+                                element.style.display = 'none';
+                            });
+                        } else {
+                            $ptSizeLabel.forEach((element) => {
+                                element.style.display = 'none';
+                            });
+
+                            $ptSize.forEach((element) => {
+                                element.style.display = 'none';
                             });
 
                             $author.forEach((element) => {

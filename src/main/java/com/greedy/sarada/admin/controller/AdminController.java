@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.greedy.sarada.admin.service.AdminService;
+import com.greedy.sarada.common.paging.ResponseDto;
 import com.greedy.sarada.sell.dto.FileDto;
 import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.RefCategoryDto;
@@ -36,9 +37,9 @@ public class AdminController {
 	public AdminController(AdminService adminService) {
 		this.adminService = adminService;
 	}
-	
+		
 	@GetMapping("/main")
-	public String adminPage() {
+	public String adminPage(Model model) {
 		
 		return "admin/admin/main";
 	}
@@ -114,7 +115,7 @@ public class AdminController {
     public ResponseEntity<String> rejectSeller(@RequestBody SellDto seller){
     	
     	String result = "거절 실패";
-    	log.info("[MemberController] Request Check seller : {}", seller);
+    	log.info("[AdminController] Request Check seller : {}", seller);
     	seller.setSellStatus("거절");
     	
     	if(adminService.rejectSeller(seller) == 1) {
@@ -124,25 +125,31 @@ public class AdminController {
     	return ResponseEntity.ok(result);
     }
     
-    /* 메인 페이지 이미지 비동기 로드*/
-//    @GetMapping(value = "/listView", produces = "application/json; charset=UTF-8")
-//	public @ResponseBody List<ListDto> findListView() {
-//		
-//		return adminService.findListView();
-//	}
-    /* 메인 페이지 이미지 비동기 로드*/
+    /* 메인 페이지 이미지 비동기 로드*/  
     @GetMapping(value = "/listView", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<List<ListDto>> getListView() {
-        // 서버에서 필요한 작업 수행 후 ItemDTO 리스트를 생성
-        List<ListDto> itemList = adminService.findListView();
-
+    public ResponseEntity<ResponseDto> getListView(
+  		  @RequestParam(defaultValue="1") int page, 
+  			@RequestParam(required=false) String searchCondition, 
+  			@RequestParam(required=false) String searchValue
+  		  ) {
+   
+        Map<String, String> searchMap = new HashMap<>();
+  		searchMap.put("searchCondition", searchCondition);
+  		searchMap.put("searchValue", searchValue);
+  		
+  		log.info("[AdminController] searchMap : {}", searchMap);
+  		
+  		Map<String, Object> boardListAndPaging = adminService.findListViewPageing(page,searchMap);
         // 이미지 파일 경로 추가
-        for (ListDto item : itemList) {
-        	FileDto file = item.getFileMain();
-        	file.setMainFilePath(file.getMainFilePath() + file.getSavedFileNm());
-        	item.setFileMain(file);
-        }
+//        for (ListDto item : boardListAndPaging) {
+//        	FileDto file = item.getFileMain();
+//        	file.setMainFilePath(file.getMainFilePath() + file.getSavedFileNm());
+//        	item.setFileMain(file);
+//        }
+        
 
-        return new ResponseEntity<>(itemList, HttpStatus.OK);
+  		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", boardListAndPaging));
+
     }
+  
 }

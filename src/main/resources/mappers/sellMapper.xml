@@ -161,6 +161,7 @@
 		, ORIGINAL_FILE_NM
 		, SAVED_FILE_NM
 		, FILE_PATH
+		, MAIN_FILE_PATH
 		)VALUES
 		(
 		  'FI'||(SEQ_FILE.NEXTVAL)
@@ -169,6 +170,7 @@
 		, #{ originalFileNm }
 		, #{ savedFileNm }
 		, #{ filePath }
+		, #{ mainFilePath, jdbcType=VARCHAR }
 		)
 	</insert>
 	
@@ -199,7 +201,7 @@
 		, #{ ptAuthor } 
 		)
 	</insert>
-	
+
 	<insert id="insertSellMainImage">
 		INSERT 
 			INTO TB_FILE
@@ -208,6 +210,7 @@
 		, FILE_TYPE
 		, ORIGINAL_FILE_NM
 		, SAVED_FILE_NM
+		, FILE_PATH
 		, MAIN_FILE_PATH
 		)VALUES
 		(
@@ -216,6 +219,7 @@
 		, #{ fileType }
 		, #{ originalFileNm }
 		, #{ savedFileNm }
+		, #{ filePath, jdbcType=VARCHAR }
 		, #{ mainFilePath }
 		)
 	</insert>

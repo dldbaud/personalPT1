@@ -20,5 +20,4 @@ public class ListDto {
 	private FileDto fileMain;
 	private List<PtDto> ptList;  //1:N
 	private List<FileDto> fileImageList;
-//	private Map<String, List<FileDto>> fileImageList;
 }

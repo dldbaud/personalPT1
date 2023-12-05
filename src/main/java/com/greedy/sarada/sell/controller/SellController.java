@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -97,8 +98,8 @@ public class SellController {
 	}
 
 	@GetMapping("/manage")
-	public String sellManage() {
-
+	public String sellManage(Model model) {
+		
 		return "user/sell/sellManage";
 	}
 
@@ -250,12 +251,12 @@ public class SellController {
 			/* 실패 시 이미 저장 된 파일을 삭제한다. */
 			for (FileDto attachment : savedAttachmentList) {
 
-				File deleteFile = new File(attachment.getSavedFileNm() + "/" + attachment.getSavedFileNm());
-
+				File deleteFile = new File(attachment.getFilePath() + "/" + attachment.getSavedFileNm());
+				File deleteMainImage = new File(((FileDto) attachImageMain).getMainFilePath() + "/" + ((FileDto) attachImageMain).getSavedFileNm());
 				deleteFile.delete();
 			}
 			
-			File deleteMainImage = new File(((FileDto) attachImageMain).getMainFilePath() + "/" + ((FileDto) attachImageMain).getMainFilePath());
+			File deleteMainImage = new File(((FileDto) attachImageMain).getMainFilePath() + "/" + ((FileDto) attachImageMain).getSavedFileNm());
 			deleteMainImage.delete();
 			
 		}

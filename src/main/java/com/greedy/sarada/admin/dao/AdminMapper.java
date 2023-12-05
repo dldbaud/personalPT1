@@ -14,7 +14,7 @@ public interface AdminMapper {
 
 	List<SellDto> findSellRegistList();
 
-	int selectTotalCount(Map<String, String> searchMap);
+	int selectSellTotalCount(Map<String, String> searchMap);
 
 	List<SellDto> selectSellList(SelectCriteria selectCriteria);
 
@@ -26,7 +26,8 @@ public interface AdminMapper {
 
 	int insertAuthSell(SellDto seller);
 
-	List<ListDto> findListView();
+	List<ListDto> selectList(SelectCriteria selectCriteria);
 
+	int selectListTotalCount(Map<String, String> searchMap);
 
 }

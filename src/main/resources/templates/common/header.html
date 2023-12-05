@@ -21,11 +21,14 @@
             <a href="/">로고입니다.</a>
         </div>
         <ul class="main-nav">
-            <li><a href="#">가나</a></li>
-            <li><a href="#">가나</a></li>
-            <li><a href="#">가나</a></li>
-            <li><a href="#">가나</a></li>
-            <li><a href="#">가나</a></li>
+            <div th:each="refCategory : ${refCategory}">
+                <li class="refList" th:text="${refCategory.refCategoryNm}"></li>
+                    <ul>
+                        <div th:each="category : ${category}">
+                            <li class="categoryList" th:if="${refCategory.refCategory == category.refCategory}" th:text="${category.categoryName}"></li>
+                        </div>
+                    </ul>
+            </div>
         </ul>
         <ul class="login">
             <th:block sec:authorize="isAnonymous()">

@@ -118,7 +118,7 @@
 	   WHERE A.SELL_STATUS = '대기'
 	</select>
 
-	<select id="selectTotalCount" resultType="_int" parameterType="hashmap">
+	<select id="selectSellTotalCount" resultType="_int" parameterType="hashmap">
 		SELECT
 			   COUNT(*)
 		FROM TB_SELL A
@@ -142,7 +142,30 @@
 			)
 		</where>
 	</select>
-
+	
+<!-- 	<select id="selectListTotalCount" resultType="_int" parameterType="hashmap">
+		SELECT 
+        	   COUNT(*)
+          FROM TB_LIST A
+		  ORDER BY REGIST_DATE
+	</select> -->
+	
+	<select id="selectListTotalCount" resultType="_int" parameterType="hashmap">
+        SELECT 
+        	   COUNT(*)
+          FROM TB_LIST A
+          JOIN TB_REF_CATEGORY B ON(A.REF_CATEGORY_CODE = B.REF_CATEGORY)
+          JOIN TB_CATEGORY C ON(B.REF_CATEGORY = C.REF_CATEGORY)
+        <if test="searchCondition == 'title'">
+        <where>
+            <if test="searchCondition == 'title'">
+                C.CATEGORY_NAME '%' || #{ searchValue } || '%'
+            </if>
+        </where>        
+        </if>
+            ORDER BY A.REGIST_DATE
+	</select>
+	
 	<select id="selectSellList" resultMap="sellDtoResultMap">
 	    SELECT
 	        A.SELL_NO,
@@ -238,32 +261,47 @@
        WHERE A.SELL_NO = #{ sellNo }
 	</select>
 	
-	<select id="findListView" resultMap="listResultMap">
-		SELECT DISTINCT
-		       A.LIST_NO
-			 , A.REF_CATEGORY_CODE
-			 , A.LIST_NM
-			 , A.REGIST_DATE
-			 , A.SELL_NO
-             , C.PRICE
-             , D.FILE_PATH
-             , D.SAVED_FILE_NM
-             , D.MAIN_FILE_PATH
-	     FROM (SELECT 
-                      B.PT_NO
-                    , B.PRICE
-                    , B.SELL_NO
-                    , B.LIST_NO
-                    , ROW_NUMBER() OVER (PARTITION BY B.LIST_NO ORDER BY B.PRICE ASC) AS PriceRank
-                FROM TB_PT B) C
-	     JOIN TB_LIST A ON (A.SELL_NO = C.SELL_NO)
-	     JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
-        WHERE A.LIST_NO = C.LIST_NO
-          AND A.SELL_NO = C.SELL_NO
-          AND D.FILE_PATH IS NULL
-          AND C.PriceRank = 1
+	<select id="selectList" resultMap="listResultMap">
+		<![CDATA[
+		    SELECT * FROM (
+		    SELECT *
+		    FROM (
+		        SELECT
+		            A.LIST_NO,
+		            A.REF_CATEGORY_CODE,
+		            A.LIST_NM,
+		            A.REGIST_DATE,
+		            A.SELL_NO,
+		            C.PRICE,
+		            D.FILE_PATH,
+		            D.SAVED_FILE_NM,
+		            D.MAIN_FILE_PATH,
+		            ROWNUM RNUM
+		        FROM (
+		            SELECT DISTINCT
+		                B.PT_NO,
+		                B.PRICE,
+		                B.SELL_NO,
+		                B.LIST_NO,
+		                ROW_NUMBER() OVER (PARTITION BY B.LIST_NO ORDER BY B.PRICE ASC) AS PriceRank
+		            FROM TB_PT B
+		            JOIN TB_FILE E ON (B.PT_NO = E.PT_NO)
+		            WHERE E.MAIN_FILE_PATH IS NOT NULL
+		        ) C
+		        JOIN TB_LIST A ON (A.SELL_NO = C.SELL_NO)
+		        JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
+		        WHERE A.LIST_NO = C.LIST_NO
+		          AND A.SELL_NO = C.SELL_NO
+		          AND D.FILE_PATH IS NULL
+		          AND C.PriceRank = 1
+		    ) 
+		    	WHERE ROWNUM <= #{ endRow }
+		    ) 
+		    WHERE RNUM >= #{ startRow }
+		    ORDER BY 1 DESC
+		    ]]>
 	</select>
-	
+
 	<update id="insertSeller">
 		UPDATE TB_SELL
            SET SELL_STATUS = '승인', SELL_REGI_DATE = SYSDATE
