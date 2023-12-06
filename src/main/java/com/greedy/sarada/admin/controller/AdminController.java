@@ -151,5 +151,12 @@ public class AdminController {
   		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", boardListAndPaging));
 
     }
+    
+    @GetMapping("/productDetail")
+    public String productDetail(@RequestParam String listNo, Model model) {
+    	
+    	List<ListDto> productDetail  = adminService.productDetail(listNo);
+    	return "";
+    }
   
 }

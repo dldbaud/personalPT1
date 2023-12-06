@@ -132,6 +132,28 @@
 		WHERE USER_NO = #{ userNo }
 	</select>
 
+<!-- TB_FILE에 PT_NO가 없을 수 도 있기에 left 조인 -->
+	<select id="productDetail" resultMap="ptResultMap">
+		SELECT 
+			   A.PT_NO
+			 , A.PT_NM
+			 , A.PRICE
+			 , A.ST_COUNT
+			 , A.SELL_NO
+			 , A.LIST_NO
+			 , A.CATEGORY_CODE
+			 , A.PT_SIZE
+			 , A.PT_DESCRIP
+			 , A.PT_AUTHOR
+			 , B.FILE_NO
+			 , B.FILE_PATH
+		     , B.SAVED_FILE_NM
+		     , B.MAIN_FILE_PATH
+	      FROM TB_PT A
+	      LEFT JOIN TB_FILE B ON(A.PT_NO = B.PT_NO)
+	      LEFT JOIN TB_LIST C ON(C.LIST_NO = A.LIST_NO)
+	     WHERE C.LIST_NO = #{ listNo }
+	</select>
 	
 	<insert id="insertSellList">
 		INSERT 

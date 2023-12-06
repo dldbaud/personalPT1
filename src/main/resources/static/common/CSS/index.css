@@ -26,6 +26,20 @@ body {
     margin: 0px 0px;
 }
 
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.categoryList{
+    display: block;
+    /* margin-left: -10%; */
+}
+
+.categoryList > li{
+    /* float: left; */
+}
+
 
 
 @media screen and (max-width : 760px){

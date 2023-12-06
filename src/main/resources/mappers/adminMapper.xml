@@ -143,13 +143,6 @@
 		</where>
 	</select>
 	
-<!-- 	<select id="selectListTotalCount" resultType="_int" parameterType="hashmap">
-		SELECT 
-        	   COUNT(*)
-          FROM TB_LIST A
-		  ORDER BY REGIST_DATE
-	</select> -->
-	
 	<select id="selectListTotalCount" resultType="_int" parameterType="hashmap">
         SELECT 
         	   COUNT(*)
@@ -262,7 +255,7 @@
 	</select>
 	
 	<select id="selectList" resultMap="listResultMap">
-		<![CDATA[
+		
 		    SELECT * FROM (
 		    SELECT *
 		    FROM (
@@ -290,18 +283,25 @@
 		        ) C
 		        JOIN TB_LIST A ON (A.SELL_NO = C.SELL_NO)
 		        JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
+		        <if test="searchCondition != 'null'">
+		        	JOIN TB_REF_CATEGORY E ON(A.REF_CATEGORY_CODE = E.REF_CATEGORY)
+		        </if>
 		        WHERE A.LIST_NO = C.LIST_NO
 		          AND A.SELL_NO = C.SELL_NO
+		          <if test="searchCondition != 'null'">
+		          	AND E.REF_CATEGORY_NM = #{ searchCondition }
+		          </if>
 		          AND D.FILE_PATH IS NULL
 		          AND C.PriceRank = 1
 		    ) 
+		    <![CDATA[
 		    	WHERE ROWNUM <= #{ endRow }
 		    ) 
 		    WHERE RNUM >= #{ startRow }
 		    ORDER BY 1 DESC
 		    ]]>
 	</select>
-
+	
 	<update id="insertSeller">
 		UPDATE TB_SELL
            SET SELL_STATUS = '승인', SELL_REGI_DATE = SYSDATE

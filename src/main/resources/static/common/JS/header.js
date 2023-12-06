@@ -143,73 +143,141 @@ window.onload = function () {
     }
 
     /* 카테고리목록 이벤트 */
-    if(document.getElementsByClassName('.refList')){
+    if (document.getElementsByClassName('.refList')) {
 
         const $refList = document.querySelectorAll('.refList');
         const $categoryList = document.querySelectorAll('.categoryList');
         const $nav = document.querySelector('.main-nav');
-
         let currentCategoryList = null;
-        console.log($nav);
 
         $categoryList.forEach(item => {
             item.style.display = "none";
         });
+        changeCategoryEvent();
 
-        $refList.forEach(item => {
-            item.addEventListener('mouseover', function(){
-                console.log('마우스오버확인');
-                const $childCategoryLists  = this.nextElementSibling.querySelectorAll('.categoryList');
-                console.log($childCategoryLists);
-                
-                $categoryList.forEach(item => {
-                    item.style.display = "none";
+        window.addEventListener('resize', function () {
+            removeEventListeners(); // 화면 사이즈 변경 시 이전 리스너 제거
+            changeCategoryEvent();
+        });
+
+        function changeCategoryEvent() {
+            if (window.innerWidth > 760) {
+                $refList.forEach(item => {
+                    item.addEventListener('mouseover', categoryMouseOver);
+                    item.addEventListener('click', refCategoryClick);
                 });
 
-                $childCategoryLists.forEach(item => {
-                    item.style.display = "block";
-                })
-            });
-        });
-        
+                $nav.addEventListener('mouseout', categoryMouseOut);
+            } else {
+                $refList.forEach(item => {
+                    item.addEventListener('click', mobileRefCategoryClick);
+                });
+            }
+        }
 
-        $nav.addEventListener('mouseout', function(event){
+        function removeEventListeners() {
+            $refList.forEach(item => {
+                item.removeEventListener('mouseover', categoryMouseOver);
+                item.removeEventListener('click', refCategoryClick);
+                item.removeEventListener('click', mobileRefCategoryClick);
+            });
+
+            $nav.removeEventListener('mouseout', categoryMouseOut);
+        }
+
+        function categoryMouseOver() {
+            console.log('마우스오버확인');
+            const $childCategoryLists = this.nextElementSibling.querySelectorAll('.categoryList');
+            console.log($childCategoryLists);
+
+            $categoryList.forEach(item => {
+                item.style.display = "none";
+            });
+
+            $childCategoryLists.forEach(item => {
+                item.style.display = "block";
+            });
+        }
+
+        function refCategoryClick() {
+            searchCondition = this.textContent;
+            console.log('클릭확인', searchCondition);
+
+            currentPage = 1;
+            load = true;
+            loadProducts(searchCondition);
+        }
+
+        function mobileRefCategoryClick() {
+            console.log('클릭확인');
+
+            const $childCategoryLists = this.nextElementSibling.querySelectorAll('.categoryList');
+            console.log($childCategoryLists);
+
+            $childCategoryLists.forEach(item => {
+                if (item.style.display === "block") {
+                    item.style.display = "none";
+                } else {
+                    item.style.display = "block";
+                }
+            });
+        }
+
+        function categoryMouseOut(event) {
             // 마우스 이벤트가 발생한 요소와 그 자식 요소를 벗어나면 트루
             if (!$nav.contains(event.relatedTarget)) {
                 $categoryList.forEach(item => {
                     item.style.display = "none";
                 });
             }
-        });
+        }
 
     }
 
     /* 파일 비동기 통신 */
 
     let currentPage = 1;
-    loadProducts();
+    let searchCondition = 'null';
+    let searchValue;
+    const $categoryCode = $(".outBox")
+    let load = false;
+    loadProducts(searchCondition);
 
 
-    function loadProducts() {
-        $.ajax({
-            url: `/admin/listView?page=${currentPage}`,
-            success: function (data) {
-                console.log(data);
-                startListView(data.data.boardList);
-            },
-            error: function (xhr) {
-                console.log(xhr);
+    function loadProducts(searchCondition, searchValue) {
+
+        if (searchCondition == 'null') {
+            $.ajax({
+                url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
+                success: function (data) {
+                    console.log(data);
+                    startListView(data.data.boardList);
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+            load = true;
+        } else if (searchCondition != 'null') {
+            if (load) {
+                $categoryCode.empty();
             }
-        });
+            $.ajax({
+                url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
+                success: function (data) {
+                    console.log(data);
+                    startListView(data.data.boardList);
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                }
+            });
+            load = false;
+        }
     }
 
-    function findMainPage() {
-        currentPage++;
-        location.href = `admin/findMainPage?page=${currentPage}`;
-    }
+    function startListView(data) {
 
-    function startListView(data){
-        
         const $categoryCode = $(".outBox")
 
         for (let index of data) {
@@ -220,24 +288,37 @@ window.onload = function () {
             const $img = new Image();
             $img.width = "70%";
             $img.height = "70%";
-            
+
             // FileDto 객체 생성 및 이미지 파일 경로 설정
-            const file = index.fileMain;
-            const imgSrc = index.fileMain && index.fileMain.mainFilePath ? index.fileMain.mainFilePath 
-            + index.fileMain.savedFileNm
-            : '메인 사진';
+            const imgSrc = index.fileMain && index.fileMain.mainFilePath ? index.fileMain.mainFilePath
+                + index.fileMain.savedFileNm
+                : '메인 사진';
             $img.src = imgSrc;
 
             // $newDivItem.appendChild($img);
 
             $newDivItem.innerHTML += `
-                <img class="myImage" src="${imgSrc}" width="100%" height="70%">
-                <p> ${index.listNm} </p>
-                <p> ${index.ptList[0].price}</p>
-            `;
+                    <img class="myImage" src="${imgSrc}" width="100%" height="70%">
+                    <p> ${index.listNm} </p>
+                    <p> ${index.ptList[0].price}</p>
+                `;
+
+            /* 상품 디테일 이벤트 */
+            $newDivItem.addEventListener('click', function () {
+                productDetail(index.listNo);
+            });
             $categoryCode.append($newDivItem);
             console.log($img.src);
         }
+    }
+
+    function productDetail(listNo) {
+        console.log('디테일 클릭확인');
+        console.log(listNo);
+        // 패스배리어블
+        // location.href = `sell/productDetail/${listNo}`
+        // 쿼리 파라미터 
+        location.href = `/sell/productDetail?listNo=${listNo}`;
     }
 
     let isFetching = false;
@@ -246,25 +327,25 @@ window.onload = function () {
     window.addEventListener('scroll', () => {
         // 이미 데이터를 불러오고 있는 중이라면 더 이상 호출하지 않음
         if (isFetching) return;
-    
+
         // 현재 스크롤 위치
         const scrollY = window.scrollY || window.pageYOffset;
-    
+
         // 문서 전체의 높이
         const documentHeight = document.body.offsetHeight;
-    
+
         // 브라우저 창의 높이
         const windowHeight = window.innerHeight;
-    
+
         // 추가 페이지 로드 조건 확인 (스크롤이 하단에 닿았을 때)
         if (scrollY + windowHeight >= documentHeight) {
             // 데이터를 불러오기 전에 상태를 업데이트하여 중복 호출 방지
             isFetching = true;
-            
+
             currentPage++;
             // 로딩 함수 호출
-            loadProducts();
-    
+            loadProducts(searchCondition);
+
             // 일정 시간 후에 상태를 리셋하여 다시 호출 가능하도록 함
             setTimeout(() => {
                 isFetching = false;

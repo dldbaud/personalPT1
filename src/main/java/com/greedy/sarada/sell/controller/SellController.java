@@ -263,4 +263,15 @@ public class SellController {
 
 		return "redirect:/";
 	}
+	
+    @GetMapping("/productDetail")
+    public String productDetail(@RequestParam String listNo, Model model) {
+    	
+    	List<PtDto> productDetail  = sellService.productDetail(listNo);
+    	
+    	log.info(listNo);
+    	log.info("[sellController] productDetail{}", productDetail);
+    	
+    	return "user/pay/productDetail";
+    }
 }

@@ -94,4 +94,9 @@ public class SellService {
 		return categoryList;
 	}
 	
+	public List<PtDto> productDetail(String listNo) {
+		
+		return sellMapper.productDetail(listNo);
+	}
+	
 }
