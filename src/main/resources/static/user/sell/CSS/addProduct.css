@@ -91,9 +91,11 @@ label {
     font-weight: bold;
 }
 
-input,
 select,
-textarea {
+.bundle,
+.author,
+.itemInput,
+.sellPtCategory {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -116,10 +118,18 @@ button:hover {
 
 
 
+.diq {
+    display: flex;
+    justify-content: start;
+}
 
+#bundle {
+    display: none;
+}
 
-
-
+#bundelText {
+    margin-bottom: 10px;
+}
 
 
 
