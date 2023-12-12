@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/pay/CSS/foodDetail.css">
+    <script type="text/javascript" src="/user/pay/JS/foodDetail.js"></script>
+</head>
+
+<body>
+
+    <div class="foodTtile">
+        <p th:text="${sList.listNm}"></p>
+        <th:block th:if="${sList.fileMain != null}">
+            <img th:src="${sList.fileMain.mainFilePath + sList.fileMain.savedFileNm}" width="400px" height="400px">
+        </th:block>
+    </div>
+
+    <div class="countBox">
+        <div th:each="pt : ${sPtList}">
+            <div th:if="${pt.category.categoryCode == 114}">
+                <label th:for="${'checkBox' + pt.ptNo}" th:text="${pt.ptNm}"></label>
+                <input type="checkbox" th:id="${'checkBox' + pt.ptNo}" class="checkBox" name="orderCount" th:value="${pt.price}" th:data-ptno="${pt.ptNo}">
+                <br>
+                <br>
+                <label th:for="${'ptCount' + pt.ptNo}">수량 : </label>
+                <input type="number" th:id="${'ptCount' + pt.ptNo}" class="numberBox" step="1" min="1" value="1" th:data-ptno="${pt.ptNo}">
+                <br>
+                <br>
+            </div>
+        </div>
+        <br>
+        <label for="ptCount">가격 : </label>
+        <span id="priceDisplay"></span>
+    </div>
+
+    <div class="imgDiv">
+        <div class="viewTable">
+            <a class="viewLable" href="#ptDescript">상세 설명</ㅁ>
+            <a class="viewLable" href="#ptDescript2">상품 후기</a>
+        </div>    
+        <th:block th:if="${sFilelist}">
+            <div class="itemImg" th:each="file : ${sFilelist}" id="ptDescript">
+                <th:block th:if="${file.mainFilePath == null}">
+                    <img th:src="${file.filePath + file.savedFileNm}">
+                </th:block>
+            </div>
+        </th:block>
+
+        <div>
+            <p id="ptDescript2">야</p>
+        </div>
+    </div>
+</body>
+
+</html>

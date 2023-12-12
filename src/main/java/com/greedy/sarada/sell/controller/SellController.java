@@ -267,11 +267,18 @@ public class SellController {
     @GetMapping("/productDetail")
     public String productDetail(@RequestParam String listNo, Model model) {
     	
-    	List<PtDto> productDetail  = sellService.productDetail(listNo);
+//    	List<PtDto> productDetail  = sellService.productDetail(listNo);
+//    	List<ListDto> productDetail  = sellService.productDetail(listNo);
+    	Map<String, Object> productDetails = sellService.productDetails(listNo);
     	
     	log.info(listNo);
-    	log.info("[sellController] productDetail{}", productDetail);
     	
+    	model.addAttribute("sList", productDetails.get("sList"));
+    	model.addAttribute("sPtList", productDetails.get("sPtList"));
+    	model.addAttribute("sFilelist", productDetails.get("sFilelist"));
+//    	model.addAttribute("productDetail", productDetail);
+    	
+    	log.info("[sellController] productDetail{}", productDetails);
     	return "user/pay/productDetail";
     }
 }

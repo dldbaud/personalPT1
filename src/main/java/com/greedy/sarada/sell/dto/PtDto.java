@@ -15,9 +15,10 @@ public class PtDto {
 	private int stCount;
 	private SellDto sell;
 	private String ptDescrip;
-	private String listNo;
 	private String ptSize;
 	private String ptAuthor;
+	private String listNo;
+	private int ptBundle;
 	private CategoryDto category;
 	private List<FileDto> fileList;
 }

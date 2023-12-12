@@ -75,9 +75,10 @@
 		<result property="price" column="PRICE"/>
 		<result property="stCount" column="ST_COUNT"/>
 		<result property="ptDescrip" column="PT_DESCRIP"/>
-		<result property="listNo" column="LIST_NO"/>				
 		<result property="ptSize" column="PT_SIZE"/>			
 		<result property="ptAuthor" column="PT_AUTHOR"/>			
+		<result property="listNo" column="LIST_NO"/>				
+		<result property="ptBundle" column="PT_BUNDLE"/>				
 		<association property="category" resultMap="sellCategoryResultMap"/>
 		<association property="sell" resultMap="sellDtoResultMap"/>
 		<association property="fileList" resultMap="fileResultMap"/>
@@ -133,9 +134,10 @@
 	</select>
 
 <!-- TB_FILE에 PT_NO가 없을 수 도 있기에 left 조인 -->
-	<select id="productDetail" resultMap="ptResultMap">
-		SELECT 
-			   A.PT_NO
+<!-- 	<select id="productDetail" resultMap="listResultMap">
+		SELECT
+		 	   C.LIST_NM
+			 , A.PT_NO
 			 , A.PT_NM
 			 , A.PRICE
 			 , A.ST_COUNT
@@ -149,12 +151,64 @@
 			 , B.FILE_PATH
 		     , B.SAVED_FILE_NM
 		     , B.MAIN_FILE_PATH
+		     , B.FILE_TYPE
 	      FROM TB_PT A
 	      LEFT JOIN TB_FILE B ON(A.PT_NO = B.PT_NO)
 	      LEFT JOIN TB_LIST C ON(C.LIST_NO = A.LIST_NO)
 	     WHERE C.LIST_NO = #{ listNo }
+	</select> -->
+	
+	<select id="selectList" resultMap="listResultMap">
+        SELECT 
+			    A.LIST_NO
+			  , D.REF_CATEGORY
+			  , A.LIST_NM
+			  , A.REGIST_DATE
+			  , A.DESCRIPTION
+			  , A.SELL_NO
+			  , A.REF_CATEGORY_CODE
+              , C.MAIN_FILE_PATH
+              , C.SAVED_FILE_NM
+		  FROM TB_LIST A
+          JOIN TB_PT B ON (A.LIST_NO = B.LIST_no)
+          JOIN TB_FILE C ON (B.PT_NO = C.PT_NO)
+          JOIN TB_REF_CATEGORY D ON (A.REF_CATEGORY_CODE = D.REF_CATEGORY)
+		 WHERE A.LIST_NO = #{ listNo }
+           AND C.MAIN_FILE_PATH IS NOT NULL
 	</select>
 	
+	<select id="selectPtList" resultMap="ptResultMap">
+		SELECT 
+		       PT_NO
+			 , PT_NM
+			 , PRICE
+			 , ST_COUNT
+			 , SELL_NO
+			 , LIST_NO
+			 , CATEGORY_CODE
+			 , PT_SIZE
+			 , PT_DESCRIP
+			 , PT_AUTHOR
+			 , PT_BUNDLE
+	      FROM TB_PT
+	     WHERE LIST_NO = #{ listNo }
+	     ORDER BY PRICE
+	</select>
+	
+	<select id="selectFileList" resultMap="fileResultMap">
+		SELECT
+		       A.FILE_NO
+			 , A.PT_NO
+			 , A.FILE_TYPE
+			 , A.ORIGINAL_FILE_NM
+			 , A.SAVED_FILE_NM
+			 , A.FILE_PATH
+			 , A.MAIN_FILE_PATH
+	      FROM TB_FILE A
+	      JOIN TB_PT B ON (B.PT_NO = A.PT_NO)
+	     WHERE LIST_NO = #{ listNo }
+	</select >
+
 	<insert id="insertSellList">
 		INSERT 
 			INTO TB_LIST
@@ -209,6 +263,7 @@
 		, CATEGORY_CODE
 		, PT_SIZE
 		, PT_AUTHOR
+		, PT_BUNDLE
 		)VALUES
 		(
 		  'PT'||(SEQ_PT.NEXTVAL)
@@ -220,7 +275,8 @@
 		, 'LI'||(SEQ_LIST.CURRVAL)
 		, #{ category.categoryCode }
 		, #{ ptSize }
-		, #{ ptAuthor } 
+		, #{ ptAuthor }
+		, #{ ptBundle } 
 		)
 	</insert>
 

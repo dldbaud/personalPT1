@@ -15,10 +15,11 @@
                 <h2>판매 등록</h2>              
                 <form id="sellForm" action="/sell/addProduct" method="post" enctype="multipart/form-data">
                     <label for="listNm">판매글 제목:</label>
-                    <input type="text" id="listNm" name="listNm" required>
+                    <input type="text" id="listNm" class="itemInput" name="listNm" required>
                     
                     <label for="main-image" class="upload">대표 사진</label>
                     <input type="file" id="main-image[0]" name="attachImageMain" accept="image/gif, image/jpeg, image/png" multiple required>
+                    
                     
                     <label for="fileView">파일 미리보기</label>
                     <div class="image-area" name="fileView[0]">
@@ -26,7 +27,7 @@
                     </div>
 
                     <label for="sellDescription">판매 설명:</label>
-                    <textarea id="sellDescription" name="sellDescription"></textarea>
+                    <textarea id="sellDescription" class="itemInput" name="sellDescription"></textarea>
                     
                     <label for="sellCategory">카테고리:</label>
                     <select id="sellCategory" name="refCategoryCode.refCategory" required>
@@ -73,6 +74,14 @@
                                 <option value="XXL">XXL</option>
                             </select>
 
+                            <!-- <div class="diq">
+                                <input type="checkbox" id="bundlech0">
+                                <label for="bundlech0" id="bundelText">묶음 여부</label>
+                            </div>
+
+                            <label for="bundle0" class="bundle0">묶음 개수</label>
+                            <input type="number" id="bundle0" class="bundle0" name="ptList[0].ptBundle"> -->
+                            
                             <label for="author" class="authorLabel">저자</label>
                             <input type="text" id="author" class="author" name="ptList[0].ptAuthor">
                             

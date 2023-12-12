@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+}
+
+.wrapper {
+    max-width: 70%;
+    justify-content: center;
+    align-items: start;
+    margin: 0 auto;
+    margin-top: 100px;
+    height: 100vh;
+}
+
+.title {
+    display: grid;
+    height: 100vh;
+    gap : 5px;
+    /* grid-template-columns: 1fr 1fr; */
+}

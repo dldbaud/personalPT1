@@ -36,6 +36,13 @@ public interface SellMapper {
 
 	List<CategoryDto> findAllCategoryList(String categoryCode);
 
-	List<PtDto> productDetail(String listNo);
+	ListDto selectList(String listNo);
+
+	List<PtDto> selectPtList(String listNo);
+
+	List<FileDto> selectFileList(String listNo);
+
+//	List<PtDto> productDetail(String listNo);
+//	List<ListDto> productDetail(String listNo);
 
 }

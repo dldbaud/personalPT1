@@ -93,10 +93,25 @@ public class SellService {
 		
 		return categoryList;
 	}
-	
-	public List<PtDto> productDetail(String listNo) {
+	public Map<String, Object> productDetails(String listNo) {
 		
-		return sellMapper.productDetail(listNo);
+		ListDto selectList = sellMapper.selectList(listNo);
+		List<PtDto> selectPtList = sellMapper.selectPtList(listNo);
+		List<FileDto> selectFileList = sellMapper.selectFileList(listNo);
+		Map<String, Object> productDetiis = new HashMap<>();
+		productDetiis.put("sList", selectList);
+		productDetiis.put("sPtList", selectPtList);
+		productDetiis.put("sFilelist", selectFileList);
+		
+		return productDetiis;
 	}
 	
+//	public List<PtDto> productDetail(String listNo) {
+//		
+//		return sellMapper.productDetail(listNo);
+//	}
+//	public List<ListDto> productDetail(String listNo) {
+//		
+//		return sellMapper.productDetail(listNo);
+//	}
 }

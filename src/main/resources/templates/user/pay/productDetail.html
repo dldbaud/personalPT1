@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" type="text/css" href="/user/pay/CSS/productDetail.css"> -->
+</head>
+<body>
+    <div th:replace="common/header.html"></div>
+
+    <div class="wrapper title">
+        <th:block th:if="${sList.refCategoryCode.refCategory == 6}">
+            <div th:replace="user/pay/foodDetail.html"></div>
+        </th:block>
+    </div>
+
+</body>
+</html>

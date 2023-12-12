@@ -152,11 +152,4 @@ public class AdminController {
 
     }
     
-    @GetMapping("/productDetail")
-    public String productDetail(@RequestParam String listNo, Model model) {
-    	
-    	List<ListDto> productDetail  = adminService.productDetail(listNo);
-    	return "";
-    }
-  
 }

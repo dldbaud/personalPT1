@@ -52,6 +52,15 @@ button {
     right : 32px;
 }
 
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.categoryList{
+    display: block;
+}
+
 @media screen and (max-width : 760px){
     .main {
         flex-direction: column;

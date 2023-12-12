@@ -239,118 +239,120 @@ window.onload = function () {
     let currentPage = 1;
     let searchCondition = 'null';
     let searchValue;
-    const $categoryCode = $(".outBox")
+    const $categoryCode = $(".outBox");
     let load = false;
-    loadProducts(searchCondition);
+
+    if(document.getElementById('outBox')){
+        loadProducts(searchCondition);
 
 
-    function loadProducts(searchCondition, searchValue) {
-
-        if (searchCondition == 'null') {
-            $.ajax({
-                url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
-                success: function (data) {
-                    console.log(data);
-                    startListView(data.data.boardList);
-                },
-                error: function (xhr) {
-                    console.log(xhr);
+        function loadProducts(searchCondition, searchValue) {
+    
+            if (searchCondition == 'null') {
+                $.ajax({
+                    url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
+                    success: function (data) {
+                        console.log(data);
+                        startListView(data.data.boardList);
+                    },
+                    error: function (xhr) {
+                        console.log(xhr);
+                    }
+                });
+                load = true;
+            } else if (searchCondition != 'null') {
+                if (load) {
+                    $categoryCode.empty();
                 }
-            });
-            load = true;
-        } else if (searchCondition != 'null') {
-            if (load) {
-                $categoryCode.empty();
+                $.ajax({
+                    url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
+                    success: function (data) {
+                        console.log(data);
+                        startListView(data.data.boardList);
+                    },
+                    error: function (xhr) {
+                        console.log(xhr);
+                    }
+                });
+                load = false;
             }
-            $.ajax({
-                url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
-                success: function (data) {
-                    console.log(data);
-                    startListView(data.data.boardList);
-                },
-                error: function (xhr) {
-                    console.log(xhr);
-                }
-            });
-            load = false;
         }
-    }
-
-    function startListView(data) {
-
-        const $categoryCode = $(".outBox")
-
-        for (let index of data) {
-            const $newDivItem = document.createElement('div');
-            $newDivItem.classList.add('itemBox');
-            console.log(index.listNm);
-
-            const $img = new Image();
-            $img.width = "70%";
-            $img.height = "70%";
-
-            // FileDto 객체 생성 및 이미지 파일 경로 설정
-            const imgSrc = index.fileMain && index.fileMain.mainFilePath ? index.fileMain.mainFilePath
-                + index.fileMain.savedFileNm
-                : '메인 사진';
-            $img.src = imgSrc;
-
-            // $newDivItem.appendChild($img);
-
-            $newDivItem.innerHTML += `
-                    <img class="myImage" src="${imgSrc}" width="100%" height="70%">
-                    <p> ${index.listNm} </p>
-                    <p> ${index.ptList[0].price}</p>
-                `;
-
-            /* 상품 디테일 이벤트 */
-            $newDivItem.addEventListener('click', function () {
-                productDetail(index.listNo);
-            });
-            $categoryCode.append($newDivItem);
-            console.log($img.src);
+        
+        function startListView(data) {
+    
+            const $categoryCode = $(".outBox");
+    
+            for (let index of data) {
+                const $newDivItem = document.createElement('div');
+                $newDivItem.classList.add('itemBox');
+                console.log(index.listNm);
+    
+                const $img = new Image();
+                $img.width = "70%";
+                $img.height = "70%";
+    
+                // FileDto 객체 생성 및 이미지 파일 경로 설정
+                const imgSrc = index.fileMain && index.fileMain.mainFilePath ? index.fileMain.mainFilePath
+                    + index.fileMain.savedFileNm
+                    : '메인 사진';
+                $img.src = imgSrc;
+    
+                // $newDivItem.appendChild($img);
+    
+                $newDivItem.innerHTML += `
+                        <img class="myImage" src="${imgSrc}" width="100%" height="70%">
+                        <p> ${index.listNm} </p>
+                        <p> ${index.ptList[0].price}</p>
+                    `;
+    
+                /* 상품 디테일 이벤트 */
+                $newDivItem.addEventListener('click', function () {
+                    productDetail(index.listNo);
+                });
+                $categoryCode.append($newDivItem);
+                console.log($img.src);
+            }
         }
-    }
-
-    function productDetail(listNo) {
-        console.log('디테일 클릭확인');
-        console.log(listNo);
-        // 패스배리어블
-        // location.href = `sell/productDetail/${listNo}`
-        // 쿼리 파라미터 
-        location.href = `/sell/productDetail?listNo=${listNo}`;
-    }
-
-    let isFetching = false;
-
-    // 스크롤 이벤트 리스너 등록
-    window.addEventListener('scroll', () => {
-        // 이미 데이터를 불러오고 있는 중이라면 더 이상 호출하지 않음
-        if (isFetching) return;
-
-        // 현재 스크롤 위치
-        const scrollY = window.scrollY || window.pageYOffset;
-
-        // 문서 전체의 높이
-        const documentHeight = document.body.offsetHeight;
-
-        // 브라우저 창의 높이
-        const windowHeight = window.innerHeight;
-
-        // 추가 페이지 로드 조건 확인 (스크롤이 하단에 닿았을 때)
-        if (scrollY + windowHeight >= documentHeight) {
-            // 데이터를 불러오기 전에 상태를 업데이트하여 중복 호출 방지
-            isFetching = true;
-
-            currentPage++;
-            // 로딩 함수 호출
-            loadProducts(searchCondition);
-
-            // 일정 시간 후에 상태를 리셋하여 다시 호출 가능하도록 함
-            setTimeout(() => {
-                isFetching = false;
-            }, 3000); // 1초 (원하는 시간으로 조절 가능)
+    
+        function productDetail(listNo) {
+            console.log('디테일 클릭확인');
+            console.log(listNo);
+    
+            location.href = `/sell/productDetail?listNo=${listNo}`;
         }
-    });
+    
+        let isFetching = false;
+    
+        // 스크롤 이벤트 리스너 등록
+        window.addEventListener('scroll', () => {
+            // 이미 데이터를 불러오고 있는 중이라면 더 이상 호출하지 않음
+            if (isFetching) return;
+    
+            // 현재 스크롤 위치
+            const scrollY = window.scrollY || window.pageYOffset;
+    
+            // 문서 전체의 높이
+            const documentHeight = document.body.offsetHeight;
+    
+            // 브라우저 창의 높이
+            const windowHeight = window.innerHeight;
+    
+            // 추가 페이지 로드 조건 확인 (스크롤이 하단에 닿았을 때)
+            if (scrollY + windowHeight >= documentHeight) {
+                // 데이터를 불러오기 전에 상태를 업데이트하여 중복 호출 방지
+                isFetching = true;
+    
+                currentPage++;
+                // 로딩 함수 호출
+                loadProducts(searchCondition);
+    
+                // 일정 시간 후에 상태를 리셋하여 다시 호출 가능하도록 함
+                setTimeout(() => {
+                    isFetching = false;
+                }, 3000); // 1초 (원하는 시간으로 조절 가능)
+            }
+        });
+    }
+   
 
 }

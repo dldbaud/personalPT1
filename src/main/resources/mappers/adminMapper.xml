@@ -84,7 +84,8 @@
 		<result property="ptDescrip" column="PT_DESCRIP"/>
 		<result property="listNo" column="LIST_NO"/>				
 		<result property="ptSize" column="PT_SIZE"/>			
-		<result property="ptAuthor" column="PT_AUTHOR"/>			
+		<result property="ptAuthor" column="PT_AUTHOR"/>
+		<result property="ptBundle" column="PT_BUNDLE"/>				
 		<association property="category" resultMap="sellCategoryResultMap"/>
 		<association property="sell" resultMap="sellDtoResultMap"/>
 		<association property="fileList" resultMap="fileResultMap"/>

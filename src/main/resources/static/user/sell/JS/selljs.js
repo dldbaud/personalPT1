@@ -187,11 +187,39 @@ window.addEventListener('load', function () {
             });
         }
     }
+    
+    
 
     let itemCount = 0;
     let imageArea = document.querySelectorAll(".image-area");
     let fileElements = document.querySelectorAll("[type=file]");
+    let bundle = document.querySelectorAll(".bundle");
 
+        /* 체크박스 이벤트 */
+        if(document.getElementById(`bundlech${itemCount}`)){
+
+            console.log(`야${itemCount}`);
+            const $bundlech = document.getElementById(`bundlech${itemCount}`);
+    
+            $bundlech.addEventListener('click', function(){
+                
+                checkboxEvent(this);
+            });
+        }
+
+    function checkboxEvent(e) {
+        const checkboxId = e.id.replace('bundlech', ''); // 현재 체크박스의 ID에서 번호 추출
+        const correspondingBundle = document.querySelectorAll('.bundle' + checkboxId); // 해당 체크박스에 대응하는 bundle 인풋
+        if (e.checked) {
+            correspondingBundle.forEach((element) => {
+                element.style.display = 'block';
+            });
+        } else {
+            correspondingBundle.forEach((element) => {
+                element.style.display = 'none';
+            });
+        }
+    }
     const fileAddClickHandler = (event) => {
 
         // 현재 클릭한 fileAdd 버튼의 부모 item 요소 찾기
@@ -253,6 +281,7 @@ window.addEventListener('load', function () {
             const newItem = document.createElement('div');
             newItem.classList.add('item');
             ++itemCount;
+            console.log(itemCount);
             newItem.innerHTML = `
                 <label>상품 등록</label>
                 
@@ -307,7 +336,10 @@ window.addEventListener('load', function () {
             });
 
             newItem.querySelector('.fileAdd').addEventListener('click', fileAddClickHandler);
-
+            // document.getElementById(`bundlech${itemCount}`).addEventListener('click', function() {
+            //     checkboxEvent(this);
+            // });
+            
 
             imageArea = document.querySelectorAll(".image-area");
 
@@ -347,14 +379,6 @@ window.addEventListener('load', function () {
             reader.onload = function () {
                 console.log(reader.result);
 
-                //function() 으로 this를 쓰면 function(){}안의 호출 시점에서 this 를 찾는데
-                // 현재 reader.onload = function () 내부에 this를 정의한게 없다
-                // 변수에 담거나 화살표 함수를 써야한다.
-
-                //파일 크기 구해서 <100 등으로 크기마다 조절 가능
-                // const fileSizeInBytes = self.files[0].size;
-                // const fileSizeInKB = fileSizeInBytes / 1024;
-                
                 const image = new Image();
                 const maxwidth = 'calc(100% - 6rem)';
                 image.src = reader.result;
@@ -369,7 +393,7 @@ window.addEventListener('load', function () {
                     width = imageWidth;
                     height = imageHeight;
 
-                    if(width > maxwidth) {
+                    if (width > maxwidth) {
                         width = maxwidth;
                     }
                     imageArea[index].innerHTML = `<img src='${reader.result}' style='width: ${width}px; height: ${height}px'>`;
@@ -418,4 +442,11 @@ window.addEventListener('load', function () {
             }
         });
     }
+//     <div class="diq">
+//     <input type="checkbox" id="bundlech${itemCount}">
+//     <label for="bundlech${itemCount}" id="bundelText">묶음 여부</label>
+// </div>
+
+// <label for="bundle${itemCount}" class="bundle${itemCount}">묶음 개수</label>
+// <input type="number" id="bundle${itemCount}" class="bundle${itemCount}" name="ptList[${itemCount}].ptBundle">
 });

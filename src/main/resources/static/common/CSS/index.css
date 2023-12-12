@@ -26,19 +26,15 @@ body {
     margin: 0px 0px;
 }
 
-ul {
+/* ul {
     list-style-type: none;
     padding: 0;
 }
 
 .categoryList{
     display: block;
-    /* margin-left: -10%; */
-}
+} */
 
-.categoryList > li{
-    /* float: left; */
-}
 
 
 
