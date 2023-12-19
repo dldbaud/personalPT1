@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <!-- <link rel="stylesheet" type="text/css" href="/user/pay/CSS/productDetail.css"> -->
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <div th:replace="common/header.html"></div>
@@ -13,6 +15,10 @@
     <div class="wrapper title">
         <th:block th:if="${sList.refCategoryCode.refCategory == 6}">
             <div th:replace="user/pay/foodDetail.html"></div>
+        </th:block>
+
+        <th:block th:if="${sList.refCategoryCode.refCategory != 6 && sList.refCategoryCode.refCategory != 4}">
+            <div th:replace="user/pay/ptDetail.html"></div>
         </th:block>
     </div>
 

@@ -86,6 +86,7 @@
 	
 	<resultMap id="fileResultMap" type="com.greedy.sarada.sell.dto.FileDto">
 		<id property="fileNo" column="FILE_NO"/>
+		<result property="ptNo" column="PT_NO"/>
 		<result property="fileType" column="FILE_TYPE"/>
 		<result property="originalFileNm" column="ORIGINAL_FILE_NM"/>
 		<result property="savedFileNm" column="SAVED_FILE_NM"/>
@@ -199,6 +200,7 @@
 		SELECT
 		       A.FILE_NO
 			 , A.PT_NO
+			 , B.PT_NM
 			 , A.FILE_TYPE
 			 , A.ORIGINAL_FILE_NM
 			 , A.SAVED_FILE_NM

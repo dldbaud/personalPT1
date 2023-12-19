@@ -1,17 +1,22 @@
 package com.greedy.sarada.user.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
+import com.greedy.sarada.common.exception.user.insertOrderException;
+import com.greedy.sarada.common.exception.user.insertOrderItemException;
+import com.greedy.sarada.common.exception.user.insertPayException;
 import com.greedy.sarada.provider.SnsDto;
-import com.greedy.sarada.user.controller.UserController;
+import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.user.dao.UserMapper;
+import com.greedy.sarada.user.dto.OrderDto;
+import com.greedy.sarada.user.dto.OrderItemDto;
+import com.greedy.sarada.user.dto.PayCompleteRequest;
+import com.greedy.sarada.user.dto.PayDto;
 import com.greedy.sarada.user.dto.UserDto;
+import com.siot.IamportRestClient.response.Payment;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,6 +84,51 @@ public class UserService {
 		
 		return mapper.findByUserById(userNm,phone);
 	
+	}
+
+	public void insertOrder(PayCompleteRequest request, Payment paymentResult, UserDto loginUser) throws insertOrderItemException, insertOrderException, insertPayException {
+		
+		log.info("insertOrder 확인 : ");
+		OrderDto order = new OrderDto();
+		order.setOrderNo(request.getOrderNo());
+		order.setOrderPrice(paymentResult.getAmount().intValue());
+		order.setListNm(request.getListNm());
+		order.setDeliveryStatus("준비중");
+		order.setListNo(request.getListNo());
+		order.setUserNo(loginUser.getUserNo());
+		
+		int result1 = mapper.insertOrder(order);
+		if(!(result1 > 0)) {
+			throw new insertOrderException("order테이블 삽입 실패");
+		}
+		
+		for(PtDto pt : request.getPtList()) {
+			log.info("insertOrderItem 확인 : ");
+			OrderItemDto orderItemDto = new OrderItemDto();
+			orderItemDto.setOrderNo(request.getOrderNo());
+			orderItemDto.setPtNm(pt.getPtNm());
+			orderItemDto.setPtNo(pt.getPtNo());
+			orderItemDto.setOrderCount(pt.getStCount());
+			
+			int rsesult = mapper.insertOrderItem(orderItemDto);
+			
+			if(!( rsesult > 0)) {
+				throw new insertOrderItemException("orderItem 테이블 삽입 실패"); 
+			}
+		}
+		
+		PayDto pay = new PayDto();
+		pay.setPayNo(request.getPayNo());
+		pay.setOrderNo(request.getOrderNo());
+		pay.setPayMethod(paymentResult.getPayMethod());
+		pay.setPayPrice(paymentResult.getAmount().intValue());
+		pay.setUserNo(loginUser.getUserNo());
+		
+		int result2 = mapper.insertPay(pay);
+		
+		if(!( result2 > 0)) {
+			throw new insertPayException("pay 테이블 삽입 실패"); 
+		}
 	}
 
 

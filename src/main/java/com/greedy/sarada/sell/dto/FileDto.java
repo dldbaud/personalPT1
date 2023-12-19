@@ -6,7 +6,7 @@ import lombok.Data;
 public class FileDto {
 	
 	private String fileNo;
-	private PtDto pt;
+	private String ptNo;
 	private String fileType;
 	private String originalFileNm;
 	private String savedFileNm;

@@ -37,6 +37,32 @@
 		<association property="user" resultMap="userResultMap"/>
 	</resultMap>
 	
+	<resultMap id="payResultMap" type="com.greedy.sarada.user.dto.PayDto">
+		<id property="payNo" column="PAY_NO"/>
+		<result property="payDate" column="PAY_DATE"/>
+		<result property="payMethod" column="PAY_METHOD"/>
+		<result property="payPrice" column="PAY_PRICE"/>
+		<result property="orderNo" column="ORDER_NO"/>
+		<result property="userNo" column="USER_NO"/>
+	</resultMap>
+	
+	<resultMap id="orderResultMap" type="com.greedy.sarada.user.dto.OrderDto">
+		<id property="orderNo" column="ORDER_NO"/>
+		<result property="orderPrice" column="ORDER_PRICE"/>
+		<result property="listNm" column="LIST_NM"/>
+		<result property="deliveryStatus" column="DELIVERY_STATUS"/>
+		<result property="orderDate" column="ORDER_DATE"/>
+		<result property="userNo" column="USER_NO"/>
+		<result property="listNo" column="LIST_NO"/>
+	</resultMap>
+	
+	<resultMap id="orderItemResultMap" type="com.greedy.sarada.user.dto.OrderItemDto">
+		<id property="orderItemNo" column="ORDER_ITEM_NO"/>
+		<result property="ptNo" column="PT_NO"/>
+		<result property="orderNo" column="ORDER_NO"/>
+		<result property="orderCount" column="ORDER_COUNT"/>
+		<result property="ptNm" column="PT_NM"/>
+	</resultMap>
 	<select id="findByUserId" resultMap="userResultMap">
 		   SELECT
                A.USER_NO
@@ -157,6 +183,62 @@
 		 WHERE USER_NM = #{ userNm }
 		   AND PHONE = #{ phone } 
 	</select>
+	
+	<insert id="insertOrderItem">
+		INSERT INTO
+		         ORDER_ITEM
+		( ORDER_ITEM_NO
+		, ORDER_NO
+		, PT_NO
+		, ORDER_COUNT
+		, PT_NM
+		)VALUES
+		( 'OR'||(SEQ_ORDERITEM.NEXTVAL)
+		, #{ orderNo }
+		, #{ ptNo }
+		, #{ orderCount }
+		, #{ ptNm }
+		)
+	</insert>
+	<insert id="insertOrder">
+		INSERT INTO
+			     TB_ORDER
+			( ORDER_NO
+			, ORDER_PRICE
+			, LIST_NM
+			, DELIVERY_STATUS
+			, ORDER_DATE
+			, USER_NO
+			, LIST_NO
+			)VALUES
+			( #{ orderNo }
+			, #{ orderPrice }
+			, #{ listNm }
+			, #{ deliveryStatus }
+			, SYSDATE
+			, #{ userNo }
+			, #{ listNo }
+			)
+	</insert>
+	<insert id="insertPay">
+		INSERT INTO
+				 TB_PAY
+			( PAY_NO
+			, PAY_DATE
+			, PAY_METHOD
+			, PAY_PRICE
+			, ORDER_NO
+			, USER_NO
+			)VALUES
+			(
+			  #{ payNo }
+			, SYSDATE
+			, #{ payMethod }
+			, #{ payPrice }
+			, #{ orderNo }
+			, #{ userNo }
+			)
+	</insert>
 </mapper>
 
 
