@@ -63,6 +63,16 @@
 		<result property="orderCount" column="ORDER_COUNT"/>
 		<result property="ptNm" column="PT_NM"/>
 	</resultMap>
+
+	<resultMap id="refundResultMap" type="com.greedy.sarada.user.dto.RefundDto">
+		<id property="refundNo" column="REFUND_NO"/>
+		<result property="orderNo" column="ORDER_NO"/>
+		<result property="refundPrice" column="REFUND_PRICE"/>
+		<result property="refundDate" column="REFUND_DATE"/>
+		<result property="refundStatus" column="REFUND_STATUS"/>
+		<result property="listNm" column="LIST_NM"/>
+	</resultMap>
+	
 	<select id="findByUserId" resultMap="userResultMap">
 		   SELECT
                A.USER_NO

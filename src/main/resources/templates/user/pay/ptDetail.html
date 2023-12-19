@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/pay/CSS/foodDetail.css">
+    <script type="text/javascript" src="/user/pay/JS/foodDetail.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+
+    <div class="foodTtile">
+        <p id="listNm" th:text="${sList.listNm}"></p>
+        <input hidden id="listNo" th:value="${sList.listNo}">
+        <th:block th:if="${sList.fileMain != null}">
+            <img th:src="${sList.fileMain.mainFilePath + sList.fileMain.savedFileNm}" width="400px" height="400px">
+        </th:block>
+    </div>
+    <th:block sec:authorize="isAuthenticated()">
+        <input type="hidden" id="userId" th:value="${ #authentication.principal.id }">
+        <input type="hidden" id="userNm" th:value="${ #authentication.principal.userNm }">
+        <input type="hidden" id="phone" th:value="${ #authentication.principal.phone }">
+        <input type="hidden" id="address" th:value="${ #authentication.principal.address }">
+     </th:block>
+
+    <div class="countBox">
+        <div th:each="pt : ${sPtList}">
+            <div th:if="${pt.category.categoryCode != 114}">
+                <label th:for="${'checkBox' + pt.ptNo}" th:text="${pt.ptNm}"></label>
+                <input type="checkbox" th:id="${'checkBox' + pt.ptNo}" class="checkBox" name="orderCount" th:value="${pt.price}" th:data-ptno="${pt.ptNo}" th:data-ptnm="${pt.ptNm}">
+                <br>
+                <br>
+                <label th:for="${'ptCount' + pt.ptNo}">수량 : </label>
+                <input type="number" th:id="${'ptCount' + pt.ptNo}" class="numberBox" step="1" min="1" value="1" th:data-ptno="${pt.ptNo}">
+                <br>
+                <br>
+            </div>
+        </div>
+        <br>
+        <label for="ptCount">가격 : </label>
+        <span id="priceDisplay"></span>
+    </div>
+
+    <div  class="payment">
+        <ul  class="paymentUl">
+            <li  data-pay="naverpay" class="active">
+                <button id="1" class="btn" value="kakao">
+                    <span >
+                        <!-- <img class="imgPay" src="/user/pay/iMAGES/회색네이버.jpg"></img>
+                        <img class="off" src="/user/pay/iMAGES/(웅디자인) 네이버 심볼.png"></img> -->
+                    </span>
+                    <div  class="text1">카카오페이</div>
+                </button>
+            </li>
+            <!-- <li  data-pay="card" class="">
+                <button  id="2" class="btn" value="card">
+                    <span >
+                        <img class="imgPay" src="/user/pay/iMAGES/회색카드.png"></img>
+                        <img class="off" src="/user/pay/iMAGES/컬러카드.png"></img>
+                    </span>
+                    <div  class="text1">카드</div>
+                </button>
+            </li> -->
+            <li  data-pay="real" class="">
+                <button id="3" class="btn" value="transfer">
+                    <span>
+                        <!-- <img class="imgPay" src="/user/pay/iMAGES/회색통장.png"></img>
+                        <img class="off" src="/user/pay/iMAGES/컬러통장.png"></img> -->
+                    </span>
+                <div  class="text1">계좌이체</div>
+            </button>
+            </li>
+        </ul>
+    </div>
+    <div id="paymentDiv"  class="paymentDiv">
+        <button id="paymentBtn" class="paymentBtn">결제</button>
+    </div>
+
+    <div th:each="pt : ${sPtList}">
+        <th:block th:each="sfile : ${pt.fileList}">
+            <div class="ptimg" th:if="${sfile != null && sfile.filePath != null}">
+               <p th:text="${sfile.ptNm}"></p>
+               <img th:src="${sfile.filePath + sfile.savedFileNm}" width="400px" height="400px">
+           </div>
+        </th:block>
+    </div>
+    <div class="imgDiv">
+        <div class="viewTable">
+            <a class="viewLable" href="#ptDescript">상세 설명</ㅁ>
+            <a class="viewLable" href="#ptDescript2">상품 후기</a>
+        </div>    
+        <th:block th:if="${sFilelist}">
+            <div class="itemImg" th:each="file : ${sFilelist}" id="ptDescript">
+                <th:block th:if="${file.mainFilePath == null}">
+                    <img th:src="${file.filePath + file.savedFileNm}">
+                </th:block>
+            </div>
+        </th:block>
+
+        <div>
+            
+        </div>
+    </div>
+</body>
+
+</html>
