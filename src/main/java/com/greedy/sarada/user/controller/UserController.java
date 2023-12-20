@@ -34,6 +34,7 @@ import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
 import com.greedy.sarada.common.paging.ResponseDto;
+import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
 import com.greedy.sarada.user.dto.PayDto;
@@ -203,8 +204,33 @@ public class UserController {
 	    
 	    /*주문 목록 페이지*/
 	    @GetMapping("/myOrderList")
-	    public String myOrderList() {
+	    public String myOrderList(@AuthenticationPrincipal UserDto user, OrderDto order, Model model, 
+	    		@RequestParam(defaultValue="1") int page, 
+	  			@RequestParam(required=false) String searchCondition, 
+	  			@RequestParam(required=false) String searchValue
+	    		) {
 	    	
+	    	
+	    	Map<String, String> searchMap = new HashMap<>();
+	  		searchMap.put("searchCondition", searchCondition);
+	  		searchMap.put("searchValue", searchValue);
+	  		log.info("[UserController] searchMap : {}", searchMap);
+	    	Map<String, Object> userInfo = userService.selectUserInfo(user.getId());
+	    	
+	    	Map<String, Object> orderListAndPaging = userService.findOrderListViewPaging(page, searchMap, user.getUserNo());
+//	    	Map<String, Object> orderLists = userService.selectOrderList(user.getUserNo());
+//	    	
+//	    	int orderReadyCounting = userService.orderReadyCounting(user.getUserNo());
+//	    	model.addAttribute("userInfo", userInfo.get("userInfo"));
+//	    	model.addAttribute("orderLists", orderLists.get("orderLists"));
+//	    	model.addAttribute("orderReadyCounting", orderReadyCounting);	    	
+	    	model.addAttribute("orderLists", orderListAndPaging.get("paging"));
+	    	model.addAttribute("orderLists", orderListAndPaging.get("orderList"));
+//	    	log.info("[userController] userInfo{}", userInfo);
+//	    	log.info("[userController] orderLists{}", orderLists);
+//	    	log.info("[userController] orderReadyCounting{}", orderReadyCounting);
+	    	log.info("[userController] orderListAndPaging{}", orderListAndPaging.get("paging"));
+	    	log.info("[userController] orderListAndPaging{}",  orderListAndPaging.get("orderList"));
 	    	return "user/myPage/myOrderList";
 	    }
 
@@ -259,7 +285,6 @@ public class UserController {
 		}
 		
 		/* 결제*/
-//		@PostMapping(value = "/payComplete", produces = "application/json; charset=UTF-8")
 		@PostMapping("/payComplete")
 		public ResponseEntity<ResponseDto> postPayComplete(@RequestBody PayCompleteRequest request, @AuthenticationPrincipal UserDto loginUser) throws insertOrderItemException, insertOrderException, insertPayException {
 		    log.info("[UserController] request{}", request);

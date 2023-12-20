@@ -1,5 +1,9 @@
 package com.greedy.sarada.user.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,7 +12,10 @@ import com.greedy.sarada.common.exception.user.MemberRegistException;
 import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
+import com.greedy.sarada.common.paging.Pagenation;
+import com.greedy.sarada.common.paging.SelectCriteria;
 import com.greedy.sarada.provider.SnsDto;
+import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.user.dao.UserMapper;
 import com.greedy.sarada.user.dto.OrderDto;
@@ -131,6 +138,53 @@ public class UserService {
 		}
 	}
 
+	public Map<String, Object> selectUserInfo(String id) {
+		
+		UserDto user = mapper.findByUserId(id);
+		Map<String, Object> userInfo = new HashMap<>();
+		
+		userInfo.put("userInfo", user);
+		
+		return userInfo;
+	}
+
+	public Map<String, Object> selectOrderList(String userNo) {
+		
+		List<OrderDto> orderList = mapper.SelectOrderLists(userNo);
+		
+		Map<String, Object> orderLists = new HashMap<>();
+		orderLists.put("orderLists", orderList);
+		return orderLists;
+	}
+
+	public int orderReadyCounting(String userNo) {
+		
+		int orderReadyCounting = mapper.selectOrderReadyCounting(userNo);
+		
+		return orderReadyCounting;
+	}
+
+	public Map<String, Object> findOrderListViewPaging(int page, Map<String, String> searchMap, String userNo) {
+		
+		int orderCount = mapper.selectOrderCount(userNo, searchMap);
+		
+		/* 한 페이지에 보여줄 게시물의 수 */
+		int limit = 8;
+		/* 한 번에 보여질 페이징 버튼의 수 */
+		int buttonAmount = 5;
+		
+		SelectCriteria selectCriteria = Pagenation.getSelectCriteria(page, orderCount, limit, buttonAmount, searchMap);
+		log.info("[UserService] selectCriteria : {}", selectCriteria);
+		
+		/* 3. 요청 페이지와 검색 기준에 맞는 게시글을 조회해온다. */
+		List<OrderDto> orderList = mapper.selectOrderList(selectCriteria, userNo);
+		log.info("[UserService] boardList : {}", orderList);
+		
+		Map<String, Object> boardListAndPaging = new HashMap<>();
+		boardListAndPaging.put("paging", selectCriteria);
+		boardListAndPaging.put("orderList", orderList);
+		return boardListAndPaging;
+	}
 
 	
 }

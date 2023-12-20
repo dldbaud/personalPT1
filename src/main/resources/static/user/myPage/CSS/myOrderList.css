@@ -32,13 +32,27 @@ table {
     width: 70%;
     margin-left: 10rem;
     margin-top: 3%;
+    border-collapse: collapse;
+    text-align: center;
 }
 
 table th, td {
     border: solid 1px black;
-    /* width: 80%; */
+    padding: 8px;
+}
+
+table th {
+    background-color: #f2f2f2;
 }
 
 table td {
     min-width: 5%;
+}
+
+#twoTd {
+    border-bottom: none;
+}
+
+#twoTdImg {
+    border-top: none;
 }

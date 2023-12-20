@@ -54,6 +54,17 @@
 		<result property="orderDate" column="ORDER_DATE"/>
 		<result property="userNo" column="USER_NO"/>
 		<result property="listNo" column="LIST_NO"/>
+		
+		<association property="mainFile" resultMap="fileResultMap" />
+	</resultMap>
+	
+		<resultMap id="fileResultMap" type="com.greedy.sarada.sell.dto.FileDto">
+		<id property="fileNo" column="FILE_NO"/>
+		<result property="fileType" column="FILE_TYPE"/>
+		<result property="originalFileNm" column="ORIGINAL_FILE_NM"/>
+		<result property="savedFileNm" column="SAVED_FILE_NM"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="mainFilePath" column="MAIN_FILE_PATH"/>
 	</resultMap>
 	
 	<resultMap id="orderItemResultMap" type="com.greedy.sarada.user.dto.OrderItemDto">
@@ -194,6 +205,87 @@
 		   AND PHONE = #{ phone } 
 	</select>
 	
+	<select id="SelectOrderLists" resultMap="orderResultMap">
+		SELECT 
+		       A.ORDER_NO
+			 , A.ORDER_PRICE
+			 , A.LIST_NM
+			 , A.DELIVERY_STATUS
+			 , A.ORDER_DATE
+			 , A.USER_NO
+			 , A.LIST_NO
+			 , B.PT_NO
+			 , C.MAIN_FILE_PATH
+			 , C.SAVED_FILE_NM
+		 FROM TB_ORDER A
+		 JOIN TB_PT B ON (A.LIST_NO = B.LIST_NO)
+		 JOIN TB_FILE C ON(B.PT_NO = C.PT_NO)
+		WHERE A.USER_NO = #{ userNo }
+	    ORDER BY A.ORDER_DATE DESC
+	</select>
+	
+	<select id="selectOrderReadyCounting">
+		SELECT 
+		       COUNT(DELIVERY_STATUS)
+		  FROM TB_ORDER
+		 WHERE USER_NO = #{ userNo }
+		   AND DELIVERY_STATUS = '준비중' 
+	</select>
+	
+	<select id="selectOrderCount" resultType="_int" parameterType="hashmap">
+		SELECT
+			   COUNT(*)
+		FROM TB_ORDER A
+		<where>
+        <if test="searchMap.searchValue != null">
+            AND (
+                A.ORDER_NO LIKE '%' || #{ searchMap.searchValue } || '%' OR
+                A.ORDER_PRICE LIKE '%' || #{ searchMap.searchValue } || '%' OR
+                A.LIST_NM LIKE '%' || #{ searchMap.searchValue } || '%' OR
+                A.DELIVERY_STATUS LIKE '%' || #{ searchMap.searchValue } || '%' OR
+                A.ORDER_DATE LIKE '%' || #{ searchMap.searchValue } || '%' OR
+                A.USER_NO LIKE '%' || #{ searchMap.searchValue } || '%' OR
+                A.LIST_NO LIKE '%' || #{ searchMap.searchValue } || '%'
+            )
+        </if>
+		</where>
+	</select>
+	
+	<select id="selectOrderList" resultMap="orderResultMap">
+	    SELECT *
+	    FROM (
+	        SELECT 
+	            A.ORDER_NO,
+	            A.ORDER_PRICE,
+	            A.LIST_NM,
+	            A.DELIVERY_STATUS,
+	            A.ORDER_DATE,
+	            A.USER_NO,
+	            A.LIST_NO,
+	            B.PT_NO,
+	            C.MAIN_FILE_PATH,
+	            C.SAVED_FILE_NM,
+	            ROW_NUMBER() OVER (ORDER BY A.ORDER_DATE DESC) AS RNUM
+	        FROM TB_ORDER A
+	        JOIN TB_PT B ON (A.LIST_NO = B.LIST_NO)
+	        JOIN TB_FILE C ON (B.PT_NO = C.PT_NO)
+	        WHERE A.USER_NO = #{ userNo }
+	          AND C.MAIN_FILE_PATH IS NOT NULL
+	        <if test="selectCriteria.searchValue != null">
+	            AND (
+	                A.ORDER_NO LIKE '%' || #{ selectCriteria.searchValue } || '%' OR
+	                A.ORDER_PRICE LIKE '%' || #{ selectCriteria.searchValue  } || '%' OR
+	                A.LIST_NM LIKE '%' || #{ selectCriteria.searchValue } || '%' OR
+	                A.DELIVERY_STATUS LIKE '%' || #{ selectCriteria.searchValue } || '%' OR
+	                A.ORDER_DATE LIKE '%' || #{ selectCriteria.searchValue } || '%' OR
+	                A.USER_NO LIKE '%' || #{ selectCriteria.searchValue } || '%' OR
+	                A.LIST_NO LIKE '%' || #{ selectCriteria.searchValue } || '%'
+	            )
+	        </if>
+	    )
+	    WHERE RNUM BETWEEN #{ selectCriteria.startRow } AND #{ selectCriteria.endRow }
+	    ORDER BY RNUM
+	</select>
 	<insert id="insertOrderItem">
 		INSERT INTO
 		         ORDER_ITEM

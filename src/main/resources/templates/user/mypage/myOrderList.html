@@ -15,38 +15,39 @@
       <div th:replace="user/myPage/myProfileSideBar.html"></div>
       <div class="myPageContents">
         <div class="mYConetentsBar">
-            <table style="border: 1px black solid;">
+            <!-- <table>
                 <tr >
                     <th>날짜</th>
-                    <th>상품 정보</th>
-                    <th>수량</th>
+                    <th >상품 정보</th>
                     <th>가격</th>
                     <th>진행 상태</th>
                     <th>변경</th>
                 </tr>
-                <tr>
-                    <td rowspan="3">dsadsdsdd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                </tr>
-                <tr>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                </tr>
-                <tr>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                    <td>asdsd</td>
-                </tr>
-            </table>
+                <th:block th:if="${orderLists != null}" th:each="order : ${orderLists}">
+                    <tr>
+                        <td rowspan="2" th:text="${order.orderDate}"></td>
+                        
+                        <td>
+                            <div>
+                                <a th:text="${order.listNm}" th:href="@{/user/orderDetail(orderNo=${order.orderNo})}"></a>
+                            </div>
+                            
+                            <div>
+                                <a th:href="@{/user/orderDetail(orderNo=${order.orderNo})}">
+                                    <img th:src="${order.mainFile.mainFilePath + order.mainFile.savedFileNm}" width="200px" height="200px">
+                                </a>
+                            </div>
+                        </td>
+                        
+                        <td rowspan="2" th:text="${order.orderPrice}"></td>
+                        <td rowspan="2" th:text="${order.deliveryStatus}"></td>
+                        <td rowspan="2">
+                            <button class="btn">배송 조회</button>
+                            <button class="btn">환불 신청</button>
+                        </td>
+                    </tr>
+                </th:block>
+            </table> -->
         </div>
       </div>
     </div>

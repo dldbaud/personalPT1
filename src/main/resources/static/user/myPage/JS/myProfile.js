@@ -72,4 +72,13 @@ window.addEventListener('load', function () {
         };
 
     }
+
+    if(this.document.getElementById('myOrder')){
+
+        const $myOrder = document.getElementById('myOrder');
+
+        $myOrder.onclick = function() {
+            location.href = "/user/myProfile";
+        }
+    }
 });

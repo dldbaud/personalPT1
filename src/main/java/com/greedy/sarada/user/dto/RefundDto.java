@@ -1,4 +1,4 @@
-package com.greedy.sarada.sell.dto;
+package com.greedy.sarada.user.dto;
 
 import java.sql.Date;
 
