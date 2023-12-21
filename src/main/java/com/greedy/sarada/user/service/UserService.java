@@ -186,5 +186,11 @@ public class UserService {
 		return boardListAndPaging;
 	}
 
+	public OrderDto selectOrderDetail(String orderNo, String userNo) {
+		
+		log.info("[UserService] selectOrderDetail : {}", "시작");
+		return mapper.selectOrderDetail(orderNo, userNo);
+	}
+
 	
 }

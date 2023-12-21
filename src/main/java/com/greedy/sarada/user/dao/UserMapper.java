@@ -47,12 +47,13 @@ public interface UserMapper {
 
 	List<OrderDto> selectOrderList(@Param("selectCriteria") SelectCriteria selectCriteria, @Param("userNo") String userNo);
 
+	OrderDto selectOrderDetail(String orderNo, String userNo);
+
+	
 
 
 //	String findByEmail(String email);
 
 //	int insertEmail(String email);
-
-
 
 }

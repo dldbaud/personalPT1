@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/myPage/CSS/orderPtDetail.css">
+</head>
+<body>
+    
+    <script type="text/javascript" src="/user/myPage/JS/myProfile.js"></script>
+    <div class="wrapper">
+      <div th:replace="user/myPage/myProfileSideBar.html"></div>
+      <div class="myPageContents">
+        <div class="mYConetentsBar">
+            <table>
+                <thead>
+                  <tr>
+                    <th>주문날짜</th>
+                    <th>상품이름</th>
+                    <th>가격</th>
+                    <th>수량</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <!-- iterStat.first 인덱스.첫번째 참 0-1방지 -->
+                    <th:block th:each="orderItem, iterStat : ${orderPtDetail.orderItem}">
+                        <tr th:if="${iterStat.first or orderItem.ptNm != orderPtDetail.orderItem[iterStat.index - 1].ptNm}">
+                            <td th:text="${orderPtDetail.orderDate}"></td>
+                            <td th:text="${orderItem.ptNm}"></td>
+                            <td th:text="${orderItem.pt.price}"></td>
+                            <td th:text="${orderItem.orderCount}"></td>
+                        </tr>
+                    </th:block>
+                </tbody>
+              </table>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.greedy.sarada.user.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import com.greedy.sarada.sell.dto.FileDto;
 
@@ -18,4 +19,6 @@ public class OrderDto {
 	private String listNo;
 	
 	private FileDto mainFile;
+	private List<FileDto> fileList;
+	private List<OrderItemDto> orderItem;
 }

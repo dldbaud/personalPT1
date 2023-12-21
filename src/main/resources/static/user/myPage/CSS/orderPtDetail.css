@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+}
+
+.wrapper { 
+    margin: 0 auto; 
+    justify-content: start; 
+    display: grid;
+    margin: 13% auto;
+    margin-top: 100px;
+    min-width: 200px;
+    margin-left: 15px;
+    list-style: none;
+    grid-template-columns: 200px 1fr;
+}
+
+.myPageContents{
+    margin-left: 2rem;
+    width: calc(100% - 6rem);
+}
+
+.contentsBar {
+    border: 1px solid gray;
+    width: 100%;
+    text-align: center;
+    padding: 3rem;
+}
+
+table {
+    width: 70%;
+    margin-left: 10rem;
+    margin-top: 3%;
+    border-collapse: collapse;
+    text-align: center;
+}

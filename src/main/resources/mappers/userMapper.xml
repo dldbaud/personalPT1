@@ -56,6 +56,8 @@
 		<result property="listNo" column="LIST_NO"/>
 		
 		<association property="mainFile" resultMap="fileResultMap" />
+		<collection property="fileList" resultMap="fileResultMap" />
+		<collection property="orderItem" resultMap="orderItemResultMap" />
 	</resultMap>
 	
 		<resultMap id="fileResultMap" type="com.greedy.sarada.sell.dto.FileDto">
@@ -73,8 +75,24 @@
 		<result property="orderNo" column="ORDER_NO"/>
 		<result property="orderCount" column="ORDER_COUNT"/>
 		<result property="ptNm" column="PT_NM"/>
+		<association property="pt" resultMap="ptResultMap" />
 	</resultMap>
-
+	
+	<resultMap id="ptResultMap" type="com.greedy.sarada.sell.dto.PtDto">
+		<id property="ptNo" column="PT_NO"/>
+		<result property="ptNm" column="PT_NM"/>
+		<result property="price" column="PRICE"/>
+		<result property="stCount" column="ST_COUNT"/>
+		<result property="ptDescrip" column="PT_DESCRIP"/>
+		<result property="ptSize" column="PT_SIZE"/>			
+		<result property="ptAuthor" column="PT_AUTHOR"/>			
+		<result property="listNo" column="LIST_NO"/>				
+		<result property="ptBundle" column="PT_BUNDLE"/>				
+<!-- 		<association property="category" resultMap="sellCategoryResultMap"/>
+		<association property="sell" resultMap="sellDtoResultMap"/>
+		<association property="fileList" resultMap="fileResultMap"/> -->
+	</resultMap>
+	
 	<resultMap id="refundResultMap" type="com.greedy.sarada.user.dto.RefundDto">
 		<id property="refundNo" column="REFUND_NO"/>
 		<result property="orderNo" column="ORDER_NO"/>
@@ -285,6 +303,30 @@
 	    )
 	    WHERE RNUM BETWEEN #{ selectCriteria.startRow } AND #{ selectCriteria.endRow }
 	    ORDER BY RNUM
+	</select>
+	
+	<select id="selectOrderDetail" resultMap="orderResultMap">
+		SELECT
+		       A.ORDER_NO
+			 , A.ORDER_PRICE
+			 , A.LIST_NM
+			 , A.DELIVERY_STATUS
+			 , A.ORDER_DATE
+			 , A.USER_NO
+			 , A.LIST_NO
+			 , B.PT_NO
+	         , B.ORDER_COUNT
+			 , B.PT_NM
+			 , C.PRICE
+			 , D.SAVED_FILE_NM
+			 , D.FILE_PATH
+			 , D.MAIN_FILE_PATH
+		  FROM TB_ORDER A
+		  JOIN ORDER_ITEM B ON (A.ORDER_NO = B.ORDER_NO)
+		  JOIN TB_PT C ON (B.PT_NO = C.PT_NO)
+		  LEFT JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
+		 WHERE A.USER_NO = #{ userNo }
+		   AND A.ORDER_NO = #{ orderNo }
 	</select>
 	<insert id="insertOrderItem">
 		INSERT INTO

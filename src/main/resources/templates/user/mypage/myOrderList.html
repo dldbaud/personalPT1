@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="/user/myPage/CSS/myOrderList.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 </head>
 <body>
     
-    <script type="text/javascript" src="/user/myPage/JS/myProfile.js"></script>
     <div class="wrapper">
       <div th:replace="user/myPage/myProfileSideBar.html"></div>
       <div class="myPageContents">
         <div class="mYConetentsBar">
-            <!-- <table>
+            <table>
                 <tr >
                     <th>날짜</th>
                     <th >상품 정보</th>
@@ -28,14 +30,12 @@
                         <td rowspan="2" th:text="${order.orderDate}"></td>
                         
                         <td>
-                            <div>
-                                <a th:text="${order.listNm}" th:href="@{/user/orderDetail(orderNo=${order.orderNo})}"></a>
+                            <div th:onclick="|location.href='@{/user/orderDetail?(userNo=${#authentication.principal.userNo},orderNo=${order.orderNo})}'|"> 
+                                <span th:text="${order.listNm}"></span>
                             </div>
                             
-                            <div>
-                                <a th:href="@{/user/orderDetail(orderNo=${order.orderNo})}">
-                                    <img th:src="${order.mainFile.mainFilePath + order.mainFile.savedFileNm}" width="200px" height="200px">
-                                </a>
+                            <div th:onclick="|location.href='@{/user/orderDetail?(userNo=${#authentication.principal.userNo},orderNo=${order.orderNo})}'|">
+                                <img th:src="${order.mainFile.mainFilePath + order.mainFile.savedFileNm}" width="200px" height="200px"/>
                             </div>
                         </td>
                         
@@ -43,12 +43,79 @@
                         <td rowspan="2" th:text="${order.deliveryStatus}"></td>
                         <td rowspan="2">
                             <button class="btn">배송 조회</button>
-                            <button class="btn">환불 신청</button>
+                            <button class="btn" id="refundBtn"
+                            th:onclick="'location.href=\'/user/refund?orderNo=' + @{${order.orderNo}} + '&userNo=' + @{${#authentication.principal.userNo}} + '\''"
+                            >환불 신청</button>
                         </td>
                     </tr>
                 </th:block>
-            </table> -->
+            </table>
         </div>
+
+	<!-- 페이징 바 -->
+	<div id="paging" align="center" style="margin-top: 20px;">
+
+		<th:block
+			th:if="${ paging.searchCondition != null and paging.searchValue != null }">
+			<!-- 맨 앞으로 이동 -->
+			<button
+				th:onclick="'location.href=\'/board/myOrderList?page=1&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''">&lt;&lt;</button>
+
+			<!-- 이전 페이지로 이동 -->
+			<button
+				th:onclick="'location.href=\'/board/myOrderList?page=' + @{${paging.page - 1}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''"
+				th:disabled="${ paging.page <= 1 }">&lt;</button>
+
+			<!-- 숫자 버튼 -->
+			<th:block
+				th:each="page : ${ #numbers.sequence(paging.startPage, paging.endPage)}">
+				<button
+					th:onclick="'location.href=\'/board/myOrderList?page=' + @{${page}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${paging.searchValue}} + '\''"
+					th:text="${ page }" th:disabled="${ paging.page eq page }">
+				</button>
+			</th:block>
+
+			<!-- 다음 페이지로 이동 -->
+			<button
+				th:onclick="'location.href=\'/user/myOrderList?page=' + @{${paging.page + 1}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${searchValue}} + '\''"
+				th:disabled="${ paging.page >= paging.maxPage }">></button>
+
+			<!-- 맨 끝으로 이동 -->
+			<button
+				th:onclick="'location.href=\'/user/myOrderList?page=' + @{${paging.maxPage}} + '&searchCondition=' + @{${paging.searchCondition}} + '&searchValue=' + @{${searchValue}} + '\''">>></button>
+
+		</th:block>
+
+		<th:block
+			th:if="${ paging.searchCondition == null || paging.searchCondition.isEmpty() || paging.searchValue == null || paging.searchValue.isEmpty()}">
+			<!-- 맨 앞으로 이동 -->
+			<button th:onclick="'location.href=\'/user/myOrderList?page=1\''">&lt;&lt;</button>
+
+			<!-- 이전 페이지로 이동 -->
+			<button
+				th:onclick="'location.href=\'/user/myOrderList?page=' + @{${paging.page - 1}} + '\''"
+				th:disabled="${ paging.page <= 1 }">&lt;</button>
+
+			<!-- 숫자 버튼 -->
+			<th:block
+				th:each="page : ${ #numbers.sequence(paging.startPage, paging.endPage)}">
+				<button
+					th:onclick="'location.href=\'/user/myOrderList?page=' + @{${page}} + '\''"
+					th:text="${ page }" th:disabled="${ paging.page eq page }">
+				</button>
+			</th:block>
+
+			<!-- 다음 페이지로 이동 -->
+			<button
+				th:onclick="'location.href=\'/user/myOrderList?page=' + @{${paging.page + 1}} + '\''"
+				th:disabled="${ paging.page >= paging.maxPage }">></button>
+
+			<!-- 맨 끝으로 이동 -->
+			<button
+				th:onclick="'location.href=\'/user/myOrderList?page=' + @{${paging.maxPage}} + '\''">>></button>
+		</th:block>
+
+	</div>
       </div>
     </div>
 </body>

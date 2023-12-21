@@ -3,6 +3,7 @@ package com.greedy.sarada.user.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +36,7 @@ import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
 import com.greedy.sarada.common.paging.ResponseDto;
+import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
@@ -224,14 +227,27 @@ public class UserController {
 //	    	model.addAttribute("userInfo", userInfo.get("userInfo"));
 //	    	model.addAttribute("orderLists", orderLists.get("orderLists"));
 //	    	model.addAttribute("orderReadyCounting", orderReadyCounting);	    	
-	    	model.addAttribute("orderLists", orderListAndPaging.get("paging"));
+	    	model.addAttribute("paging", orderListAndPaging.get("paging"));
 	    	model.addAttribute("orderLists", orderListAndPaging.get("orderList"));
 //	    	log.info("[userController] userInfo{}", userInfo);
 //	    	log.info("[userController] orderLists{}", orderLists);
 //	    	log.info("[userController] orderReadyCounting{}", orderReadyCounting);
-	    	log.info("[userController] orderListAndPaging{}", orderListAndPaging.get("paging"));
+	    	log.info("[userController] paging{}", orderListAndPaging.get("paging"));
 	    	log.info("[userController] orderListAndPaging{}",  orderListAndPaging.get("orderList"));
 	    	return "user/myPage/myOrderList";
+	    }
+	    
+	    @GetMapping("/orderDetail")
+	    public String orderPtDetail(@RequestParam(value="userNo") String userNo, 
+                @RequestParam(value="orderNo") String orderNo, 
+                Model model) {
+	    	log.info("[userController] orderPtDetail orderNo 확인 및 시작{}", orderNo +" "+userNo);
+	    	OrderDto orderPtDetail = userService.selectOrderDetail(orderNo,userNo);
+	    	
+	    	model.addAttribute("orderPtDetail", orderPtDetail);
+	    	
+	    	log.info("[userController] orderPtDetail{}", orderPtDetail);
+	    	return "user/myPage/orderPtDetail";
 	    }
 
 		/* 사업자 등록 페이지*/

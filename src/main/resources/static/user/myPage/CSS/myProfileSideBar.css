@@ -15,7 +15,21 @@ body {
 }
 
 .wrapper ul li {
-    padding: 5px;
+    padding: 8px 12px;
+}
+
+.main-nav{
+    display: flex;
+    padding-left: 0;
+}
+
+.main-nav li{
+    padding: 8px 12px;
+    list-style: none;
+}
+
+.main-nav li:hover {
+    background-color: brown;
 }
 
 input[type=button] {
