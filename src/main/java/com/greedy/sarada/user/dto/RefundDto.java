@@ -12,6 +12,6 @@ public class RefundDto {
 	private int refundPrice;
 	private Date refundDate;
 	private String refundStatus;
-	private String listNo;
+	private String listNm;
 	
 }

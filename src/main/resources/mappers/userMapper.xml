@@ -87,10 +87,7 @@
 		<result property="ptSize" column="PT_SIZE"/>			
 		<result property="ptAuthor" column="PT_AUTHOR"/>			
 		<result property="listNo" column="LIST_NO"/>				
-		<result property="ptBundle" column="PT_BUNDLE"/>				
-<!-- 		<association property="category" resultMap="sellCategoryResultMap"/>
-		<association property="sell" resultMap="sellDtoResultMap"/>
-		<association property="fileList" resultMap="fileResultMap"/> -->
+		<result property="ptBundle" column="PT_BUNDLE"/>
 	</resultMap>
 	
 	<resultMap id="refundResultMap" type="com.greedy.sarada.user.dto.RefundDto">
@@ -328,6 +325,13 @@
 		 WHERE A.USER_NO = #{ userNo }
 		   AND A.ORDER_NO = #{ orderNo }
 	</select>
+	
+	<select id="findPayNo" resultType="java.lang.String">
+		SELECT 
+		       PAY_NO
+		  FROM TB_PAY
+		 WHERE ORDER_NO = #{ orderNo }
+	</select>
 	<insert id="insertOrderItem">
 		INSERT INTO
 		         ORDER_ITEM
@@ -383,6 +387,32 @@
 			, #{ userNo }
 			)
 	</insert>
+	
+	<insert id="inserRefund">
+		INSERT INTO
+		         TB_REFUND
+			( REFUND_NO
+			, ORDER_NO
+			, REFUND_PRICE
+			, REFUND_DATE
+			, REFUND_STATUS
+			, LIST_NM
+			)VALUES(
+			 'RE'||(SEQ_REFUND.NEXTVAL)
+			, #{ orderNo }
+			, #{ refundPrice }
+			, SYSDATE
+			, 'Y'
+			, #{ listNm }
+			)
+	</insert>
+	
+	<select id="findListNm" resultType="java.lang.String">
+		SELECT
+		       LIST_NM
+		  FROM TB_ORDER
+		 WHERE ORDER_NO = #{ orderNo }
+	</select>
 </mapper>
 
 

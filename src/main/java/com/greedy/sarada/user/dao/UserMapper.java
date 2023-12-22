@@ -11,6 +11,7 @@ import com.greedy.sarada.provider.SnsDto;
 import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayDto;
+import com.greedy.sarada.user.dto.RefundDto;
 import com.greedy.sarada.user.dto.UserDto;
 
 @Mapper
@@ -48,6 +49,12 @@ public interface UserMapper {
 	List<OrderDto> selectOrderList(@Param("selectCriteria") SelectCriteria selectCriteria, @Param("userNo") String userNo);
 
 	OrderDto selectOrderDetail(String orderNo, String userNo);
+
+	String findPayNo(String orderNo);
+
+	int inserRefund(RefundDto refund);
+
+	String findListNm(String orderNo);
 
 	
 

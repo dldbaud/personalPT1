@@ -22,6 +22,7 @@ import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
 import com.greedy.sarada.user.dto.PayDto;
+import com.greedy.sarada.user.dto.RefundDto;
 import com.greedy.sarada.user.dto.UserDto;
 import com.siot.IamportRestClient.response.Payment;
 
@@ -190,6 +191,26 @@ public class UserService {
 		
 		log.info("[UserService] selectOrderDetail : {}", "시작");
 		return mapper.selectOrderDetail(orderNo, userNo);
+	}
+
+	public String findPayNo(String orderNo) {
+		
+		log.info("[UserService] findPayNo {}", orderNo);
+		
+		return mapper.findPayNo(orderNo);
+	}
+
+	public void insertRefund(RefundDto refund) {
+		
+		int result = mapper.inserRefund(refund);
+		
+	}
+
+	public String findListNm(String orderNo) {
+		
+		log.info("[UserService] findListNm {}", orderNo);
+		
+		return mapper.findListNm(orderNo);
 	}
 
 	

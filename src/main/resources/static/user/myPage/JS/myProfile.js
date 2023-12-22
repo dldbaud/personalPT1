@@ -81,4 +81,5 @@ window.addEventListener('load', function () {
             location.href = "/user/myProfile";
         }
     }
+
 });

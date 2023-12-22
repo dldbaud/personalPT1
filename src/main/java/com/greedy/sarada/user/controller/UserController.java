@@ -3,10 +3,7 @@ package com.greedy.sarada.user.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,16 +32,15 @@ import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
 import com.greedy.sarada.common.paging.ResponseDto;
-import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.user.dto.OrderDto;
-import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
-import com.greedy.sarada.user.dto.PayDto;
+import com.greedy.sarada.user.dto.RefundDto;
 import com.greedy.sarada.user.dto.UserDto;
 import com.greedy.sarada.user.service.AuthenticationService;
 import com.greedy.sarada.user.service.UserService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 
@@ -249,6 +244,61 @@ public class UserController {
 	    	log.info("[userController] orderPtDetail{}", orderPtDetail);
 	    	return "user/myPage/orderPtDetail";
 	    }
+	    
+	    @GetMapping("/refund")
+	    public String payRefund(@RequestParam(value="orderNo") String orderNo
+	    		,@RequestParam(value="userNo") String userNo
+	    		,@RequestParam(value="amount") String amount
+	    		,RedirectAttributes rttr
+	    		) throws IOException, IamportResponseException {
+	    	
+	    	String payNo = userService.findPayNo(orderNo);
+	    	log.info("[UserController] payNo확인{}",payNo);
+	    	String listNm = userService.findListNm(orderNo);
+	    	String imp_key = "4472688766767282";
+			String imp_secret = "uVesZr8wTfgxjSI8vfCN61pqnRsyMdmru5w81ZiHhdMH2TMv0qllSYW81Pi8sqeQKEBbIoZNZ4yOerY6";
+	    	String result = "";
+			int amountPrice = Integer.parseInt(amount);
+	    	
+			
+			IamportClient iamportClient = new IamportClient(imp_key, imp_secret);
+			
+			/* 결제 정보 조회*/
+			IamportResponse<Payment> paymentResponse = iamportClient.paymentByImpUid(payNo);
+	        Payment paymentResult = paymentResponse.getResponse();
+	        
+	        /*결제 금액가져오기*/
+	        BigDecimal amountToBePaid = paymentResult.getCancelAmount();
+	        int amountToBePaidInt = amountToBePaid.intValue();
+	        int refundMoney = amountPrice - amountToBePaidInt;
+	        if(refundMoney <= 0) {
+	        	rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("refund.nonMoney"));
+	        	return "redirect:/";
+	        }
+			CancelData cancelData = new CancelData(payNo, true, amountToBePaid);
+			
+			IamportResponse<Payment> cancelResponse = iamportClient.cancelPaymentByImpUid(cancelData);
+			
+			Payment cancelResult = cancelResponse.getResponse();
+
+			if(cancelResult.getCancelAmount() != null) {
+				
+				log.info("[UserController] cancelResult.getCancelAmount(){}", cancelResult.getCancelAmount());
+				
+				RefundDto refund = new RefundDto();
+				refund.setOrderNo(orderNo);
+				refund.setRefundPrice(refundMoney);
+				refund.setListNm(listNm);
+				userService.insertRefund(refund);
+				rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("refund.success"));
+				return "redirect:/";
+			} else {
+				rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("refund.failed"));
+				return "redirect:/";
+			}
+	    }
+
+
 
 		/* 사업자 등록 페이지*/
 	    @GetMapping("/sell/sellRegist")
@@ -296,7 +346,7 @@ public class UserController {
 		/* 비밀번호 찾기 */
 		@GetMapping("/findPwd")
 		public String goSearchPwd() {
-
+			
 			return "user/login/findPwd";
 		}
 		
@@ -325,7 +375,6 @@ public class UserController {
 		        } else {
 		        	return failPostProcess(paymentResult); // 결제 실패 처리
 		            
-//		            return ResponseEntity.ok().body(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, "결제 금액 비교 실패", paymentResult));
 		        }
 
 		        // TODO: 결제 완료 후 추가 처리 로직
@@ -382,3 +431,4 @@ public class UserController {
 		
 		
 }
+
