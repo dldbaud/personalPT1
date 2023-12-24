@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.greedy.sarada.common.exception.user.InsertReplyException;
 import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
 import com.greedy.sarada.common.exception.user.insertOrderException;
@@ -35,6 +36,7 @@ import com.greedy.sarada.common.paging.ResponseDto;
 import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
 import com.greedy.sarada.user.dto.RefundDto;
+import com.greedy.sarada.user.dto.ReplyDto;
 import com.greedy.sarada.user.dto.UserDto;
 import com.greedy.sarada.user.service.AuthenticationService;
 import com.greedy.sarada.user.service.UserService;
@@ -428,7 +430,21 @@ public class UserController {
 		
 		
 		
+	/*댓글*/
+	@GetMapping(value = "/replyInsert", produces = "application/json; charset=UTF-8")
+	public @ResponseBody  String replyInsert(@AuthenticationPrincipal UserDto user ,@RequestBody ReplyDto reply) {
 		
+		String result = "";
+		try {
+			userService.replyInsert(user.getUserNo(), reply.getReplyBody());
+			
+			result = "댓글작성 성공";
+		} catch (InsertReplyException e) {
+			result = "댓글 작성 실패";
+			e.printStackTrace();
+		}
+		return result;
+	}
 		
 }
 

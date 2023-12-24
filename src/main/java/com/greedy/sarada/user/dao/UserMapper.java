@@ -56,6 +56,8 @@ public interface UserMapper {
 
 	String findListNm(String orderNo);
 
+	int replyInsert(String userNo, String replyBody);
+
 	
 
 

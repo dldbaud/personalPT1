@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.greedy.sarada.common.exception.user.InsertReplyException;
 import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
 import com.greedy.sarada.common.exception.user.insertOrderException;
@@ -211,6 +212,16 @@ public class UserService {
 		log.info("[UserService] findListNm {}", orderNo);
 		
 		return mapper.findListNm(orderNo);
+	}
+
+	public void replyInsert(String userNo, String replyBody) throws InsertReplyException {
+		
+		int result = mapper.replyInsert(userNo, replyBody);
+		
+		if(!(result > 0)) {
+			throw new InsertReplyException("댓글 작성 실패"); 
+		}
+		
 	}
 
 	
