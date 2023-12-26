@@ -315,10 +315,12 @@ window.onload = function () {
         }
     
         function productDetail(listNo) {
+
+            const page = 1;
             console.log('디테일 클릭확인');
             console.log(listNo);
     
-            location.href = `/sell/productDetail?listNo=${listNo}`;
+            location.href = `/sell/productDetail?listNo=${listNo}&page=${page}`;
         }
     
         let isFetching = false;
