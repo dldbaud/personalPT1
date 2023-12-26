@@ -3,6 +3,7 @@ package com.greedy.sarada.user.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.support.MessageSourceAccessor;
@@ -431,20 +432,38 @@ public class UserController {
 		
 		
 	/*댓글*/
-	@GetMapping(value = "/replyInsert", produces = "application/json; charset=UTF-8")
-	public @ResponseBody  String replyInsert(@AuthenticationPrincipal UserDto user ,@RequestBody ReplyDto reply) {
+	@PostMapping("/replyInsert")
+	public ResponseEntity<String> replyInsert(@AuthenticationPrincipal UserDto user ,@RequestBody ReplyDto reply) {
 		
+		reply.setWriter(user);
+		log.info("[UserController 댓글시 컨트롤러 화인]{}", reply);
 		String result = "";
 		try {
-			userService.replyInsert(user.getUserNo(), reply.getReplyBody());
+			userService.replyInsert(reply);
 			
 			result = "댓글작성 성공";
 		} catch (InsertReplyException e) {
 			result = "댓글 작성 실패";
 			e.printStackTrace();
 		}
-		return result;
+		return ResponseEntity.ok("댓글 등록 완료");
 	}
+	
+	//댓글 비동기 페이징 방식
+	@GetMapping("/loadReply")
+	/* get에서는 DTO에 @RequestParam 생략가능 (get은 쿼리스트링이기 떄문) post는 작성해야함 */
+	public ResponseEntity<ResponseDto> loadReply(ReplyDto loadReply
+			,@RequestParam(defaultValue="1") int page
+			) {
 		
+		log.info("[UserController] loadReply : {}", loadReply);
+		
+		Map<String, Object> replyListAndPaging = userService.selectReplyList(loadReply, page); 
+		
+		log.info("[UserController] replyListAndPaging : {}", replyListAndPaging);
+		
+		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", replyListAndPaging));
+	}
+	
 }
 

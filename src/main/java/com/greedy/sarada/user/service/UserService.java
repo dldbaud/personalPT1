@@ -24,6 +24,7 @@ import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
 import com.greedy.sarada.user.dto.PayDto;
 import com.greedy.sarada.user.dto.RefundDto;
+import com.greedy.sarada.user.dto.ReplyDto;
 import com.greedy.sarada.user.dto.UserDto;
 import com.siot.IamportRestClient.response.Payment;
 
@@ -214,14 +215,40 @@ public class UserService {
 		return mapper.findListNm(orderNo);
 	}
 
-	public void replyInsert(String userNo, String replyBody) throws InsertReplyException {
+	public void replyInsert(ReplyDto reply) throws InsertReplyException {
 		
-		int result = mapper.replyInsert(userNo, replyBody);
+		int result = mapper.replyInsert(reply);
 		
 		if(!(result > 0)) {
 			throw new InsertReplyException("댓글 작성 실패"); 
 		}
 		
+	}
+
+	public Map<String, Object> selectReplyList(ReplyDto loadReply, int page) {
+		
+		/* 1. 전체 게시글 수 확인 (검색어가 있는 경우 포함) => 페이징 처리 계산을 위해서 */
+		int totalCount = mapper.selectReplyTotalCount(loadReply.getRefListNo());
+		log.info("[UserService] totalCount : {}", totalCount);
+		
+		/* 한 페이지에 보여줄 게시물의 수 */
+		int limit = 3;
+		/* 한 번에 보여질 페이징 버튼의 수 */
+		int buttonAmount = 5;
+		
+		/* 2. 페이징 처리와 연관 된 값을 계산하여 SelectCriteria 타입의 객체에 담는다. */
+		SelectCriteria selectCriteria = Pagenation.getSelectCriteria(page, totalCount, limit, buttonAmount);
+		log.info("[UserService] selectCriteria : {}", selectCriteria);
+		
+		/* 3. 요청 페이지와 검색 기준에 맞는 게시글을 조회해온다. */
+		List<ReplyDto> replyList = mapper.selectReplyList(selectCriteria);
+		log.info("[UserService] boardList : {}", replyList);
+		
+		Map<String, Object> replyListAndPaging = new HashMap<>();
+		replyListAndPaging.put("paging", selectCriteria);
+		replyListAndPaging.put("replyList", replyList);
+		
+		return replyListAndPaging;
 	}
 
 	

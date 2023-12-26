@@ -33,10 +33,11 @@ import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.sell.dto.RefCategoryDto;
 import com.greedy.sarada.sell.dto.SellDto;
 import com.greedy.sarada.sell.service.SellService;
+import com.greedy.sarada.user.dto.ReplyDto;
 import com.greedy.sarada.user.dto.UserDto;
+import com.greedy.sarada.user.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
 
 @Slf4j
 @Controller
@@ -48,10 +49,12 @@ public class SellController {
 
 	private final SellService sellService;
 	private final MessageSourceAccessor messageSourceAccessor;
+	private final UserService userService;
 
-	public SellController(SellService sellService, MessageSourceAccessor messageSourceAccessor) {
+	public SellController(SellService sellService, MessageSourceAccessor messageSourceAccessor, UserService userService) {
 		this.sellService = sellService;
 		this.messageSourceAccessor = messageSourceAccessor;
+		this.userService = userService;
 	}
 
 	/* 사업자 등록 페이지 */
@@ -264,21 +267,41 @@ public class SellController {
 		return "redirect:/";
 	}
 	
+//    @GetMapping("/productDetail")
+//    public String productDetail(@RequestParam String listNo, Model model) {
+//    	
+//    	Map<String, Object> productDetails = sellService.productDetails(listNo);
+//    	
+//    	log.info(listNo);
+//    	
+//    	model.addAttribute("sList", productDetails.get("sList"));
+//    	model.addAttribute("sPtList", productDetails.get("sPtList"));
+//    	model.addAttribute("sFilelist", productDetails.get("sFilelist"));
+//  	
+//    	log.info("[sellController] productDetail{}", productDetails);
+//    	return "user/pay/productDetail";
+//    }
+	
     @GetMapping("/productDetail")
-    public String productDetail(@RequestParam String listNo, Model model) {
+    public String productDetail(@RequestParam String listNo, 
+    		@RequestParam(defaultValue="1") int page,
+    		Model model) {
     	
-//    	List<PtDto> productDetail  = sellService.productDetail(listNo);
-//    	List<ListDto> productDetail  = sellService.productDetail(listNo);
-    	Map<String, Object> productDetails = sellService.productDetails(listNo);
+    	ReplyDto loadReply = new ReplyDto();
+    	loadReply.setRefListNo(listNo);
     	
     	log.info(listNo);
+    	Map<String, Object> productDetails = sellService.productDetails(listNo);
+    	Map<String, Object> replyListAndPaging = userService.selectReplyList(loadReply, page);
+    	model.addAttribute("replylist", replyListAndPaging.get("replyList"));
+    	model.addAttribute("paging", replyListAndPaging.get("paging"));
     	
     	model.addAttribute("sList", productDetails.get("sList"));
     	model.addAttribute("sPtList", productDetails.get("sPtList"));
     	model.addAttribute("sFilelist", productDetails.get("sFilelist"));
-//    	model.addAttribute("productDetail", productDetail);
     	
     	log.info("[sellController] productDetail{}", productDetails);
+    	log.info("[sellController] replyListAndPaging : {}", replyListAndPaging);
     	return "user/pay/productDetail";
     }
 }

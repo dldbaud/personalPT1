@@ -392,9 +392,117 @@ window.addEventListener('load', function () {
             console.log(rsp.error_msg);
             alert('결제를 취소하셨습니다.');
         }
+
+    }
+    if(document.getElementById('replyWriteBtn')){
+
+
+        const $replyWriteBtn = document.getElementById('replyWriteBtn');
+        console.log($replyWriteBtn, 'replyWriteBtn 확인');
+        const $replyWrite = document.getElementById('replyWrite');
+
+        $replyWriteBtn.addEventListener('click', function(){
+            console.log('클릭확인');
+            replyInsert();
+        });
     }
     
-    // 예제 사용
+    function replyInsert() {
+        const $replyWrite = document.getElementById('replyWrite');
+        const $listNo = document.getElementById('listNo').value;
+
+        if(!$replyWrite.value.trim()) {
+            alert("댓글을 입력해주세요");
+            return;
+        }
+
+        const replyWriteValue = $replyWrite.value
+        const json = { replyBody : replyWriteValue, refListNo : $listNo}
+        $.ajax({
+            url : "/user/replyInsert",
+            type : "POST",
+            data : JSON.stringify(json),
+            //POST인 경우에만 get 은 안해도 됨
+            headers : {
+                'Content-Type' : 'application/json; charset=UTF-8'
+            },
+            // contentType : 'application/json; charset=UTF8',
+            // dataType: 'json', 이걸로하면 성공응답을 받아도 error 코드를 찍어줌 그래서 위에껄 써야함  
+        }).then(data => {
+            console.log(data);
+            $replyWrite.value = '';	    //댓글 입력 창 비우기
+            console.log($replyWrite);
+            loadReply();				//댓글 다시 로드하기
+        })
+        .catch(error => console.log(error,'실패확인'));
+    }
+
+    function loadReply() {
+		
+        let page = 1;
+        const listNo = document.getElementById('listNo').value;
+        
+        $.ajax({
+            url : "/user/loadReply?refListNo=" + listNo + "&page=" + page,
+        })
+        // .then(result => result.json())
+        .then(data => {
+            console.log(data);
+            makeReply(data);
+        })
+        .catch(error => console.log(error));
+        
+    }
+    function makeReply(data) {
+        console.log('makeReply');
+        console.log(data);
+        const $replyViewDiv = document.querySelector('#replyViewDiv');
+        $replyViewDiv.innerHTML = '';
+    
+        data.data.replyList.forEach(reply => {
+            const $replyView = document.createElement('div');
+            $replyView.classList.add('replyView');
+            const $id = document.createElement('span');
+            const $replyDate = document.createElement('p');
+            const $replyBody = document.createElement('p');
+
+            $id.textContent = reply.writer.id;
+            $replyDate.textContent = reply.replyDate;
+            $replyBody.textContent = reply.replyBody;
+            $replyView.append($id,$replyBody,$replyDate);
+            $replyViewDiv.appendChild($replyView);
+        });
+    }
+
+    if(document.getElementById('paging')){
+
+        const $paging = document.getElementById('paging');
+        const $pagingBtn = document.querySelectorAll('.pagingBtn');
+
+        $pagingBtn.forEach((pagingBtn, index) => { 
+            pagingBtn.addEventListener('click', () =>
+                pagingEvent(pagingBtn, index));
+            });
+    }
+
+    function pagingEvent(pagingBtn, index) {
+        ;
+        const page = pagingBtn.value;
+        const listNo = document.getElementById('listNo').value;
+        
+        console.log(pagingBtn, index, page);
+
+        $.ajax({
+            url : "/user/loadReply?refListNo=" + listNo + "&page=" + page,
+        })
+        .then(data => {
+            console.log(data);
+            makeReply(data);
+            //페이징 새로 하는 함수 필요
+        })
+        .catch(error => console.log(error));;
+    }
+
     function kakaopayEvent() {
         requestPayment("kakaopay.TC0ONETIME", "kakao");
     }

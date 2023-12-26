@@ -12,6 +12,7 @@ import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayDto;
 import com.greedy.sarada.user.dto.RefundDto;
+import com.greedy.sarada.user.dto.ReplyDto;
 import com.greedy.sarada.user.dto.UserDto;
 
 @Mapper
@@ -43,7 +44,7 @@ public interface UserMapper {
 
 	int selectOrderReadyCounting(String userNo);
 	
-	//맵과 함꼐 여러 인자를 넘기는경우 xml 작성 중요
+	//맵과 함꼐 여러 인자를 넘기는경우 또는 인자를 2개이상 넘기는 데 데이터 타입이 다를 경우 xml 작성 중요
 	int selectOrderCount(@Param("userNo") String userNo, @Param("searchMap") Map<String, String> searchMap);
 
 	List<OrderDto> selectOrderList(@Param("selectCriteria") SelectCriteria selectCriteria, @Param("userNo") String userNo);
@@ -56,7 +57,12 @@ public interface UserMapper {
 
 	String findListNm(String orderNo);
 
-	int replyInsert(String userNo, String replyBody);
+	int replyInsert(ReplyDto reply);
+
+	int selectReplyTotalCount(String refListNo);
+	
+	List<ReplyDto> selectReplyList(SelectCriteria selectCriteria);
+
 
 	
 

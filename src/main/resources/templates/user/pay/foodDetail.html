@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
 
 <head>
     <meta charset="UTF-8">
@@ -100,21 +102,46 @@
             </div>
         </th:block>
 
-        <div class="reply">
-            <div class="replyLabel" id="ptDescript2">
-                <p>상세 후기</p>
-            </div>
-
-            <div class="replyViewDiv">
-                <div class="replyView">
-                    <p>야</p>
-                </div>
-            </div>
-            <form class="replyInsert">
-                <textarea class="replyWrite"  id="replyWrite" placeholder="댓글을 입력하세요"></textarea>
-                <button id="replyWriteBtn">댓글 작성</button>
-            </form>
+    </div>
+    <div class="reply">
+        <div class="replyLabel" id="ptDescript2">
+            <p>상세 후기</p>
         </div>
+
+        <div class="replyViewDiv" id="replyViewDiv">
+            <div class="replyView" th:each="reply : ${replylist}">
+                <span th:text="${reply.writer.id}"></span>
+                <p th:text="${reply.replyBody}"></p>
+                <p th:text="${reply.replyDate}"></p>
+            </div>
+        </div>
+        <div class="replyInsert">
+            <textarea class="replyWrite"  id="replyWrite" placeholder="댓글을 입력하세요"></textarea>
+            <button id="replyWriteBtn">댓글 작성</button>
+        </div>
+    </div>
+
+    <div id="paging" align="center" style="margin-top: 20px;">
+        <th:block>
+            <!-- 맨 앞으로 이동 -->
+            <button class="pagingBtn" th:value="${paging.startPage}" th:disabled="${ paging.page <= 1 }">&lt;&lt;</button>
+
+            <!-- 이전 페이지로 이동 -->
+            <button class="pagingBtn" th:disabled="${ paging.page <= 1 }" th:value="${ paging.page - 1 }">&lt;</button>
+
+            <!-- 숫자 버튼 -->
+            <th:block th:each="page : ${ #numbers.sequence(paging.startPage, paging.endPage)}">
+                <button class="pagingBtn" th:text="${ page }" th:disabled="${ paging.page eq page }" th:value="${ page }">
+                </button>
+            </th:block>
+
+            <!-- 다음 페이지로 이동 -->
+            <button class="pagingBtn" th:disabled="${ paging.page >= paging.maxPage }" th:value="${ paging.page + 1 }">></button>
+
+            <!-- 맨 끝으로 이동 -->
+            <button class="pagingBtn"
+                th:value="${paging.maxPage}" th:disabled="${ paging.page <= 1 }">>></button>
+        </th:block>
     </div>
 </body>
 

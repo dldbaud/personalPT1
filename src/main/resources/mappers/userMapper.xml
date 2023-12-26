@@ -99,6 +99,16 @@
 		<result property="listNm" column="LIST_NM"/>
 	</resultMap>
 	
+		<resultMap id="replyResultMap" type="com.greedy.sarada.user.dto.ReplyDto">
+		<id property="replyNo" column="REPLY_NO"/>
+		<result property="refListNo" column="REF_LIST_NO"/>
+		<result property="replyBody" column="REPLY_BODY"/>
+		<result property="replyStatus" column="REPLY_STATUS"/>
+		<result property="replyDate" column="REPLY_DATE"/>
+		
+		<association property="writer" resultMap="userResultMap"/>
+	</resultMap>
+	
 	<select id="findByUserId" resultMap="userResultMap">
 		   SELECT
                A.USER_NO
@@ -412,6 +422,52 @@
 		       LIST_NM
 		  FROM TB_ORDER
 		 WHERE ORDER_NO = #{ orderNo }
+	</select>
+	
+	<insert id="replyInsert">
+		INSERT INTO 
+			     TB_REPLY
+		( REPLY_NO
+		, REF_LIST_NO
+		, REPLY_BODY
+		, REPLY_WRITER_USER_NO
+		, REPLY_STATUS
+	    , REPLY_DATE
+		)VALUES
+		( SEQ_REPLY.NEXTVAL
+		, #{ refListNo }
+		, #{ replyBody }
+		, #{ writer.userNo } 
+		, 'Y'
+		, SYSDATE
+		)
+	</insert>
+	
+	<select id="selectReplyTotalCount" resultType="_int" parameterType="hashmap">
+		SELECT
+		       COUNT(*)
+		  FROM TB_REPLY
+		 WHERE REF_LIST_NO = #{ refListNo }
+	</select>
+	
+	<select id="selectReplyList" resultMap="replyResultMap">
+    SELECT *
+		  FROM (
+		        SELECT 
+				       REPLY_NO
+					 , REF_LIST_NO
+					 , REPLY_BODY
+					 , REPLY_WRITER_USER_NO
+					 , REPLY_STATUS
+					 , REPLY_DATE
+					 , C.ID
+					 , ROW_NUMBER() OVER (ORDER BY A.REPLY_DATE DESC) AS RNUM
+			      FROM TB_REPLY A 
+                  JOIN TB_LIST B ON (A.REF_LIST_NO = B.LIST_NO)
+                  JOIN TB_USER C ON (A.REPLY_WRITER_USER_NO = C.USER_NO)
+                )
+	     WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
+	     ORDER BY RNUM
 	</select>
 </mapper>
 
