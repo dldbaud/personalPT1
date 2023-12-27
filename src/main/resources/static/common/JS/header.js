@@ -51,12 +51,12 @@ window.onload = function () {
     /* 가입하기 아이디 중복 확인 여부 */
     if (document.getElementById("registInfo")) {
         document.getElementById("registInfo").addEventListener('submit', function (event) {
-            // 여기서 추가적인 로직을 처리하고 폼 제출을 막을 수 있습니다.
+            // 서브밋 전에 검사
             if (isDuplicated) {
-                // 중복 확인이 완료되었을 때 폼을 제출합니다.
+                // 중복 확인이 완료되었을 때 폼을 제출.
                 this.submit();
             } else {
-                // 중복 확인이 되지 않았을 때 폼 제출을 막습니다.
+                // 중복 확인이 되지 않았을 때 폼 제출 안함.
                 alert("아이디 중복을 확인하세요");
                 event.preventDefault();
             }
@@ -205,8 +205,19 @@ window.onload = function () {
 
             currentPage = 1;
             load = true;
-            loadProducts(searchCondition);
+            /* 수정필요 메인 페이지에서는 파일을 처음부터 비동기로 불러오기 때문에 이 동작으로 메인페이지 이동시 searchCondition 값 초기화가 안됨
+            그러므로 카테고리를 가져오는 것 처럼 메인에 넘어갈때 정적인 파일을 보내고 클릭시 정적인 파일들을 받은 다음에 스크롤 시에는 
+            비동기를 이용해 inerHTML= ''를 하여 지우고 다시 html 요소들을 추가해 줘야 할 것 같음 (댓글 처럼)*/
+            if (document.getElementById('foodDetailHtml')) {
+
+                location.href = `http://localhost:8002/main?condition=${searchCondition}`;
+                
+            } else {
+                // foodDetailHtml이 없는 경우 바로 loadProducts 호출
+                loadProducts(searchCondition);
+            }
         }
+
 
         function mobileRefCategoryClick() {
             console.log('클릭확인');
@@ -243,9 +254,19 @@ window.onload = function () {
     let load = false;
 
     if(document.getElementById('outBox')){
-        loadProducts(searchCondition);
 
-
+        const urlParams = new URLSearchParams(window.location.search);
+        const condition = urlParams.get('condition');
+    
+        if (condition) {
+            // 조건이 있다면 해당 파일을 비동기적으로 불러옴 여기서 스크롤시 동작 이상함 구상을 잘 못 한 거같음 208줄 참고
+            loadProducts(condition);
+            console.log('새로고침안됨');
+        } else {
+            //로고 버튼을 클릭해야 여기로 이동 구상을 잘 못 한 거같음
+            loadProducts(searchCondition);
+            console.log('새로고침확인');
+        }
         function loadProducts(searchCondition, searchValue) {
     
             if (searchCondition == 'null') {
