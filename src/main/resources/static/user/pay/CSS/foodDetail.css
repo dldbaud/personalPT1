@@ -188,7 +188,7 @@ body {
     margin-bottom: 10px;
 }
 
-#replyWriteBtn {
+#replyWriteBtn, #replyUpdateBtn {
     background-color: #3498db;
     color: #fff;
     padding: 8px 15px;
@@ -215,53 +215,20 @@ body {
 }
 
 
+/* 페이징 바 */
 
-
-
-
-
-
-
-
-/* 스크롤바 설정 */
-#comment::-webkit-scrollbar,
-#comment-box::-webkit-scrollbar {
-    width: 20px;
+#paging {
+    display: flex;
+    grid-column: 1 / 3;
+    justify-content: center;
 }
 
-/* 스크롤바 막대 설정 */
-#comment::-webkit-scrollbar-thumb,
-#comment-box::-webkit-scrollbar-thumb {
-    background-color: #DEDCDC;
-    border-radius: 10px; /* 스크롤바 둥글게 설정 */
+#paging button {
+    margin: 10px;
 }
 
-/* 스크롤바 뒷 배경 설정 */
-#comment::-webkit-scrollbar-track,
-#comment-box::-webkit-scrollbar-track {
-    background-color: rgba(255, 255, 255, 0); /* 투명 */
-}
 
-/* 더보기 기능을 위한 css */
-.more-button {
-    width: 1000px;
-    background-color: #f3f3f3;
-    text-align: center;
-    padding: 10px;
-    font-size: 25px;
-    cursor: pointer;
-    margin: 0 auto;
-    margin-top: 50px;
-}
 
-.more-button:hover {
-    background-color: white;
-}
 
-.loading { /* active가 아닌 프로젝트들은 노출X */
-    display: none;
-}
 
-.loading.active { /* active인 프로젝트들만 노출 */
-    display: block;
-}
+

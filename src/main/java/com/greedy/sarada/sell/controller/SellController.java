@@ -33,6 +33,7 @@ import com.greedy.sarada.sell.dto.PtDto;
 import com.greedy.sarada.sell.dto.RefCategoryDto;
 import com.greedy.sarada.sell.dto.SellDto;
 import com.greedy.sarada.sell.service.SellService;
+import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.ReplyDto;
 import com.greedy.sarada.user.dto.UserDto;
 import com.greedy.sarada.user.service.UserService;
@@ -285,6 +286,7 @@ public class SellController {
     @GetMapping("/productDetail")
     public String productDetail(@RequestParam String listNo, 
     		@RequestParam(defaultValue="1") int page,
+    		@AuthenticationPrincipal UserDto user,
     		Model model) {
     	
     	ReplyDto loadReply = new ReplyDto();
@@ -295,6 +297,19 @@ public class SellController {
     	Map<String, Object> replyListAndPaging = userService.selectReplyList(loadReply, page);
     	model.addAttribute("replylist", replyListAndPaging.get("replyList"));
     	model.addAttribute("paging", replyListAndPaging.get("paging"));
+    	
+    	if(user != null) {
+    		ReplyDto replyCheck = userService.replyCheck(listNo, user);
+    		OrderDto order = new OrderDto();
+    		order.setUserNo(user.getUserNo());
+    		order.setListNo(listNo);
+    		OrderDto orderCheck = userService.orderCheck(order);
+    		
+    		model.addAttribute("replyCheck", replyCheck);
+    		model.addAttribute("orderCheck", orderCheck);
+    		log.info("[sellController] replyCheck : {}", replyCheck);
+    		log.info("[sellController] orderCheck : {}", orderCheck);
+    	}
     	
     	model.addAttribute("sList", productDetails.get("sList"));
     	model.addAttribute("sPtList", productDetails.get("sPtList"));

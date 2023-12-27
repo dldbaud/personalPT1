@@ -376,6 +376,7 @@ window.addEventListener('load', function () {
                         // msg += '카드 승인번호 : ' + rsp.apply_num;
     
                         alert(msg);
+                        location.reload();
                     } else if (data.status == 500) {
                         //[3] 아직 제대로 결제가 되지 않았습니다.
                         //[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
@@ -407,6 +408,7 @@ window.addEventListener('load', function () {
         });
     }
     
+    /* 댓글 삽입 */
     function replyInsert() {
         const $replyWrite = document.getElementById('replyWrite');
         const $listNo = document.getElementById('listNo').value;
@@ -472,6 +474,8 @@ window.addEventListener('load', function () {
             $replyView.append($id,$replyBody,$replyDate);
             $replyViewDiv.appendChild($replyView);
         });
+
+        pagingCreate(data);
     }
 
     if(document.getElementById('paging')){
@@ -498,11 +502,110 @@ window.addEventListener('load', function () {
         .then(data => {
             console.log(data);
             makeReply(data);
-            //페이징 새로 하는 함수 필요
+            pagingCreate(data);
         })
         .catch(error => console.log(error));;
     }
 
+    function pagingCreate(data) {
+        
+        console.log(data.data.paging);
+        const $paging = document.getElementById('paging');
+        $paging.innerHTML = '';
+
+        const $firstBtn = document.createElement('button');
+        $firstBtn.classList.add('pagingBtn');
+        $firstBtn.id = 'firstBtn';
+        $firstBtn.disabled = data.data.paging.page <= 1;
+        $firstBtn.value = data.data.paging.startPage;
+        $firstBtn.textContent = '<<';
+        
+
+        const $beforeBtn = document.createElement('button');
+        $beforeBtn.classList.add('pagingBtn');
+        $beforeBtn.disabled = data.data.paging.page <= 1;
+        $beforeBtn.value = data.data.paging.page - 1;
+        $beforeBtn.textContent = '<';
+
+        $paging.append($firstBtn, $beforeBtn);
+        for(let i = data.data.paging.startPage; i <= data.data.paging.endPage; i++){
+            const $button = document.createElement('button');
+            $button.classList.add('pagingBtn');
+            $button.textContent = i;
+            $button.disabled = data.data.paging.page == i;
+            $button.value = i;
+
+            $paging.append($button);
+        }
+        const $nextBtn = document.createElement('button');
+        $nextBtn.classList.add('pagingBtn');
+        $nextBtn.disabled = data.data.paging.page >= data.data.paging.maxPage;
+        $beforeBtn.value = data.data.paging.page + 1;
+
+        const $lastBtn = document.createElement('button');
+        $lastBtn.classList.add('pagingBtn');
+        $lastBtn.disabled = data.data.paging.page <= 1;
+        $lastBtn.value = data.data.paging.endPage;
+
+        
+        $nextBtn.textContent = '>';
+        $lastBtn.textContent = ">>";
+
+        $paging.append($nextBtn, $lastBtn);
+
+        const $pagingBtn = document.querySelectorAll('.pagingBtn');
+
+        $pagingBtn.forEach((pagingBtn, index) => { 
+            pagingBtn.addEventListener('click', () =>
+                pagingEvent(pagingBtn, index));
+            });
+
+        
+    }
+
+    /* 댓글 수정 */
+    if(document.getElementById('replyUpdateBtn')){
+
+        const $replyUpdateBtn = document.getElementById('replyUpdateBtn');
+        
+        // 즉시실행임  $replyUpdateBtn.addEventListener('click', replyUpdate());
+        $replyUpdateBtn.addEventListener('click', () => {
+            replyUpdate();
+
+        });
+
+    }
+    
+    function replyUpdate() {
+
+        const $replyWrite = document.getElementById('replyWrite');
+        const $listNo = document.getElementById('listNo').value;
+
+        if(!$replyWrite.value.trim()) {
+            alert("댓글을 입력해주세요");
+            return;
+        }
+
+        const replyWriteValue = $replyWrite.value
+        const json = { replyBody : replyWriteValue, refListNo : $listNo}
+        $.ajax({
+            url : "/user/replyUpdate",
+            type : "POST",
+            data : JSON.stringify(json),
+            //POST인 경우에만 get 은 안해도 됨
+            headers : {
+                'Content-Type' : 'application/json; charset=UTF-8'
+            },
+            // contentType : 'application/json; charset=UTF8',
+            // dataType: 'json', 이걸로하면 성공응답을 받아도 error 코드를 찍어줌 그래서 위에껄 써야함  
+        }).then(data => {
+            console.log(data);
+            $replyWrite.value = '';	    //댓글 입력 창 비우기
+            console.log($replyWrite);
+            loadReply();				//댓글 다시 로드하기
+        })
+        .catch(error => console.log(error,'실패확인'));
+    }
     function kakaopayEvent() {
         requestPayment("kakaopay.TC0ONETIME", "kakao");
     }

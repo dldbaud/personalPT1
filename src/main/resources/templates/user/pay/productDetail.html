@@ -11,7 +11,9 @@
 </head>
 <body>
     <div th:replace="common/header.html"></div>
-
+    <!-- js연동 때문에 -->
+    <input type="hidden" id="outBox"></input>
+    <input type="hidden" id="foodDetailHtml"></input>
     <div class="wrapper title">
         <th:block th:if="${sList.refCategoryCode.refCategory == 6}">
             <div th:replace="user/pay/foodDetail.html"></div>

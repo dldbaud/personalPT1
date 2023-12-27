@@ -449,6 +449,19 @@ public class UserController {
 		return ResponseEntity.ok("댓글 등록 완료");
 	}
 	
+	/*댓글 수정 replyUpdate*/
+	@PostMapping("/replyUpdate")
+	public ResponseEntity<String> replyUpdate(@AuthenticationPrincipal UserDto user ,@RequestBody ReplyDto reply) {
+		
+		reply.setWriter(user);
+		log.info("[UserController 댓글 수정 컨트롤러 화인]{}", reply);
+		String result = "";
+		userService.replyUpdate(reply);
+		
+		result = "댓글 수정 성공";
+		
+		return ResponseEntity.ok("댓글 수정 완료");
+	}
 	//댓글 비동기 페이징 방식
 	@GetMapping("/loadReply")
 	/* get에서는 DTO에 @RequestParam 생략가능 (get은 쿼리스트링이기 떄문) post는 작성해야함 */
@@ -465,5 +478,11 @@ public class UserController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", replyListAndPaging));
 	}
 	
+	@GetMapping("searchCondition")
+	public @ResponseBody String searchCondition(@RequestParam String search) {
+		
+		String data = search;
+		return data;
+	}
 }
 

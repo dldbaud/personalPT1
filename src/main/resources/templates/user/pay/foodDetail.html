@@ -115,13 +115,23 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
                 <p th:text="${reply.replyDate}"></p>
             </div>
         </div>
-        <div class="replyInsert">
-            <textarea class="replyWrite"  id="replyWrite" placeholder="댓글을 입력하세요"></textarea>
-            <button id="replyWriteBtn">댓글 작성</button>
-        </div>
+        <th:block sec:authorize="isAuthenticated()">
+            <th:block th:if="${replyCheck == null and orderCheck != null}">
+                <div class="replyInsert">
+                    <textarea class="replyWrite"  id="replyWrite" placeholder="댓글을 입력하세요"></textarea>
+                    <button id="replyWriteBtn">댓글 작성</button>
+                </div>
+            </th:block>
+            <th:block th:if="${replyCheck != null and orderCheck != null}" >
+                <div class="replyInsert">
+                    <textarea class="replyWrite"  id="replyWrite" th:placeholder="${replyCheck.replyBody}"></textarea>
+                    <button id="replyUpdateBtn">수정하기</button>
+                </div>
+            </th:block>
+        </th:block>
     </div>
 
-    <div id="paging" align="center" style="margin-top: 20px;">
+    <div id="paging">
         <th:block>
             <!-- 맨 앞으로 이동 -->
             <button class="pagingBtn" th:value="${paging.startPage}" th:disabled="${ paging.page <= 1 }">&lt;&lt;</button>

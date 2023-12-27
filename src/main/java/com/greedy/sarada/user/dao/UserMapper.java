@@ -63,6 +63,12 @@ public interface UserMapper {
 	
 	List<ReplyDto> selectReplyList(SelectCriteria selectCriteria);
 
+	ReplyDto replyCheck(@Param("user") UserDto user, @Param("listNo") String listNo);
+
+	int replyUpdate(ReplyDto reply);
+
+	OrderDto orderCheck(OrderDto order);
+
 
 	
 

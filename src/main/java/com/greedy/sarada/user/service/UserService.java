@@ -251,5 +251,25 @@ public class UserService {
 		return replyListAndPaging;
 	}
 
+	public ReplyDto replyCheck(String listNo, UserDto user) {
+		
+		ReplyDto replyCheck = mapper.replyCheck(user, listNo);
+		
+		return replyCheck;
+	}
+
+	public void replyUpdate(ReplyDto reply) {
+		
+		int result = mapper.replyUpdate(reply);
+			
+	}
+
+	public OrderDto orderCheck(OrderDto order) {
+		
+		OrderDto orderCheck = mapper.orderCheck(order);
+		
+		return orderCheck;
+	}
+
 	
 }
