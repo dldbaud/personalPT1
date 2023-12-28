@@ -24,40 +24,82 @@ window.onload = function () {
 
     /* 아이디 중복 체크 */
     let isDuplicated = false;
-
+    let isVerify = false;
     if (document.getElementById("duplicationCheck")) {
         const $duplicationCheck = document.getElementById("duplicationCheck");
 
         $duplicationCheck.onclick = function () {
-            let id = document.getElementById("id").value.trim();
-
-            fetch("/user/idDupCheck", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8'
-                },
-                body: JSON.stringify({ id: id })
-            })
-                .then(result => result.text())
-                .then(result => {
-
-                    alert(result)
-                    isDuplicated = true;
+            const id = document.getElementById("id").value.trim();
+            //\s공백  +&은 a + b + c 식으로 끝나야 함 
+            const idCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!(idCheck.test(id))){
+                alert("아이디를 확인해주세요");
+                return;
+            }
+            
+            if(id === ""){
+                alert("아이디를 입력하세요");
+            } else {
+                fetch("/user/idDupCheck", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    body: JSON.stringify({ id: id })
                 })
-                .catch((error) => error.text().then((res) => alert(res)));
+                    .then(result => result.text())
+                    .then(result => {
+    
+                        alert(result)
+                        if(result == "사용 가능한 아이디입니다."){
+                            isDuplicated = true;
+                        }
+                    })
+                    .catch((error) => error.text().then((res) => alert(res)));
+            }
+        }
+
+        /*이메일 인증 */
+        const $Verify = document.getElementById("Verify");
+
+        $Verify.onclick = function () {
+
+            if(isDuplicated){
+                let id = document.getElementById("id").value.trim();
+    
+                fetch("/user/Verify", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    body: JSON.stringify({ id: id })
+                })
+                    .then(result => result.text())
+                    .then(result => {
+    
+                        alert(result)
+                        isVerify = true;
+                    })
+                    .catch((error) => error.text().then((res) => alert(res)));
+            } else {
+                alert("아이디 중복을 확인하세요");
+            }
         }
     }
-
+    
     /* 가입하기 아이디 중복 확인 여부 */
     if (document.getElementById("registInfo")) {
         document.getElementById("registInfo").addEventListener('submit', function (event) {
             // 서브밋 전에 검사
-            if (isDuplicated) {
+            if (isDuplicated && isVerify) {
                 // 중복 확인이 완료되었을 때 폼을 제출.
                 this.submit();
-            } else {
+            } else if(!(isDuplicated)){
                 // 중복 확인이 되지 않았을 때 폼 제출 안함.
                 alert("아이디 중복을 확인하세요");
+                event.preventDefault();
+            } else if(!(isVerify)){
+                alert("아이디 인증을 확인하세요");
                 event.preventDefault();
             }
         });
@@ -140,6 +182,31 @@ window.onload = function () {
         $findPwd.onclick = function () {
             location.href = "/user/findPwd";
         }
+        // $findPwd.onclick = function () {
+        //     mailsend();
+        // }
+
+        // function mailsend() {
+        //     const phone = document.getElementById("phone").value;
+        //     const id = document.getElementById("id").value;
+         
+        //     $.ajax({
+        //        type : "POST",
+        //        url : "/user/mailsend",
+        //        data : {
+        //            "phone" : phone,
+        //            "emailId" : id 
+        //        },
+        //        success : function(data) {
+                   
+                   
+        //           alert("해당 이메일로 임시 비밀번호를 발송 하였습니다. \n 확인부탁드립니다.")
+                  
+        //           console.log("data : "+ data);
+                  
+        //        }
+        //     })
+        // }
     }
 
     /* 카테고리목록 이벤트 */

@@ -502,6 +502,12 @@
 		WHERE REF_LIST_NO = #{ refListNo }
 		   AND REPLY_WRITER_USER_NO = #{ writer.userNo }
 	</update>
+	
+	<select id="findUserByEmailId" resultMap="userResultMap">
+		SELECT *
+		  FROM TB_USER
+		 WHERE ID = #{ id }
+	</select>
 </mapper>
 
 

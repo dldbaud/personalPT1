@@ -69,6 +69,8 @@ public interface UserMapper {
 
 	OrderDto orderCheck(OrderDto order);
 
+	UserDto findUserByEmailId(String id);
+
 
 	
 

@@ -40,6 +40,7 @@ import com.greedy.sarada.user.dto.RefundDto;
 import com.greedy.sarada.user.dto.ReplyDto;
 import com.greedy.sarada.user.dto.UserDto;
 import com.greedy.sarada.user.service.AuthenticationService;
+import com.greedy.sarada.user.service.MailService;
 import com.greedy.sarada.user.service.UserService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -58,12 +59,16 @@ public class UserController {
 	    private final MessageSourceAccessor messageSourceAccessor;
 	    private final UserService userService;
 	    private final AuthenticationService authenticationService;
+	    private final MailService mailService;
 		
-	    public UserController(PasswordEncoder passwordEncoder, MessageSourceAccessor messageSourceAccessor, UserService userService, AuthenticationService authenticationService) {
+	    public UserController(PasswordEncoder passwordEncoder, MessageSourceAccessor messageSourceAccessor, UserService userService, AuthenticationService authenticationService
+	    		,MailService mailService
+	    		) {
 	    	this.passwordEncoder = passwordEncoder;
 	    	this.messageSourceAccessor = messageSourceAccessor;
 	    	this.userService = userService;
 	    	this.authenticationService = authenticationService;
+	    	this.mailService = mailService;
 	    }
 	    
 	    @GetMapping("/test/login")
@@ -353,6 +358,25 @@ public class UserController {
 			return "user/login/findPwd";
 		}
 		
+		/* 이메일 전송 */
+		@PostMapping("/mailsend")
+		@ResponseBody
+		String mailConfirm(@ModelAttribute UserDto user, @RequestParam String phone,
+				@RequestParam String id) throws Exception {
+
+			String ph = phone;
+			String emailId = id;
+			log.info("[UserController] email : {}", emailId);
+
+			String tempPwd = userService.sendSimpleMessage(emailId); // 임시 비밀번호 발급
+
+			// DB에 임시 비밀번호 저장
+			UserDto tempUser = userService.findUserByEmailId(emailId);
+			tempUser.setPwd(passwordEncoder.encode(tempPwd)); // 비밀번호 인코딩
+			userService.modifyTpwd(tempUser);
+
+			return tempPwd; // 클라이언트에게 발급된 임시 비밀번호 반환
+		}
 		/* 결제*/
 		@PostMapping("/payComplete")
 		public ResponseEntity<ResponseDto> postPayComplete(@RequestBody PayCompleteRequest request, @AuthenticationPrincipal UserDto loginUser) throws insertOrderItemException, insertOrderException, insertPayException {
@@ -478,11 +502,5 @@ public class UserController {
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", replyListAndPaging));
 	}
 	
-	@GetMapping("searchCondition")
-	public @ResponseBody String searchCondition(@RequestParam String search) {
-		
-		String data = search;
-		return data;
-	}
 }
 

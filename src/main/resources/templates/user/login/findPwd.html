@@ -9,17 +9,17 @@
 </head>
 <body>
 
-    <script>
+    <!-- <script>
         const id = '[[${id}]]';
         id && alert(id);
-    </script>
+    </script> -->
 
     <div th:replace="common/header.html"></div>
 
     <div class="wrapper">
         <form class="login2" action="/user/findId" method="post">
-            <input type="text" class="id" name="id" placeholder="아이디"/>
-            <input type="password" class="phone" name="phone" placeholder="휴대전화"/>
+            <input type="text" id="id" class="id" name="id" placeholder="아이디"/>
+            <input type="password" id="phone" class="phone" name="phone" placeholder="휴대전화"/>
             <input type="submit" class="btn" value="비밀번호 찾기" id="findPwd">
         </form>
     </div>

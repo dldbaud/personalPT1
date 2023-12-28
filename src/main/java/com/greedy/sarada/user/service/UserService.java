@@ -270,6 +270,24 @@ public class UserService {
 		
 		return orderCheck;
 	}
+	
+	/*비밀번호 저장*/
+	public UserDto findUserByEmailId(String id) {
+		
+		return mapper.findUserByEmailId(id);
+	}
+
+	public void modifyTpwd(UserDto tempUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String sendSimpleMessage(String emailId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
 
 	
 }
