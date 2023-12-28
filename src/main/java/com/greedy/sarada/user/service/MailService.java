@@ -39,12 +39,12 @@ public class MailService implements MailServiceInter {
 		
 		//발신자 설정
 		message.addRecipients(RecipientType.TO, to);
-		message.setSubject("To-gather 비밀번호 찾기 이메일 인증");
+		message.setSubject("SARADA 비밀번호 찾기 이메일 인증");
 		
 		String msgg = "";
 		msgg += "<div style='margint:100px;'>";
 		msgg += "<h1> 안녕하세요</h1>";
-		msgg += "<h1> To-gather 입니다</h1>";
+		msgg += "<h1> SARADA 입니다</h1>";
 		msgg += "<br>";
 		msgg += "<p>임시번호 발급이 완료 되었습니다.<p>";
 		msgg += "<br>";

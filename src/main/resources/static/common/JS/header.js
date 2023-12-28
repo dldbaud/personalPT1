@@ -45,8 +45,9 @@ window.onload = function () {
                     headers: {
                         'Content-Type': 'application/json; charset=UTF-8'
                     },
+                    //fetch는 data ajax는 body
                     body: JSON.stringify({ id: id })
-                })
+                })  //펫치에서만 result.text() 사용 데이터를 문자열로 바로 꺼낼떄
                     .then(result => result.text())
                     .then(result => {
     
@@ -59,32 +60,32 @@ window.onload = function () {
             }
         }
 
-        /*이메일 인증 */
-        const $Verify = document.getElementById("Verify");
+        // /*이메일 인증 감은 잡았으니 보류 이메일에 새로운 인증 링크를 보내고 버튼에 비동기를 달고 그 값을 세션으로 활용하면 됨 */
+        // const $Verify = document.getElementById("Verify");
 
-        $Verify.onclick = function () {
+        // $Verify.onclick = function () {
 
-            if(isDuplicated){
-                let id = document.getElementById("id").value.trim();
+        //     if(isDuplicated){
+        //         let id = document.getElementById("id").value.trim();
     
-                fetch("/user/Verify", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json; charset=UTF-8'
-                    },
-                    body: JSON.stringify({ id: id })
-                })
-                    .then(result => result.text())
-                    .then(result => {
+        //         fetch("/user/Verify", {
+        //             method: "POST",
+        //             headers: {
+        //                 'Content-Type': 'application/json; charset=UTF-8'
+        //             },
+        //             body: JSON.stringify({ id: id })
+        //         })
+        //             .then(result => result.text())
+        //             .then(result => {
     
-                        alert(result)
-                        isVerify = true;
-                    })
-                    .catch((error) => error.text().then((res) => alert(res)));
-            } else {
-                alert("아이디 중복을 확인하세요");
-            }
-        }
+        //                 alert(result)
+        //                 isVerify = true;
+        //             })
+        //             .catch((error) => error.text().then((res) => alert(res)));
+        //     } else {
+        //         alert("아이디 중복을 확인하세요");
+        //     }
+        // }
     }
     
     /* 가입하기 아이디 중복 확인 여부 */
@@ -182,31 +183,48 @@ window.onload = function () {
         $findPwd.onclick = function () {
             location.href = "/user/findPwd";
         }
-        // $findPwd.onclick = function () {
-        //     mailsend();
-        // }
 
-        // function mailsend() {
-        //     const phone = document.getElementById("phone").value;
-        //     const id = document.getElementById("id").value;
-         
-        //     $.ajax({
-        //        type : "POST",
-        //        url : "/user/mailsend",
-        //        data : {
-        //            "phone" : phone,
-        //            "emailId" : id 
-        //        },
-        //        success : function(data) {
-                   
-                   
-        //           alert("해당 이메일로 임시 비밀번호를 발송 하였습니다. \n 확인부탁드립니다.")
-                  
-        //           console.log("data : "+ data);
-                  
-        //        }
-        //     })
-        // }
+    }
+
+    if (document.getElementById('findPwd2')) {
+        console.log('로드 됨');
+        $findPwd2 = document.getElementById('findPwd2');
+
+       // 감은 잡았으니 보류 일단 sns 홈페이지로 보내주는 방법을 씀
+        $findPwd2.onclick = function () {
+            mailsend();
+        }
+
+        function mailsend() {
+            const phone = document.getElementById("phone").value;
+            const id = document.getElementById("id").value;
+            const email = document.getElementById("email").value;
+
+            $.ajax({
+                url : "/user/mailsend",
+                type : "POST",
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: JSON.stringify({ "id" : id,
+                           "phone" : phone,
+                           "email" : email })
+                })
+                .then(result => {
+                    console.log("result : "+ result);
+                    if(result == "google") {
+                        location.href = `https://accounts.google.com/signin/recovery`;
+                    }else if(result == "naver"){
+                        location.href = `https://nid.naver.com/user2/help/myInfo.nhn?menu=reissuePassword`;
+                    }else if(result == "null"){
+                        alert("회원정보가 없습니다");
+                    }else {
+                        alert("해당 이메일로 임시 비밀번호를 발송 하였습니다. \n 확인부탁드립니다.")
+                        console.log("result : "+ result);
+                    }
+                })
+                .catch((error) => error.text().then((res) => alert(res)));;
+        }
     }
 
     /* 카테고리목록 이벤트 */
@@ -277,7 +295,7 @@ window.onload = function () {
             비동기를 이용해 inerHTML= ''를 하여 지우고 다시 html 요소들을 추가해 줘야 할 것 같음 (댓글 처럼)*/
             if (document.getElementById('foodDetailHtml')) {
 
-                location.href = `http://localhost:8002/main?condition=${searchCondition}`;
+                location.href = `/?condition=${searchCondition}`;
                 
             } else {
                 // foodDetailHtml이 없는 경우 바로 loadProducts 호출
@@ -326,8 +344,10 @@ window.onload = function () {
         const condition = urlParams.get('condition');
     
         if (condition) {
-            // 조건이 있다면 해당 파일을 비동기적으로 불러옴 여기서 스크롤시 동작 이상함 구상을 잘 못 한 거같음 208줄 참고
-            loadProducts(condition);
+            // 조건이 있다면 해당 파일을 비동기적으로 불러옴 여기서 스크롤시 동작 되긴하는데 이상함 구상을 잘 못 한 거같음 208줄 참고
+            load = true;
+            searchCondition = condition;
+            loadProducts(searchCondition);
             console.log('새로고침안됨');
         } else {
             //로고 버튼을 클릭해야 여기로 이동 구상을 잘 못 한 거같음

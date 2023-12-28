@@ -13,14 +13,15 @@
         const id = '[[${id}]]';
         id && alert(id);
     </script> -->
-
+<!-- action="/user/findPwd" method="post" -->
     <div th:replace="common/header.html"></div>
 
     <div class="wrapper">
-        <form class="login2" action="/user/findId" method="post">
+        <form class="login2">
             <input type="text" id="id" class="id" name="id" placeholder="아이디"/>
-            <input type="password" id="phone" class="phone" name="phone" placeholder="휴대전화"/>
-            <input type="submit" class="btn" value="비밀번호 찾기" id="findPwd">
+            <input type="text" id="phone" class="phone" name="phone" placeholder="휴대전화"/>
+            <input type="text" id="email" class="phone" name="email" placeholder="받을 이메일"/>
+            <input type="button" class="btn" value="비밀번호 찾기" id="findPwd2">
         </form>
     </div>
 </body>

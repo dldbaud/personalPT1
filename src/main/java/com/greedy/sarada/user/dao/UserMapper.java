@@ -71,6 +71,10 @@ public interface UserMapper {
 
 	UserDto findUserByEmailId(String id);
 
+	String findUserByUserType(String id, String phone);
+
+	int updatePT(UserDto tempUser);
+
 
 	
 

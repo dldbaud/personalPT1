@@ -32,6 +32,7 @@ public class UserDto implements UserDetails, OAuth2User{
 	private String userStatus;
 	private String snsToken;
 	private String email;
+	private String userType;
 	private List<UserRoleDto> userRoleList;
 	private Map<String, Object> attributes;
 	

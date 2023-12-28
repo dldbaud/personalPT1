@@ -44,19 +44,21 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
     	OAuth2User oauth2User = super.loadUser(userRequest);
 //    	log.info("[PrincipalOauth2UserService] OAuth2User getAttribute : " + super.loadUser(userRequest).getAttributes());    	
     	log.info("[PrincipalOauth2UserService] OAuth2User getAttribute : " + oauth2User.getAttributes());
-		
+    	String userType = "";
     	OAuth2UserInfo oAuth2UserInfo = null;
     	if ("google".equals(userRequest.getClientRegistration().getRegistrationId())) {
     		log.info("[구글 요청]");
+    		userType = "google";
     		oAuth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
     	} else if("naver".equals(userRequest.getClientRegistration().getRegistrationId())) {
     		log.info("[네이버 요청]");
     		//reponse 안에 response 안에 있기 때문
+    		userType = "naver";
     		oAuth2UserInfo = new NaverUserInfo((Map)oauth2User.getAttributes().get("response"));
     	} else {
     		log.info("[구글과 네이버만 가능]");
     	}
-    	
+    
     	String provider = oAuth2UserInfo.getProvider();
     	String providerId = oAuth2UserInfo.getProviderId();
     	String email = oAuth2UserInfo.getEmail();
@@ -75,7 +77,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
     		user.setPwd(password);
     		user.setUserNm(name);
     		user.setPhone(mobile);
-    		
+    		user.setUserType(userType);
     		sns.setSnsId(userName);
     		sns.setSnsNm(provider);
     		try {

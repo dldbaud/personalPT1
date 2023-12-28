@@ -359,23 +359,42 @@ public class UserController {
 		}
 		
 		/* 이메일 전송 */
+//		@PostMapping 어노테이션을 사용하는 메소드의 반환 타입이 String일 경우
+//		@ResponseBody 어노테이션이 필요하지 않습니다
 		@PostMapping("/mailsend")
 		@ResponseBody
-		String mailConfirm(@ModelAttribute UserDto user, @RequestParam String phone,
-				@RequestParam String id) throws Exception {
+		public String mailConfirm(@RequestBody UserDto user) throws Exception {
 
-			String ph = phone;
-			String emailId = id;
-			log.info("[UserController] email : {}", emailId);
+			String id = user.getId();
+			String email = user.getEmail();
+			String phone = user.getPhone();
+			
+			log.info("[UserController] email : {}", id);
+			log.info("[UserController] email : {}", email);
+			log.info("[UserController] email : {}", phone);
 
-			String tempPwd = userService.sendSimpleMessage(emailId); // 임시 비밀번호 발급
-
-			// DB에 임시 비밀번호 저장
-			UserDto tempUser = userService.findUserByEmailId(emailId);
-			tempUser.setPwd(passwordEncoder.encode(tempPwd)); // 비밀번호 인코딩
-			userService.modifyTpwd(tempUser);
-
-			return tempPwd; // 클라이언트에게 발급된 임시 비밀번호 반환
+			String userTyped = userService.findUserByUserType(id,phone);
+			log.info("[userTyped] userTyped : {}", userTyped);
+			if("일반".equals(userTyped)) {
+				log.info("[userTyped] userTyped : {}", userTyped);
+				String tempPwd = mailService.sendSimpleMessage(email); // 임시 비밀번호 발급
+				// DB에 임시 비밀번호 저장
+				UserDto tempUser = userService.findUserByEmailId(id);
+				tempUser.setPwd(passwordEncoder.encode(tempPwd)); // 비밀번호 인코딩
+				userService.modifyTpwd(tempUser);
+				return tempPwd; // 클라이언트에게 발급된 임시 비밀번호 반환
+//			} else if("google".equals(userTyped)){
+//				log.info("[userTyped] userTyped : {}", userTyped);
+//				return "google";
+//			} else if("naver".equals(userTyped)){
+//				log.info("[userTyped] userTyped : {}", userTyped);
+//				return "naver";
+			} else {
+				log.info("[userTyped] userTyped : {}", userTyped);
+				return "null";
+			}
+			
+			
 		}
 		/* 결제*/
 		@PostMapping("/payComplete")

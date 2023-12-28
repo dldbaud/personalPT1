@@ -15,6 +15,7 @@
 		<result property="userStatus" column="USER_STATUS"/>
 		<result property="snsToken" column="SNS_TOKEN"/>
 		<result property="email" column="EMAIL"/>
+		<result property="userType" column="USER_TYPE"/>
 		<collection property="userRoleList" resultMap="userRoleResultMap"/>
 	</resultMap>
 	
@@ -163,6 +164,7 @@
 		, JOIN_DATE
 		, SNS_TOKEN
 		, EMAIL
+		, USER_TYPE
 		)
 		VALUES
 		(
@@ -175,6 +177,7 @@
 		, SYSDATE
 		, #{ snsToken }
 		, #{ email }
+		, #{ userType }
 		)
 		
 	</insert>
@@ -508,6 +511,20 @@
 		  FROM TB_USER
 		 WHERE ID = #{ id }
 	</select>
+	
+	<select id="findUserByUserType" resultType="string">
+	    SELECT USER_TYPE
+		  FROM TB_USER
+		 WHERE ID = #{ id }
+		   AND PHONE = #{ phone }
+	</select>
+	
+	<insert id="updatePT">
+	    UPDATE 
+	    		TB_USER 	
+	    SET PWD = #{ pwd }
+	    WHERE ID = #{ id }
+	</insert>
 </mapper>
 
 

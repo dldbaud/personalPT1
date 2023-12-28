@@ -278,13 +278,14 @@ public class UserService {
 	}
 
 	public void modifyTpwd(UserDto tempUser) {
-		// TODO Auto-generated method stub
+		
+		int result = mapper.updatePT(tempUser);
 		
 	}
 
-	public String sendSimpleMessage(String emailId) {
+	public String findUserByUserType(String id, String phone) {
 		// TODO Auto-generated method stub
-		return null;
+		return mapper.findUserByUserType(id, phone);
 	}
 	
 
