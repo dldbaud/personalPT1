@@ -297,6 +297,7 @@ public class UserController {
 				refund.setOrderNo(orderNo);
 				refund.setRefundPrice(refundMoney);
 				refund.setListNm(listNm);
+				refund.setUserNo(userNo);
 				userService.insertRefund(refund);
 				rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("refund.success"));
 				return "redirect:/";
@@ -306,7 +307,25 @@ public class UserController {
 			}
 	    }
 
-
+	    /* 환불 목록 페이지*/
+	    @GetMapping("myRefundList")
+	    public String myRefundList(@AuthenticationPrincipal UserDto user,
+	    		Model model, 
+	    		@RequestParam(defaultValue="1") int page, 
+	  			@RequestParam(required=false) String searchCondition, 
+	  			@RequestParam(required=false) String searchValue) {
+	    	
+	    	Map<String, String> searchMap = new HashMap<>();
+	    	
+	    	searchMap.put("searchCondition", searchCondition);
+	    	searchMap.put("searchValue", searchValue);
+	    	
+	    	Map<String, Object> myRefundListPaging = userService.myRefundPaging(page, searchMap, user.getUserNo());
+	    	
+	    	model.addAttribute("paging", myRefundListPaging.get("paging"));
+	    	model.addAttribute("refundList", myRefundListPaging.get("refundList"));
+	    	return "user/myPage/myRefund";
+	    }
 
 		/* 사업자 등록 페이지*/
 	    @GetMapping("/sell/sellRegist")

@@ -1,6 +1,7 @@
 package com.greedy.sarada.user.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,5 +14,7 @@ public class RefundDto {
 	private Date refundDate;
 	private String refundStatus;
 	private String listNm;
+	private String userNo;
 	
+	private OrderDto orderList;
 }

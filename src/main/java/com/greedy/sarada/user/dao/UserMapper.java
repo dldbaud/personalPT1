@@ -75,6 +75,10 @@ public interface UserMapper {
 
 	int updatePT(UserDto tempUser);
 
+	int selectRefundTotalCount(String userNo);
+
+	List<RefundDto> selectRefundList(SelectCriteria selectCriteria);
+
 
 	
 
