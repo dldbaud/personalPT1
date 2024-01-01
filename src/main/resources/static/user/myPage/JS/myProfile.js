@@ -82,4 +82,12 @@ window.addEventListener('load', function () {
         }
     }
 
+    if(document.getElementById('myRefundList')) {
+
+        const $myRefundList = document.getElementById('myRefundList');
+
+        $myRefundList.onclick = function() {
+            location.href = "/user/myRefundList";
+        }
+    }
 });
