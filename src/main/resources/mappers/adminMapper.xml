@@ -267,6 +267,7 @@
 		            A.REGIST_DATE,
 		            A.SELL_NO,
 		            C.PRICE,
+		            C.CATEGORY_CODE,
 		            D.FILE_PATH,
 		            D.SAVED_FILE_NM,
 		            D.MAIN_FILE_PATH,
@@ -277,6 +278,7 @@
 		                B.PRICE,
 		                B.SELL_NO,
 		                B.LIST_NO,
+		                B.CATEGORY_CODE,
 		                ROW_NUMBER() OVER (PARTITION BY B.LIST_NO ORDER BY B.PRICE ASC) AS PriceRank
 		            FROM TB_PT B
 		            JOIN TB_FILE E ON (B.PT_NO = E.PT_NO)
@@ -284,14 +286,30 @@
 		        ) C
 		        JOIN TB_LIST A ON (A.SELL_NO = C.SELL_NO)
 		        JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
-		        <if test="searchCondition != 'null'">
-		        	JOIN TB_REF_CATEGORY E ON(A.REF_CATEGORY_CODE = E.REF_CATEGORY)
+		        <if test="searchCondition != 'category'">
+			        JOIN TB_REF_CATEGORY E ON(A.REF_CATEGORY_CODE = E.REF_CATEGORY)		        
+		        </if>
+		        <if test="searchCondition == 'category'">
+			        JOIN TB_CATEGORY E ON(C.CATEGORY_CODE = E.CATEGORY_CODE)		        
 		        </if>
 		        WHERE A.LIST_NO = C.LIST_NO
 		          AND A.SELL_NO = C.SELL_NO
-		          <if test="searchCondition != 'null'">
-		          	AND E.REF_CATEGORY_NM = #{ searchCondition }
+		          <if test="searchCondition != 'category'">
+			          <if test="searchCondition != 'null' and searchValue != 'null'">
+			          	AND (E.REF_CATEGORY_NM LIKE '%' || #{ searchCondition } || '%'
+			          	OR A.LIST_NM LIKE '%' || #{ searchValue } || '%' )
+			          </if>
+			          <if test="searchCondition != 'null' and searchValue == 'null'">
+			          	AND E.REF_CATEGORY_NM LIKE '%' || #{ searchCondition } || '%'
+			          </if>
+			          <if test="searchCondition == 'null' and searchValue != 'null'">
+			          	AND (E.REF_CATEGORY_NM LIKE '%' || #{ searchValue } || '%'
+			          	OR A.LIST_NM LIKE '%' || #{ searchValue } || '%' )
+			          </if>	          
 		          </if>
+		 		  <if test="searchCondition == 'category'">
+		 		  	   AND E.CATEGORY_NAME = #{ searchValue }
+		 		  </if>
 		          AND D.FILE_PATH IS NULL
 		          AND C.PriceRank = 1
 		    ) 

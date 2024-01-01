@@ -247,12 +247,18 @@ window.onload = function () {
 
         function changeCategoryEvent() {
             if (window.innerWidth > 760) {
+                /* 큰 카테고리 */
                 $refList.forEach(item => {
                     item.addEventListener('mouseover', categoryMouseOver);
                     item.addEventListener('click', refCategoryClick);
                 });
 
                 $nav.addEventListener('mouseout', categoryMouseOut);
+
+                /* 작은 카테고리 */
+                $categoryList.forEach(item => {
+                    item.addEventListener('click', categoryListClick)
+                });
             } else {
                 $refList.forEach(item => {
                     item.addEventListener('click', mobileRefCategoryClick);
@@ -268,6 +274,11 @@ window.onload = function () {
             });
 
             $nav.removeEventListener('mouseout', categoryMouseOut);
+
+            /* 작은 카테고리 */
+            $categoryList.forEach(item => {
+                item.removeEventListener('click', categoryListClick)
+            });
         }
 
         function categoryMouseOver() {
@@ -284,8 +295,9 @@ window.onload = function () {
             });
         }
 
-        function refCategoryClick() {
-            searchCondition = this.textContent;
+        /* 큰 카테고리  */
+        function refCategoryClick(event) {
+            searchCondition = event.target.textContent;
             console.log('클릭확인', searchCondition);
 
             currentPage = 1;
@@ -293,7 +305,7 @@ window.onload = function () {
             /* 수정필요 메인 페이지에서는 파일을 처음부터 비동기로 불러오기 때문에 이 동작으로 메인페이지 이동시 searchCondition 값 초기화가 안됨
             그러므로 카테고리를 가져오는 것 처럼 메인에 넘어갈때 정적인 파일을 보내고 클릭시 정적인 파일들을 받은 다음에 스크롤 시에는 
             비동기를 이용해 inerHTML= ''를 하여 지우고 다시 html 요소들을 추가해 줘야 할 것 같음 (댓글 처럼)*/
-            if (document.getElementById('foodDetailHtml')) {
+            if (document.getElementById('productDetail')) {
 
                 location.href = `/?condition=${searchCondition}`;
                 
@@ -303,10 +315,11 @@ window.onload = function () {
             }
         }
 
-
+        /* 펼치기 접기 */
         function mobileRefCategoryClick() {
             console.log('클릭확인');
 
+            //categoryList 의 다음 형제 요소 즉 All이 없으면 1=> 3으로 안감
             const $childCategoryLists = this.nextElementSibling.querySelectorAll('.categoryList');
             console.log($childCategoryLists);
 
@@ -328,35 +341,60 @@ window.onload = function () {
             }
         }
 
+        /* 작은 카테고리 */
+        function categoryListClick(event){
+            // preventDefault(event);
+            searchCondition = 'category';
+            searchValue = event.target.textContent;
+            console.log('클릭확인', searchValue);
+            currentPage = 1;
+            load = true;
+            if (document.getElementById('productDetail')) {
+
+                location.href = `/?condition=${searchCondition}&searchValue=${searchValue}`;
+                
+            } else {
+                // foodDetailHtml이 없는 경우 바로 loadProducts 호출
+                loadProducts(searchCondition, searchValue);
+            }
+        }
+
     }
 
     /* 파일 비동기 통신 */
 
     let currentPage = 1;
     let searchCondition = 'null';
-    let searchValue;
+    let searchValue ='null';
     const $categoryCode = $(".outBox");
     let load = false;
 
     if(document.getElementById('outBox')){
 
+        /* header에있는 검색어를 가져옴 */
         const urlParams = new URLSearchParams(window.location.search);
         const condition = urlParams.get('condition');
+        const $searchValue = urlParams.get('searchValue');
     
         if (condition) {
             // 조건이 있다면 해당 파일을 비동기적으로 불러옴 여기서 스크롤시 동작 되긴하는데 이상함 구상을 잘 못 한 거같음 208줄 참고
             load = true;
             searchCondition = condition;
-            loadProducts(searchCondition);
+            searchValue = $searchValue;
+            loadProducts(searchCondition,searchValue);
             console.log('새로고침안됨');
         } else {
             //로고 버튼을 클릭해야 여기로 이동 구상을 잘 못 한 거같음
-            loadProducts(searchCondition);
+            loadProducts(searchCondition,searchValue);
             console.log('새로고침확인');
         }
         function loadProducts(searchCondition, searchValue) {
-    
+            
             if (searchCondition == 'null') {
+                if(searchValue != 'null' && load === true) {
+                    console.log('이게뭐야야야양');
+                    $categoryCode.empty();
+                }
                 $.ajax({
                     url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
                     success: function (data) {
@@ -367,8 +405,8 @@ window.onload = function () {
                         console.log(xhr);
                     }
                 });
-                load = true;
-            } else if (searchCondition != 'null') {
+                load = false;
+            } else if (searchCondition != 'null' || searchValue != 'null') {
                 if (load) {
                     $categoryCode.empty();
                 }
@@ -384,6 +422,7 @@ window.onload = function () {
                 });
                 load = false;
             }
+
         }
         
         function startListView(data) {
@@ -453,8 +492,9 @@ window.onload = function () {
                 isFetching = true;
     
                 currentPage++;
+                console.log(currentPage);
                 // 로딩 함수 호출
-                loadProducts(searchCondition);
+                loadProducts(searchCondition, searchValue);
     
                 // 일정 시간 후에 상태를 리셋하여 다시 호출 가능하도록 함
                 setTimeout(() => {
@@ -464,5 +504,17 @@ window.onload = function () {
         });
     }
    
+    if(document.getElementById('searchBarBtn')){
+        const $searchBarBtn = document.getElementById('searchBarBtn');
 
+        $searchBarBtn.addEventListener('click', ()=>{
+            searchCondition = 'null';
+            searchValue = document.getElementById('searchBarValue').value;
+            load = true;
+            console.log("473확인인인인", load);
+            console.log("473확인인인인", searchValue);
+            loadProducts(searchCondition,searchValue)
+        });
+       
+    }
 }
