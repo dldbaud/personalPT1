@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.greedy.sarada.common.paging.SelectCriteria;
 import com.greedy.sarada.provider.SnsDto;
+import com.greedy.sarada.sell.dto.PtDto;
+import com.greedy.sarada.sell.dto.SellDto;
 import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.OrderItemDto;
 import com.greedy.sarada.user.dto.PayDto;
@@ -67,7 +69,7 @@ public interface UserMapper {
 
 	int replyUpdate(ReplyDto reply);
 
-	OrderDto orderCheck(OrderDto order);
+	List<OrderDto> orderCheck(OrderDto order);
 
 	UserDto findUserByEmailId(String id);
 
@@ -77,7 +79,12 @@ public interface UserMapper {
 
 	int selectRefundTotalCount(String userNo);
 
-	List<RefundDto> selectRefundList(SelectCriteria selectCriteria);
+	List<RefundDto> selectRefundList(@Param("selectCriteria") SelectCriteria selectCriteria, @Param("userNo") String userNo);
+
+	int findPtStCount(PtDto pt);
+
+	int updatePtCount(PtDto pt);
+
 
 
 	

@@ -42,6 +42,8 @@ public interface SellMapper {
 
 	List<FileDto> selectFileList(String listNo);
 
+	SellDto findSellRegist(UserDto user);
+
 //	List<PtDto> productDetail(String listNo);
 //	List<ListDto> productDetail(String listNo);
 

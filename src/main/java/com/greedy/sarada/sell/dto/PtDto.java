@@ -21,4 +21,6 @@ public class PtDto {
 	private int ptBundle;
 	private CategoryDto category;
 	private List<FileDto> fileList;
+	
+
 }

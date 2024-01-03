@@ -26,35 +26,25 @@
 						<th>날짜</th>
 						<th>상품 정보</th>
 						<th>가격</th>
-						<th>진행 상태</th>
-						<th>변경</th>
 					</tr>
-					<!-- <th:block th:if="${orderLists != null}" th:each="order : ${orderLists}">
+					<th:block th:if="${refundList != null}" th:each="refund : ${refundList}">
 						<tr>
-							<td rowspan="2" th:text="${order.orderDate}"></td>
+							<td rowspan="2" th:text="${refund.refundDate}"></td>
 
 							<td>
 								<div
-									th:onclick="|location.href='@{/user/orderDetail?(userNo=${#authentication.principal.userNo},orderNo=${order.orderNo})}'|">
-									<span th:text="${order.listNm}"></span>
+									th:onclick="|location.href='@{/user/orderDetail?(userNo=${#authentication.principal.userNo},orderNo=${refund.orderNo})}'|">
+									<span th:text="${refund.listNm}"></span>
 								</div>
 
 								<div
-									th:onclick="|location.href='@{/user/orderDetail?(userNo=${#authentication.principal.userNo},orderNo=${order.orderNo})}'|">
-									<img th:src="${order.mainFile.mainFilePath + order.mainFile.savedFileNm}"
+									th:onclick="|location.href='@{/user/orderDetail?(userNo=${#authentication.principal.userNo},orderNo=${refund.orderNo})}'|">
+									<img th:src="${refund.orderList.mainFile.mainFilePath + refund.orderList.mainFile.savedFileNm}"
 										width="200px" height="200px" />
 								</div>
 							</td>
 
-							<td rowspan="2" th:text="${order.orderPrice}"></td>
-							<td rowspan="2" th:text="${order.deliveryStatus}"></td>
-							<td rowspan="2">
-								<button class="btn">배송 조회</button>
-								<button class="btn" id="refundBtn"
-								th:onclick="'location.href=\'/user/refund?orderNo=' + @{${order.orderNo}} + '&userNo=' + @{${#authentication.principal.userNo}} + '&amount=' + @{${order.orderPrice}} + '\''"
-									>환불
-									신청</button>
-							</td> -->
+							<td rowspan="2" th:text="${refund.refundPrice}"></td>
 						</tr>
 					</th:block>
 				</table>

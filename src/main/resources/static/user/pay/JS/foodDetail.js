@@ -381,8 +381,13 @@ window.addEventListener('load', function () {
                         //[3] 아직 제대로 결제가 되지 않았습니다.
                         //[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
                         alert("결제 실패");
+                    } else if(data.status == 400){
+                        console.log(data, "ajax확인");
+                        var messages = data.data.ptStCountMinus;
+                        var combinedMessage = messages.join('\n');
+                        alert(combinedMessage);
                     } else {
-                        alert("결제 실패123");
+                        alert("결제 실패123"); 
                     }
                 });
             //성공시 이동할 페이지

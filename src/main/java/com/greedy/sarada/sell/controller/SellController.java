@@ -60,11 +60,20 @@ public class SellController {
 
 	/* 사업자 등록 페이지 */
 	@GetMapping("/sellRegist")
-	public String sellSellRegist() {
+    public String sellSellRegist(@AuthenticationPrincipal UserDto user,
+    		Model model) {
+    	
+    	SellDto sellResist =sellService.findSellRegist(user);
+    	String[] address = sellResist.getSellAddress().split("\\$");
 
-		return "user/sell/sellRegist";
-	}
-	
+		model.addAttribute("address", address);
+    	model.addAttribute("sellResist", sellResist);
+    	
+    	log.info("[판매자 신청 정보 확인] : {}", sellResist);
+    	return "user/sell/sellRegist";
+    }
+
+    
 	/*상위카테고리 코드 조회*/
 	@GetMapping(value = "/RefCategory", produces = "application/json; charset=UTF-8")
 	public @ResponseBody List<RefCategoryDto> findRefCategoryList() {
@@ -303,7 +312,7 @@ public class SellController {
     		OrderDto order = new OrderDto();
     		order.setUserNo(user.getUserNo());
     		order.setListNo(listNo);
-    		OrderDto orderCheck = userService.orderCheck(order);
+    		List<OrderDto> orderCheck = userService.orderCheck(order);
     		
     		model.addAttribute("replyCheck", replyCheck);
     		model.addAttribute("orderCheck", orderCheck);

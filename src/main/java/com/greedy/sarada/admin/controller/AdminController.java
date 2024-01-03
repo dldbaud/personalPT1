@@ -102,7 +102,7 @@ public class AdminController {
     	UserDto user = new UserDto();
     	user.setUserNo(seller.getUser().getUserNo());
     	seller.setUser(user);
-
+    	seller.setSellStatus("승인");
     	log.info("[AdminController] user.setUserNo(seller.getUser().getUserNo()) : {}", user.getUserNo());
     	if(adminService.insertSeller(seller) == 1) {
     		result = "등록 승인";

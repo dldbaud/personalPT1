@@ -17,7 +17,7 @@
 		<id property="sellNo" column="SELL_NO"/>
 		<result property="sellNm" column="SELL_NM"/>
 		<result property="sellAddress" column="SELL_ADDRESS"/>
-		<result property="sellCategoryNm" column="SELL_CATEGORY"/>
+		<result property="sellCategoryNm" column="SELL_CATEGORY_NM"/>
 		<result property="sellType" column="SELL_TYPE"/>
 		<result property="sellPhone" column="SELL_PHONE"/>
 		<result property="sellStatus" column="SELL_STATUS"/>
@@ -304,5 +304,20 @@
 		)
 	</insert>
 	
-	
+	<select id="findSellRegist" resultMap="sellDtoResultMap">
+		SELECT 
+		       SELL_NO
+			 , USER_NO
+			 , SELL_NM
+			 , SELL_ADDRESS
+			 , SELL_CATEGORY_NM
+			 , SELL_TYPE
+			 , SELL_PHONE
+			 , SELL_STATUS
+			 , SELL_REQ_DATE
+			 , SELL_REGI_DATE
+			 , SELLER_NO
+		 FROM TB_SELL
+		WHERE USER_NO = #{ userNo }
+	</select>
 </mapper>

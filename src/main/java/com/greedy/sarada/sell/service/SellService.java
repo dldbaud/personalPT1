@@ -105,6 +105,10 @@ public class SellService {
 		
 		return productDetiis;
 	}
+	public SellDto findSellRegist(UserDto user) {
+		
+		return sellMapper.findSellRegist(user);
+	}
 	
 //	public List<PtDto> productDetail(String listNo) {
 //		

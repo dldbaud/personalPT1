@@ -1,5 +1,6 @@
 package com.greedy.sarada.user.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.greedy.sarada.common.paging.SelectCriteria;
 import com.greedy.sarada.provider.SnsDto;
 import com.greedy.sarada.sell.dto.ListDto;
 import com.greedy.sarada.sell.dto.PtDto;
+import com.greedy.sarada.sell.dto.SellDto;
 import com.greedy.sarada.user.dao.UserMapper;
 import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.OrderItemDto;
@@ -264,9 +266,9 @@ public class UserService {
 			
 	}
 
-	public OrderDto orderCheck(OrderDto order) {
+	public List<OrderDto> orderCheck(OrderDto order) {
 		
-		OrderDto orderCheck = mapper.orderCheck(order);
+		List<OrderDto> orderCheck = mapper.orderCheck(order);
 		
 		return orderCheck;
 	}
@@ -304,7 +306,7 @@ public class UserService {
 		log.info("[UserService] selectCriteria : {}", selectCriteria);
 		
 		/* 3. 요청 페이지와 검색 기준에 맞는 게시글을 조회해온다. */
-		List<RefundDto> refundList = mapper.selectRefundList(selectCriteria);
+		List<RefundDto> refundList = mapper.selectRefundList(selectCriteria, userNo);
 		log.info("[UserService] boardList : {}", refundList);
 		
 		Map<String, Object> myRefundListPaging = new HashMap<>();
@@ -315,8 +317,36 @@ public class UserService {
 		
 		return myRefundListPaging;
 	}
+
+	public Map<String, Object> findPtStCount(List<PtDto> ptList) {
+		
+		List<String> ptStCountMinus = new ArrayList<>();
+		
+		log.info("[UserService] 재고확인 시작 : {}");
+		for(PtDto pt : ptList) {
+			log.info("[UserService] 재고확인 시작PT: {}", pt);
+			int number = mapper.findPtStCount(pt);
+			
+			//현재 상품의 number가 0일 경우에만 
+			if(number <= 0) {
+				log.info("[UserService] number :{}", number);
+				ptStCountMinus.add(pt.getPtNm() + "의 상품 재고가 부족합니다.");
+			}
+		}
+		
+		Map<String, Object> ptStCountMap = new HashMap<>();
+		
+		ptStCountMap.put("ptStCountMinus", ptStCountMinus);
+		
+		return ptStCountMap;
+	}
+
+	public void updatePtCount(PayCompleteRequest request) {
+		for(PtDto pt : request.getPtList()) {
+			int result = mapper.updatePtCount(pt);
+		}
+		
+	}
 	
 
-
-	
 }

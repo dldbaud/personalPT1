@@ -548,12 +548,32 @@
 					 , A.REFUND_STATUS
 					 , A.LIST_NM
 					 , A.USER_NO
+					 , D.MAIN_FILE_PATH
+	                 , D.SAVED_FILE_NM
 					 , ROW_NUMBER() OVER (ORDER BY A.REFUND_DATE DESC) AS RNUM
 			      FROM TB_REFUND A
+					JOIN TB_ORDER B ON (A.ORDER_NO = B.ORDER_NO)
+			        JOIN TB_PT C ON (B.LIST_NO = C.LIST_NO)
+			        JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
+			        WHERE A.USER_NO = #{ userNo }
+			          AND D.MAIN_FILE_PATH IS NOT NULL
                 )
-	     WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
+	     WHERE RNUM BETWEEN #{ selectCriteria.startRow } AND #{ selectCriteria.endRow }
 	     ORDER BY RNUM
 	</select>
+	
+	<select id="findPtStCount" resultType="_int">
+		SELECT
+		       ST_COUNT - #{ stCount } 
+		  FROM TB_PT
+		 WHERE PT_NO = #{ ptNo }
+	</select>
+	
+	<update id="updatePtCount">
+		UPDATE TB_PT
+		   SET ST_COUNT = ST_COUNT - #{ stCount }
+		 WHERE PT_NO = #{ ptNo }
+	</update>
 </mapper>
 
 

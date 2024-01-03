@@ -34,6 +34,7 @@ import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
 import com.greedy.sarada.common.paging.ResponseDto;
+import com.greedy.sarada.sell.dto.SellDto;
 import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
 import com.greedy.sarada.user.dto.RefundDto;
@@ -278,6 +279,7 @@ public class UserController {
 	        /*결제 금액가져오기*/
 	        BigDecimal amountToBePaid = paymentResult.getCancelAmount();
 	        int amountToBePaidInt = amountToBePaid.intValue();
+	        /* 결제한금액 결제요청금액 확인 후*/
 	        int refundMoney = amountPrice - amountToBePaidInt;
 	        if(refundMoney <= 0) {
 	        	rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("refund.nonMoney"));
@@ -326,14 +328,7 @@ public class UserController {
 	    	model.addAttribute("refundList", myRefundListPaging.get("refundList"));
 	    	return "user/myPage/myRefund";
 	    }
-
-		/* 사업자 등록 페이지*/
-	    @GetMapping("/sell/sellRegist")
-	    public String sellSellRegist() {
-	    	
-	    	return "user/sell/sellRegist";
-	    }
-	    
+    
 	    
 	    /*판매자 등록*/
 	    @PostMapping("/sell/Regist")
@@ -426,47 +421,67 @@ public class UserController {
 		    
 		    IamportClient iamportClient = new IamportClient(imp_key, imp_secret);
 		    
-		    try {
-		        IamportResponse<Payment> paymentResponse = iamportClient.paymentByImpUid(payNo);
-		        Payment paymentResult = paymentResponse.getResponse();
+		    
+		    
+		    	 try {	
+		    		 
+		    		 Map<String, Object> ptStCountMap = userService.findPtStCount(request.getPtList());
+		    		 List<String> ptStCountMinus = (List<String>) ptStCountMap.get("ptStCountMinus");
 
-		        // 가맹점에서는 merchant_uid 기준으로 결제되어야 하는 금액 조회
-		        // 예를 들어, queryAmountToBePaid(paymentResult.getMerchantUid())로 가정합니다.
-//		        int amountToBePaid = queryAmountToBePaid(paymentResult.getMerchantUid());
-		        BigDecimal amountToBePaid = paymentResult.getAmount();
-		        // 결제 상태 및 결제 금액 확인 후 처리
-		        if ("paid".equals(paymentResult.getStatus()) && paymentResult.getAmount().equals(amountToBePaid)) {
-		        	return successInsertOrder(request, paymentResult, loginUser); // 결제까지 성공적으로 완료
-		        } else {
-		        	return failPostProcess(paymentResult); // 결제 실패 처리
-		            
-		        }
+		    		 if (!ptStCountMinus.isEmpty()) {
+		    		     log.info("[UserController] 재고 수량 부족: {}", ptStCountMinus);
+		    		     /* 바로 결제 취소*/
+		    		     IamportResponse<Payment> paymentResponse = iamportClient.paymentByImpUid(payNo);
+			 		     Payment paymentResult = paymentResponse.getResponse();
+			 		    	
+		    		     CancelData cancelData = new CancelData(payNo, true, paymentResult.getAmount());
+		    				
+		    			IamportResponse<Payment> cancelResponse = iamportClient.cancelPaymentByImpUid(cancelData);
+		 		    	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.BAD_REQUEST, "재고 수량 부족", ptStCountMap));
+		 		    } else {
+		 		    	
+		 		    	IamportResponse<Payment> paymentResponse = iamportClient.paymentByImpUid(payNo);
+		 		    	Payment paymentResult = paymentResponse.getResponse();
+		 		    	
+		 		    	// 가맹점에서는 merchant_uid 기준으로 결제되어야 하는 금액 조회
+		 		    	// 예를 들어, queryAmountToBePaid(paymentResult.getMerchantUid())로 가정합니다.
+//				        int amountToBePaid = queryAmountToBePaid(paymentResult.getMerchantUid());
+		 		    	BigDecimal amountToBePaid = paymentResult.getAmount();
+		 		    	// 결제 상태 및 결제 금액 확인 후 처리
+		 		    	if ("paid".equals(paymentResult.getStatus()) && paymentResult.getAmount().equals(amountToBePaid)) {
+		 		    		return successInsertOrder(request, paymentResult, loginUser); // 결제까지 성공적으로 완료
+		 		    	} else {
+		 		    		return failPostProcess(paymentResult); // 결제 실패 처리
+		 		    		
+		 		    	}
+		 		    }
 
-		        // TODO: 결제 완료 후 추가 처리 로직
+				        // TODO: 결제 완료 후 추가 처리 로직
 
-		    } catch (IamportResponseException e) {
-		        System.out.println(e.getMessage());
+				    } catch (IamportResponseException e) {
+				        System.out.println(e.getMessage());
 
-		        switch (e.getHttpStatusCode()) {
-		            case 401:
-		                log.info("[UserController] 권한 정보 틀림{}");
-		                return ResponseEntity.ok().body(new ResponseDto(HttpStatus.UNAUTHORIZED, "권한 정보 틀림"));
-		            case 404:
-		                log.info("[UserController] payNo 에 해당되는 거래내역이 존재하지 않음{}", payNo);
-		                return ResponseEntity.ok().body(new ResponseDto(HttpStatus.NOT_FOUND, "payNo 틀림"));
-		            case 500:
-		                log.info("[UserController] 서버 응답 오류");
-		                return ResponseEntity.ok().body(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, "서버 응답 오류"));
-		        }
+				        switch (e.getHttpStatusCode()) {
+				            case 401:
+				                log.info("[UserController] 권한 정보 틀림{}");
+				                return ResponseEntity.ok().body(new ResponseDto(HttpStatus.UNAUTHORIZED, "권한 정보 틀림"));
+				            case 404:
+				                log.info("[UserController] payNo 에 해당되는 거래내역이 존재하지 않음{}", payNo);
+				                return ResponseEntity.ok().body(new ResponseDto(HttpStatus.NOT_FOUND, "payNo 틀림"));
+				            case 500:
+				                log.info("[UserController] 서버 응답 오류");
+				                return ResponseEntity.ok().body(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, "서버 응답 오류"));
+				        }
 
-		    } catch (IOException e) {
-		        // 서버 연결 실패
-		        e.printStackTrace();
+				    } catch (IOException e) {
+				        // 서버 연결 실패
+				        e.printStackTrace();
+				    }
+
+				    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "로그 확인 중", request));
 		    }
-
-		    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "로그 확인 중", request));
-//		    return ResponseEntity.ok().body(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, "로그 확인 중", request));
-		}
+		    
+		
 
 		private ResponseEntity<ResponseDto> failPostProcess(Payment paymentResult) {
 			
@@ -479,6 +494,7 @@ public class UserController {
 
 		    try {
 		        userService.insertOrder(request, paymentResult, loginUser);
+		        userService.updatePtCount(request);
 		        log.info("[UserController] insertOrder{}", "메소드확인");
 		        responseEntity = ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "결제 성공", paymentResult));
 		    } catch (insertOrderItemException | insertOrderException | insertPayException e) {
