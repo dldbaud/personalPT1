@@ -18,10 +18,12 @@ body {
 
 .myPageContents{
     margin-left: 2rem;
+    grid-template-columns: 1fr;
     width: calc(100% - 6rem);
 }
 
 .contentsBar {
+    grid-template-columns: 1fr;
     border: 1px solid gray;
     width: 100%;
     text-align: center;

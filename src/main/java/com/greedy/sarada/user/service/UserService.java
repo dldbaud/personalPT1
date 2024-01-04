@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.greedy.sarada.common.exception.user.InsertReplyException;
 import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
+import com.greedy.sarada.common.exception.user.MemberRemoveException;
 import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
@@ -346,6 +347,15 @@ public class UserService {
 			int result = mapper.updatePtCount(pt);
 		}
 		
+	}
+
+	public void removeUser(UserDto user) throws MemberRemoveException {
+		
+		int result = mapper.removeUser(user);
+		
+		if(!(result > 0)) {
+            throw new MemberRemoveException("회원 탈퇴에 실패하셨습니다.");
+        }
 	}
 	
 

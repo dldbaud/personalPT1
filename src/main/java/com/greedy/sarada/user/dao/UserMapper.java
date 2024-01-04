@@ -85,6 +85,11 @@ public interface UserMapper {
 
 	int updatePtCount(PtDto pt);
 
+	int removeUser(UserDto user);
+	
+	/*보안상 폐기*/
+	UserDto findByUserId2(String id);
+
 
 
 	

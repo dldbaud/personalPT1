@@ -31,11 +31,11 @@ window.onload = function () {
         $duplicationCheck.onclick = function () {
             const id = document.getElementById("id").value.trim();
             //\s공백  +&은 a + b + c 식으로 끝나야 함 
-            const idCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if(!(idCheck.test(id))){
-                alert("아이디를 확인해주세요");
-                return;
-            }
+            // const idCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // if(!(idCheck.test(id))){
+            //     alert("아이디를 확인해주세요");
+            //     return;
+            // }
             
             if(id === ""){
                 alert("아이디를 입력하세요");

@@ -31,6 +31,24 @@ window.addEventListener('load', function () {
 
     }
 
+    if(document.getElementById('userLeave')){
+
+        const $userLeave = document.getElementById('userLeave');
+
+        $userLeave.onclick = function() {
+            location.href = "/user/leave";
+        }
+    }
+
+    if(document.getElementById('agreeLeave')){
+
+        const $agreeLeave = document.getElementById('agreeLeave');
+
+        $agreeLeave.onclick = function() {
+            location.href = "/user/leaveUpdate";
+        }
+    }
+
     if(document.getElementById("sellCategory")){
         if (!window.loadedScript) {
         

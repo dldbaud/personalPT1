@@ -30,13 +30,13 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 
     <div class="countBox">
         <div th:each="pt : ${sPtList}">
-            <div th:if="${pt.category.categoryCode == 114}">
+            <div th:if="${pt.category.categoryCode == 114}" th:class="${pt.stCount == 0} ? 'disabled' : ''">
                 <label th:for="${'checkBox' + pt.ptNo}" th:text="${pt.ptNm}"></label>
-                <input type="checkbox" th:id="${'checkBox' + pt.ptNo}" class="checkBox" name="orderCount" th:value="${pt.price}" th:data-ptno="${pt.ptNo}" th:data-ptnm="${pt.ptNm}">
+                <input type="checkbox" th:id="${'checkBox' + pt.ptNo}" class="checkBox" name="orderCount" th:value="${pt.price}" th:data-ptno="${pt.ptNo}" th:data-ptnm="${pt.ptNm}" th:disabled = "${pt.stCount == 0}">
                 <br>
                 <br>
                 <label th:for="${'ptCount' + pt.ptNo}">수량 : </label>
-                <input type="number" th:id="${'ptCount' + pt.ptNo}" class="numberBox" step="1" min="1" value="1" th:data-ptno="${pt.ptNo}">
+                <input type="number" th:id="${'ptCount' + pt.ptNo}" class="numberBox" step="1" min="1" value="1" th:data-ptno="${pt.ptNo}" th:disabled = "${pt.stCount == 0}">
                 <br>
                 <br>
             </div>

@@ -28,8 +28,8 @@
 						<th>가격</th>
 					</tr>
 					<th:block th:if="${refundList != null}" th:each="refund : ${refundList}">
-						<tr>
-							<td rowspan="2" th:text="${refund.refundDate}"></td>
+						<tr rowspan="2">
+							<td th:text="${refund.refundDate}"></td>
 
 							<td>
 								<div
@@ -44,7 +44,7 @@
 								</div>
 							</td>
 
-							<td rowspan="2" th:text="${refund.refundPrice}"></td>
+							<td th:text="${refund.refundPrice}"></td>
 						</tr>
 					</th:block>
 				</table>

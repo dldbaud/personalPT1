@@ -139,12 +139,37 @@
            AND A.ID = #{ id }
 	</select>
 	
+	<select id="findByUserId2" resultMap="userResultMap">
+		   SELECT
+               A.USER_NO
+		     , A.ID
+             , A.PWD
+		     , A.USER_NM
+		     , A.PROFILE_NM
+		     , A.PHONE
+		     , A.ADDRESS
+		     , A.JOIN_DATE
+		     , A.QUIT_DATE
+		     , A.USER_STATUS
+		     , A.SNS_TOKEN
+		     , A.EMAIL
+		     , B.USER_NO REF_USER_NO
+		     , B.AUTH_NO REF_AUTH_NO
+		     , C.AUTH_NO REF_AUTH_NO2
+		     , C.AUTH_NM
+		     , C.AUTH_DESC
+          FROM TB_USER A
+          LEFT JOIN TB_USER_ROLE B ON (A.USER_NO = B.USER_NO)
+		  LEFT JOIN TB_AUTH C ON (B.AUTH_NO = C.AUTH_NO)
+         WHERE A.USER_STATUS = 'N'
+           AND A.ID = #{ id }
+	</select>
+	
 	<select id="selectById" resultType="string">
         SELECT
                ID
-          FROM TB_USER 
-         WHERE USER_STATUS = 'Y'
-           AND ID = #{ id }
+          FROM TB_USER
+         WHERE ID = #{ id }
     </select>
     
     <select id="selectByProviderId" resultType="string">
@@ -573,6 +598,12 @@
 		UPDATE TB_PT
 		   SET ST_COUNT = ST_COUNT - #{ stCount }
 		 WHERE PT_NO = #{ ptNo }
+	</update>
+	
+	<update id="removeUser">
+		UPDATE TB_USER
+		   SET USER_STATUS = 'N'
+		 WHERE USER_NO = #{ userNo } 
 	</update>
 </mapper>
 

@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.greedy.sarada.common.exception.user.InsertReplyException;
 import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
+import com.greedy.sarada.common.exception.user.MemberRemoveException;
 import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
@@ -121,7 +122,13 @@ public class UserController {
 	    @PostMapping("/loginfail")
 	    public String loginFailed(RedirectAttributes rttr) {
 	    	
-	    	rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
+	    	String loginStatus = AuthenticationService.getLoginStatus();
+	    	
+//	        if ("DisabledException".equals(loginStatus)) {
+//	            rttr.addFlashAttribute("message", "탈퇴 한 회원입니다.");
+//	        }  else {
+//	        }
+	        rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("error.login"));
 	    	
 	    	return "redirect:/user/login";
 	    }
@@ -373,8 +380,6 @@ public class UserController {
 		}
 		
 		/* 이메일 전송 */
-//		@PostMapping 어노테이션을 사용하는 메소드의 반환 타입이 String일 경우
-//		@ResponseBody 어노테이션이 필요하지 않습니다
 		@PostMapping("/mailsend")
 		@ResponseBody
 		public String mailConfirm(@RequestBody UserDto user) throws Exception {
@@ -555,6 +560,25 @@ public class UserController {
 		
 		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", replyListAndPaging));
 	}
+	
+	/* 회원탈퇴*/
+	@GetMapping("/leave")
+	public String userLeave(@AuthenticationPrincipal UserDto user) {
+		
+		return "user/mypage/leave";
+	}
+	
+	@GetMapping("/leaveUpdate")
+	public String leaveUpdate(@AuthenticationPrincipal UserDto user , RedirectAttributes rttr) throws MemberRemoveException {
+		
+		userService.removeUser(user);
+		SecurityContextHolder.clearContext();
+		
+		rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("user.delete"));
+		
+		return "redirect:/";
+	}
+	
 	
 }
 
