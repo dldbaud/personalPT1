@@ -17,6 +17,10 @@
                     <label for="listNm">판매글 제목:</label>
                     <input type="text" id="listNm" class="itemInput" name="listNm" required>
                     
+                    <label for="sellCategory">상위 카테고리:</label>
+                    <select id="sellCategory" name="refCategoryCode.refCategory" required>
+                    </select>
+
                     <label for="main-image" class="upload">대표 사진</label>
                     <input type="file" id="main-image[0]" name="attachImageMain" accept="image/gif, image/jpeg, image/png" multiple required>
                     
@@ -29,9 +33,9 @@
                     <label for="sellDescription">판매 설명:</label>
                     <textarea id="sellDescription" class="itemInput" name="sellDescription"></textarea>
                     
-                    <label for="sellCategory">카테고리:</label>
+                    <!-- <label for="sellCategory">카테고리:</label>
                     <select id="sellCategory" name="refCategoryCode.refCategory" required>
-                    </select>
+                    </select> -->
                     
                     <div id="itemsContainer">
                         <div class="item">
@@ -40,7 +44,7 @@
                             <label for="ptNm">이름</label>
                             <input type="text" id="ptNm" class="itemInput" name="ptList[0].ptNm" required>
 
-                            <label for="sellPtCategory">카테고리:</label>
+                            <label for="sellPtCategory">상세 카테고리:</label>
                             <select id="sellPtCategory" class="sellPtCategory" name="ptList[0].category.categoryCode" required>
 
                             <label for="main-image" class="upload">상품 사진</label>

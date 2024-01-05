@@ -44,7 +44,8 @@ table th, td {
 }
 
 table th {
-    background-color: #f2f2f2;
+    background-color: #85c1e9;
+    color: black;
 }
 
 table td {
@@ -59,6 +60,24 @@ table td {
     border-top: none;
 }
 
-.paging {
-    
+.pagingBtn{
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    border-radius: 12px;
+    background-color: white;
+    font-weight: bold;
+    /* border: 1px solid gray; */
+    border: none;
+    font-size: 10px;
+    color: #254F70;
+}
+
+.pagingBtn:disabled {
+    border: none;
+}
+
+.pagingBtn:hover{
+    cursor: pointer;
+
 }

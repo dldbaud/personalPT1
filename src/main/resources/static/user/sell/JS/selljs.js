@@ -12,6 +12,18 @@ window.addEventListener('load', function () {
         }
     }
 
+    if (document.getElementById('manageProducts')) {
+        console.log('id확인');
+
+        $manageProducts = document.getElementById('manageProducts');
+
+        $manageProducts.onclick = function () {
+            console.log('클릭 확인');
+            location.href = "/sell/manageProducts";
+        }
+    }
+    
+
     /* 상위 카테고리 코드 조회 */
     let selectedRefCategory;  // 전역 변수 선언
     //전역 배열

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/user/sell/CSS/sellRegist.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div th:replace="user/myPage/myProfileSideBar.html"></div>
+        <div class="myPageContents">
+            <div class="mYConetentsBar">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>상품 번호</th>
+                            <th>상품 이름</th>
+                            <th>가격</th>
+                            <th>재고</th>
+                            <th>변경</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:if="${ptLists != null}" th:each="pt : ${ptLists}">
+                            <tr>
+                                <td th:text="${pt.ptNo}"></td>
+                                <td th:text="${pt.ptNm}"></td>
+
+                                <td th:text="${pt.price}"></td>
+                                <td th:text="${pt.stCount}"></td>
+                                <td style="text-align: center;">
+                                    <button class="btn" id="refundBtn"
+                                    th:text ="변경"  th:onclick="'location.href=\'/sell/ptManage?ptNo=' + @{${pt.ptNo}} + '&sellNo=' + @{${pt.sell.sellNo}} + '\''">
+                                    </button>
+                                </td>
+                            </tr>
+                        </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

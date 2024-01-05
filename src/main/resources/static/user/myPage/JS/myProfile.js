@@ -2,11 +2,13 @@ window.addEventListener('load', function () {
     console.log("두 번째 스크립트가 로드되었습니다.");
     
     // 두 번째 스크립트 내용
-    
+    var pathname = window.location.pathname;
     if(document.getElementById("myInfoUpdate")){
     
         const $myInfoUpdate = document.getElementById("myInfoUpdate");
-        
+        if (pathname === '/user/myProfile/update') {
+            $myInfoUpdate.style.color = 'blue';
+          }
         $myInfoUpdate.onclick = function() {
             location.href="/user/myProfile/update";
         }
@@ -15,7 +17,9 @@ window.addEventListener('load', function () {
     if(document.getElementById("myOrderList")){
         
         const $myOrderList = document.getElementById("myOrderList");
-        
+        if (pathname === '/user/myOrderList') {
+            $myOrderList.style.color = 'blue';
+          }
     $myOrderList.onclick = function() {
         location.href="/user/myOrderList";
     }
@@ -23,7 +27,9 @@ window.addEventListener('load', function () {
     if(document.getElementById("sellRegist")){
         
         const $sellRegist = document.getElementById("sellRegist");
-
+        if (pathname === '/sell/sellRegist') {
+            $sellRegist.style.color = 'blue';
+          }
         $sellRegist.onclick = function() {
             console.log("야")
             location.href="/sell/sellRegist";
@@ -35,19 +41,26 @@ window.addEventListener('load', function () {
 
         const $userLeave = document.getElementById('userLeave');
 
+        if (pathname === '/user/leave') {
+            $userLeave.style.color = 'blue';
+          }
         $userLeave.onclick = function() {
             location.href = "/user/leave";
+            
         }
     }
 
     if(document.getElementById('agreeLeave')){
 
         const $agreeLeave = document.getElementById('agreeLeave');
-
+        if (pathname === '/user/leaveUpdate') {
+            $agreeLeave.style.color = 'blue';
+          }
         $agreeLeave.onclick = function() {
             location.href = "/user/leaveUpdate";
         }
     }
+
 
     if(document.getElementById("sellCategory")){
         if (!window.loadedScript) {
@@ -74,10 +87,10 @@ window.addEventListener('load', function () {
 
     if(document.getElementById("searchZipCode")){
 
-        // const $searchZipCode = document.getElementById("searchZipCode");
-        const $searchZip = document.getElementById("searchZip");
+        const $searchZipCode = document.getElementById("searchZipCode");
+        // const $searchZip = document.getElementById("searchZip");
             
-        $searchZip.onclick = function() {
+        $searchZipCode.onclick = function() {
             
             new daum.Postcode({
                 oncomplete: function(data) {
@@ -94,8 +107,11 @@ window.addEventListener('load', function () {
     if(this.document.getElementById('myOrder')){
 
         const $myOrder = document.getElementById('myOrder');
-
+        if (pathname === '/user/myProfile') {
+            $myOrder.style.color = 'blue';
+          }
         $myOrder.onclick = function() {
+            console.log('야');
             location.href = "/user/myProfile";
         }
     }
@@ -103,7 +119,9 @@ window.addEventListener('load', function () {
     if(document.getElementById('myRefundList')) {
 
         const $myRefundList = document.getElementById('myRefundList');
-
+        if (pathname === '/user/myRefundList') {
+            $myRefundList.style.color = 'blue';
+          }
         $myRefundList.onclick = function() {
             location.href = "/user/myRefundList";
         }

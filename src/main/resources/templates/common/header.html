@@ -9,6 +9,9 @@
     <script type="text/javascript" src="/common/JS/header.js"></script>
     <script src="https://kit.fontawesome.com/9f6f15ccb8.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap">
+   
 </head>
 
     <script>
@@ -19,7 +22,7 @@
 <body>
     <div class="main">
         <div class="main-logo">
-            <a href="/">로고입니다.</a>
+            <a href="/" class="logo">AllMart</a>
         </div>
         <ul class="main-nav">
             <div th:each="refCategory : ${refCategory}">
@@ -33,17 +36,17 @@
         </ul>
         <ul class="login">
             <th:block sec:authorize="isAnonymous()">
-                <input type="button" value="로그인" id="login">
+                <input class= "loginBtn" type="button" value="로그인" id="login">
             </th:block>
             <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-                <input type="button" value="관리자 버튼" id="adminButton">
+                <input class= "loginBtn" type="button" value="관리자 버튼" id="adminButton">
             </th:block>
             <th:block sec:authorize="hasRole('ROLE_SELL')">
-                <input type="button" value="판매자 버튼" id="sellButton">
+                <input class= "loginBtn" type="button" value="판매자 버튼" id="sellButton">
             </th:block>
             <th:block sec:authorize="isAuthenticated()">
-                <input type="button" value="마이프로필" id="myProfile">
-                <input type="button" value="로그아웃" id="logout">
+                <input class= "loginBtn" type="button" value="마이프로필" id="myProfile">
+                <input class= "loginBtn" type="button" value="로그아웃" id="logout">
             </th:block>
         </ul>
 
