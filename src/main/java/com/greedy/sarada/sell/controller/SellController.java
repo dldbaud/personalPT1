@@ -328,4 +328,28 @@ public class SellController {
     	log.info("[sellController] replyListAndPaging : {}", replyListAndPaging);
     	return "user/pay/productDetail";
     }
+    
+    /*상품 관리 페이지*/
+    @GetMapping("/manageProducts")
+    public String manageProducts(@AuthenticationPrincipal UserDto user, Model model) {
+    	
+    	List<PtDto> ptLists = sellService.manageProducts(user);
+    	
+    	log.info(" 셀 컨트롤러 ptLists : {}", ptLists);
+    	
+    	model.addAttribute("ptLists", ptLists);
+    	return "/user/sell/manageProducts";
+    }
+    
+    /* 상품 재고,가격 관리*/
+    @GetMapping("/ptManage")
+    public String ptManage(String ptNo, String sellNo, Model model) {
+    	
+    	PtDto ptManage = sellService.ptManage(ptNo,sellNo);
+    	
+    	model.addAttribute("ptManage" , ptManage);
+    	
+    	log.info(" 셀 컨트롤러 ptManage : {}", ptManage);
+    	return "/user/sell/ptManage";
+    }
 }

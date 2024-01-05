@@ -320,4 +320,37 @@
 		 FROM TB_SELL
 		WHERE USER_NO = #{ userNo }
 	</select>
+	
+	<select id="selectPtManageList" resultMap="ptResultMap">
+		SELECT
+		       A.PT_NO
+			 , A.PT_NM
+			 , A.PRICE
+			 , A.ST_COUNT
+			 , A.SELL_NO
+			 , A.LIST_NO
+	      FROM TB_PT A
+	      JOIN TB_SELL B ON (A.SELL_NO = B.SELL_NO)
+	      JOIN TB_USER C ON (B.USER_NO = C.USER_NO)
+	     WHERE C.USER_NO = #{ userNo }
+	</select>
+	
+	<select id="ptManage" resultMap="ptResultMap" >
+		SELECT
+		       PT_NO
+			 , PT_NM
+			 , PRICE
+			 , ST_COUNT
+			 , SELL_NO
+			 , LIST_NO
+			 , CATEGORY_CODE
+			 , PT_SIZE
+			 , PT_DESCRIP
+			 , PT_AUTHOR
+			 , PT_BUNDLE
+			 , PT_STATUS
+	     FROM TB_PT
+	    WHERE SELL_NO = #{ sellNo }
+	      AND PT_NO = #{ ptNo }
+	</select>
 </mapper>

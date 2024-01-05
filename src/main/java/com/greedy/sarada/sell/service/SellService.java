@@ -109,6 +109,14 @@ public class SellService {
 		
 		return sellMapper.findSellRegist(user);
 	}
+	public List<PtDto> manageProducts(UserDto user) {
+		
+		return sellMapper.selectPtManageList(user);
+	}
+	public PtDto ptManage(String ptNo, String sellNo) {
+		// TODO Auto-generated method stub
+		return sellMapper.ptManage(ptNo, sellNo);
+	}
 	
 //	public List<PtDto> productDetail(String listNo) {
 //		

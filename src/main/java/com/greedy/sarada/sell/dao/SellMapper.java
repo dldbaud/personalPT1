@@ -44,6 +44,10 @@ public interface SellMapper {
 
 	SellDto findSellRegist(UserDto user);
 
+	List<PtDto> selectPtManageList(UserDto user);
+
+	PtDto ptManage(String ptNo, String sellNo);
+
 //	List<PtDto> productDetail(String listNo);
 //	List<ListDto> productDetail(String listNo);
 
