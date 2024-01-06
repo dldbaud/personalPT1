@@ -441,6 +441,7 @@ public class UserController {
 			 		    	
 		    		     CancelData cancelData = new CancelData(payNo, true, paymentResult.getAmount());
 		    				
+		    		    /*웹훅을 설정해야 이걸 안 하나?*/
 		    			IamportResponse<Payment> cancelResponse = iamportClient.cancelPaymentByImpUid(cancelData);
 		 		    	return ResponseEntity.ok().body(new ResponseDto(HttpStatus.BAD_REQUEST, "재고 수량 부족", ptStCountMap));
 		 		    } else {

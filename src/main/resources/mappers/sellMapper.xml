@@ -74,6 +74,7 @@
 		<result property="ptNm" column="PT_NM"/>
 		<result property="price" column="PRICE"/>
 		<result property="stCount" column="ST_COUNT"/>
+		<result property="sellNo" column="SELL_NO"/>
 		<result property="ptDescrip" column="PT_DESCRIP"/>
 		<result property="ptSize" column="PT_SIZE"/>			
 		<result property="ptAuthor" column="PT_AUTHOR"/>			
@@ -353,4 +354,18 @@
 	    WHERE SELL_NO = #{ sellNo }
 	      AND PT_NO = #{ ptNo }
 	</select>
+	
+	<update id="ptUpdate">
+		UPDATE
+		       TB_PT
+		<trim prefix="SET">
+	  		 PRICE = #{ price }
+		     , ST_COUNT = #{ stCount }
+	  	<if test="ptSize != null">
+	  	    , PT_SIZE = #{ ptSize }
+	  	</if>
+		</trim>
+	   WHERE PT_NO = #{ ptNo }
+	     AND SELL_NO = #{ sellNo }
+	</update>
 </mapper>

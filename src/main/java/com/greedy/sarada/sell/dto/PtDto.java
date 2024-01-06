@@ -13,6 +13,7 @@ public class PtDto {
 	private String ptNm;
 	private int price;
 	private int stCount;
+	private String sellNo;
 	private SellDto sell;
 	private String ptDescrip;
 	private String ptSize;

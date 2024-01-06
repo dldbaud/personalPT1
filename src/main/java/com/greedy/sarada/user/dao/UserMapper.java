@@ -63,7 +63,7 @@ public interface UserMapper {
 
 	int selectReplyTotalCount(String refListNo);
 	
-	List<ReplyDto> selectReplyList(SelectCriteria selectCriteria);
+	List<ReplyDto> selectReplyList(@Param("selectCriteria") SelectCriteria selectCriteria, @Param("refListNo") String refListNo);
 
 	ReplyDto replyCheck(@Param("user") UserDto user, @Param("listNo") String listNo);
 

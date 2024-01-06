@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -348,8 +349,26 @@ public class SellController {
     	PtDto ptManage = sellService.ptManage(ptNo,sellNo);
     	
     	model.addAttribute("ptManage" , ptManage);
-    	
+    	log.info(" 셀 컨트롤러 ptNo : {}", ptNo);
+    	log.info(" 셀 컨트롤러 sellNo : {}", sellNo);
     	log.info(" 셀 컨트롤러 ptManage : {}", ptManage);
     	return "/user/sell/ptManage";
     }
+    
+//    @PostMapping("/ptUpdate")
+//    public String ptUpdate(@ModelAttribute PtDto pt) {
+//    	
+//    	log.info("ptUpdate 확인{}", pt);
+//    	
+//    	return "redirect:/sell/ptManage?ptNo=" + pt.getPtNo() + "&sellNo=" + pt.getSellNo();
+//    }
+    
+  @PostMapping("/ptUpdate")
+  public @ResponseBody String ptUpdate(@RequestBody PtDto pt) {
+  	
+  	log.info("ptUpdate 확인{}", pt);
+  	sellService.ptUpdate(pt);
+  	
+  	return "sucess";
+  }
 }

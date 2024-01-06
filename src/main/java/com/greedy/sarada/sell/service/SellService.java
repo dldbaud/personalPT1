@@ -117,13 +117,10 @@ public class SellService {
 		// TODO Auto-generated method stub
 		return sellMapper.ptManage(ptNo, sellNo);
 	}
+	public void ptUpdate(PtDto pt) {
+		
+		int result = sellMapper.ptUpdate(pt);
+		
+	}
 	
-//	public List<PtDto> productDetail(String listNo) {
-//		
-//		return sellMapper.productDetail(listNo);
-//	}
-//	public List<ListDto> productDetail(String listNo) {
-//		
-//		return sellMapper.productDetail(listNo);
-//	}
 }

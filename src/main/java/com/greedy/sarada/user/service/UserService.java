@@ -133,7 +133,12 @@ public class UserService {
 		PayDto pay = new PayDto();
 		pay.setPayNo(request.getPayNo());
 		pay.setOrderNo(request.getOrderNo());
-		pay.setPayMethod(paymentResult.getPayMethod());
+		pay.setPayMethod(paymentResult.getPgProvider());
+		if("html5_inicis".equals(paymentResult.getPgProvider())) {
+			pay.setPayMethod(paymentResult.getCardName());
+		} else {
+			pay.setPayMethod(paymentResult.getPgProvider());
+		}
 		pay.setPayPrice(paymentResult.getAmount().intValue());
 		pay.setUserNo(loginUser.getUserNo());
 		
@@ -244,7 +249,7 @@ public class UserService {
 		log.info("[UserService] selectCriteria : {}", selectCriteria);
 		
 		/* 3. 요청 페이지와 검색 기준에 맞는 게시글을 조회해온다. */
-		List<ReplyDto> replyList = mapper.selectReplyList(selectCriteria);
+		List<ReplyDto> replyList = mapper.selectReplyList(selectCriteria, loadReply.getRefListNo());
 		log.info("[UserService] boardList : {}", replyList);
 		
 		Map<String, Object> replyListAndPaging = new HashMap<>();

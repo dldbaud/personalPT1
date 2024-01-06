@@ -16,6 +16,7 @@
         <div th:replace="user/myPage/myProfileSideBar.html"></div>
         <div class="myPageContents">
             <div class="mYConetentsBar">
+                <h2 style="text-align: center;">변경 전</h2>
                 <table>
                     <thead>
                         <tr>
@@ -23,26 +24,66 @@
                             <th>상품 이름</th>
                             <th>가격</th>
                             <th>재고</th>
-                            <th>변경</th>
+                            <th th:if="${ptManage != null and ptManage.category.categoryCode == 110}">사이즈</th>
                         </tr>
-                    </thead>
                     <tbody>
-                        <th:block th:if="${ptLists != null}" th:each="pt : ${ptLists}">
+                        <th:block th:if="${ptManage != null}" th:each="pt : ${ptManage}">
                             <tr>
                                 <td th:text="${pt.ptNo}"></td>
                                 <td th:text="${pt.ptNm}"></td>
 
                                 <td th:text="${pt.price}"></td>
                                 <td th:text="${pt.stCount}"></td>
-                                <td style="text-align: center;">
-                                    <button class="btn" id="refundBtn"
-                                    th:text ="변경"  th:onclick="'location.href=\'/sell/ptManage?ptNo=' + @{${pt.ptNo}} + '&sellNo=' + @{${pt.sell.sellNo}} + '\''">
-                                    </button>
-                                </td>
+                                <td th:if="${ptManage != null and ptManage.category.categoryCode == 110}"
+                                    th:text="${pt.ptSize}"></td>
                             </tr>
                         </th:block>
                     </tbody>
+                    </thead>
                 </table>
+                <h2 style="text-align: center;">변경하기</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>상품 번호</th>
+                            <th>상품 이름</th>
+                            <th style="width: 100px;">가격</th>
+                            <th style="width: 100px;">재고</th>
+                            <th th:if="${ptManage != null and ptManage.category.categoryCode == 110}">사이즈</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:if="${ptManage != null}" th:each="pt : ${ptManage}">
+                            <tr>
+                                <td th:text="${pt.ptNo}"></td>
+                                <td th:text="${pt.ptNm}"></td>
+
+                                <td>
+                                    <input type="number" name="price" min="0" required style="width: 100px;" th:value="${pt.price}"/>
+                                </td>
+                                <td>
+                                    <input type="number" name="stCount" min="0" required style="width: 100px;" th:value="${pt.stCount}"/>
+                                </td>
+                                <td th:if="${ptManage != null and ptManage.category.categoryCode == 110}">
+                                    <select name="ptSize">
+                                        <option value="" selected></option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <input type="hidden" name="ptNo" th:value="${pt.ptNo}" />
+                            <input type="hidden" name="sellNo" th:value="${pt.sell.sellNo}" />
+                        </th:block>
+                    </tbody>
+                </table>
+                <div style="display: flex; justify-content: center; text-align: center;" >
+                    <input
+                        style="background-color: #217dbb; border: none; color: white; width: 80px; height: 50px; margin-top: 20px;"
+                        type="button" id="ptUpdateBtn" value="변경하기">
+                </div>
             </div>
         </div>
     </div>

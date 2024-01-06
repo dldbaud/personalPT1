@@ -48,6 +48,8 @@ public interface SellMapper {
 
 	PtDto ptManage(String ptNo, String sellNo);
 
+	int ptUpdate(PtDto pt);
+
 //	List<PtDto> productDetail(String listNo);
 //	List<ListDto> productDetail(String listNo);
 
