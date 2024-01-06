@@ -126,4 +126,50 @@ window.addEventListener('load', function () {
             location.href = "/user/myRefundList";
         }
     }
+
+    //재고 조절
+    if(document.getElementById('ptUpdateBtn')) {
+
+        const $ptUpdateBtn = document.getElementById('ptUpdateBtn');
+
+        $ptUpdateBtn.onclick = function() {
+            console.log('확인1');
+            ptUpdate();
+        }
+
+        function ptUpdate(){
+            
+            
+            const $ptSize = document.getElementsByName('ptSize')[0];
+            console.log(ptSize);
+            var ptSize;
+            if (ptSize) {
+                ptSize = $ptSize[0].value;
+                console.log(ptSize);
+            }
+            const price = document.getElementsByName('price')[0].value;
+            const stCount = document.getElementsByName('stCount')[0].value;
+            const ptNo = document.getElementsByName('ptNo')[0].value;
+            const sellNo = document.getElementsByName('sellNo')[0].value;
+            console.log(price);
+            console.log(stCount);
+            const ptList = { ptSize, price, stCount, ptNo, sellNo}
+            const json = JSON.stringify(ptList);
+            $.ajax({
+                url : `/sell/ptUpdate`,
+                type : "POST",
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                data: json,
+                error: function (xhr) {
+                    console.log(xhr);
+                },
+				success : function(data) {
+                    alert('변경 완료');
+                    location.reload();
+                }
+            });
+        }
+    }
 });

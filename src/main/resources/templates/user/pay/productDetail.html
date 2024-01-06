@@ -15,11 +15,11 @@
     <input type="hidden" id="outBox"></input>
     <input type="hidden" id="productDetail"></input>
     <div class="wrapper title">
-        <th:block th:if="${sList.refCategoryCode.refCategory == 6}">
+        <th:block th:if="${sList.refCategoryCode.refCategory != 4}">
             <div th:replace="user/pay/foodDetail.html"></div>
         </th:block>
 
-        <th:block th:if="${sList.refCategoryCode.refCategory != 6 && sList.refCategoryCode.refCategory != 4}">
+        <th:block th:if="${sList.refCategoryCode.refCategory == 4}">
             <div th:replace="user/pay/ptDetail.html"></div>
         </th:block>
     </div>
