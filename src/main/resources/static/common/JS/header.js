@@ -45,7 +45,7 @@ window.onload = function () {
                     headers: {
                         'Content-Type': 'application/json; charset=UTF-8'
                     },
-                    //fetch는 data ajax는 body
+                    //ajax는 data fetch는 body
                     body: JSON.stringify({ id: id })
                 })  //펫치에서만 result.text() 사용 데이터를 문자열로 바로 꺼낼떄
                     .then(result => result.text())

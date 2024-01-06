@@ -341,6 +341,27 @@ window.addEventListener('load', function () {
             handlePaymentResponse(rsp);
         });
     }
+
+    function requestPayment1(pg, payMethod) {
+        console.log($finalPrice);
+        console.log(pg);
+        console.log(payMethod);
+        IMP.request_pay({
+            pg: pg,
+            pay_method: payMethod,
+            merchant_uid: 'ca' + new Date().getTime(),
+            name: '카드결제',
+            amount: $finalPrice,
+            buyer_email: $id,
+            buyer_name: $userNm,
+            buyer_tel: $phone,
+            buyer_addr: $address,
+            buyer_postcode: '개인',
+            // m_redirect_url: 'redirect url'
+        }, function (rsp) {
+            handlePaymentResponse(rsp);
+        });
+    }
     
     function handlePaymentResponse(rsp) {
         if (rsp.success) {
@@ -395,6 +416,7 @@ window.addEventListener('load', function () {
             msg = '결제에 실패하였습니다.';
             msg += '에러내용 : ' + rsp.error_msg;
             //실패시 이동할 페이지
+            console.log(rsp);
             console.log(rsp.error_msg);
             alert('결제를 취소하셨습니다.');
         }
@@ -447,12 +469,11 @@ window.addEventListener('load', function () {
     function loadReply() {
 		
         let page = 1;
-        const listNo = document.getElementById('listNo').value;
+        const refListNo = document.getElementById('listNo').value;
         
         $.ajax({
-            url : "/user/loadReply?refListNo=" + listNo + "&page=" + page,
+            url : "/user/loadReply?refListNo=" + refListNo + "&page=" + page,
         })
-        // .then(result => result.json())
         .then(data => {
             console.log(data);
             makeReply(data);
@@ -616,6 +637,6 @@ window.addEventListener('load', function () {
     }
     
     function cardEvent() {
-        requestPayment("html5_inicis.INIPayTest.TC0ONETIME", "card");
+        requestPayment1("html5_inicis", "card");
     }
 });
