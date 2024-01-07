@@ -245,16 +245,23 @@ window.addEventListener('load', function () {
     if(document.getElementById('paymentDiv')){
 
         const $paymentBtn = document.getElementById('paymentBtn');
+        const $id = document.getElementById('userId');
 
         $paymentBtn.addEventListener('click', function(){
             console.log('결제 클릭');
-            //typeof === 쓸꺼면 typeof 써야함
-            if($finalPrice == 'undefined' || $finalPrice == null) {
-                console.log('무시안당함');
-                alert("결제 금액을 확인해주세요");
+            // console.log8($id);
+            if(!($id)) {
+                alert("로그인을 해주세요");
+                return;
             } else {
-                console.log('무시당함');
-                paymentDivEvent();
+                //typeof === 쓸꺼면 typeof 써야함
+                if($finalPrice == 'undefined' || $finalPrice == null) {
+                    console.log('무시안당함');
+                    alert("결제 금액을 확인해주세요");
+                } else {
+                    console.log('무시당함');
+                    paymentDivEvent();
+                }
             }
         });
     }

@@ -396,7 +396,7 @@ window.onload = function () {
                     $categoryCode.empty();
                 }
                 $.ajax({
-                    url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
+                    url: `/user/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
                     success: function (data) {
                         console.log(data);
                         startListView(data.data.boardList);
@@ -411,7 +411,7 @@ window.onload = function () {
                     $categoryCode.empty();
                 }
                 $.ajax({
-                    url: `/admin/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
+                    url: `/user/listView?page=${currentPage}&searchCondition=${searchCondition}&searchValue=${searchValue}`,
                     success: function (data) {
                         console.log(data);
                         startListView(data.data.boardList);
@@ -467,7 +467,7 @@ window.onload = function () {
             console.log('디테일 클릭확인');
             console.log(listNo);
     
-            location.href = `/sell/productDetail?listNo=${listNo}&page=${page}`;
+            location.href = `/user/productDetail?listNo=${listNo}&page=${page}`;
         }
     
         let isFetching = false;

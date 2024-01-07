@@ -16,7 +16,7 @@
       <div class="myPageContents">
         <div class="mYConetentsBar">
             <th:block th:if="${ sellResist == null}">
-                <form action="/sell/Regist" method="post">
+                <form action="/user/sellRegist" method="post">
                     <table>
                         <tr>
                             <th>상호 (영업명)</th>
@@ -69,7 +69,7 @@
             <th:block th:if="${ sellResist != null and sellResist.sellStatus == '승인'}">
 
                 <h3 align="center">사업자 등록 정보</h3>
-                <form action="/sell/Regist" method="post">
+                <form action="/user/sellRegist" method="post">
                     <table>
                         <tr>
                             <th>상호 (영업명)</th>
@@ -115,7 +115,7 @@
             <th:block th:if="${ sellResist != null and sellResist.sellStatus == '대기'}">
 
             <h3 align="center">사업자 신청중</h3>
-            <form action="/sell/Regist" method="post">
+            <form action="/user/sellRegist" method="post">
                 <table>
                     <tr>
                         <th>상호 (영업명)</th>

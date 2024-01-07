@@ -125,31 +125,6 @@ public class AdminController {
     	return ResponseEntity.ok(result);
     }
     
-    /* 메인 페이지 이미지 비동기 로드*/  
-    @GetMapping(value = "/listView", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<ResponseDto> getListView(
-  		  @RequestParam(defaultValue="1") int page, 
-  			@RequestParam(required=false) String searchCondition, 
-  			@RequestParam(required=false) String searchValue
-  		  ) {
-   
-        Map<String, String> searchMap = new HashMap<>();
-  		searchMap.put("searchCondition", searchCondition);
-  		searchMap.put("searchValue", searchValue);
-  		
-  		log.info("[AdminController] searchMap : {}", searchMap);
-  		
-  		Map<String, Object> boardListAndPaging = adminService.findListViewPageing(page,searchMap);
-        // 이미지 파일 경로 추가
-//        for (ListDto item : boardListAndPaging) {
-//        	FileDto file = item.getFileMain();
-//        	file.setMainFilePath(file.getMainFilePath() + file.getSavedFileNm());
-//        	item.setFileMain(file);
-//        }
-        
 
-  		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", boardListAndPaging));
-
-    }
     
 }

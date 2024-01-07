@@ -30,7 +30,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 
     <div class="countBox">
         <div th:each="pt : ${sPtList}">
-            <div th:if="${pt.category.categoryCode == 114}" th:class="${pt.stCount == 0} ? 'disabled' : ''">
+            <div th:if="${pt.category.categoryCode != 114}" th:class="${pt.stCount == 0} ? 'disabled' : ''">
                 <label th:for="${'checkBox' + pt.ptNo}" th:text="${pt.ptNm}"></label>
                 <input type="checkbox" th:id="${'checkBox' + pt.ptNo}" class="checkBox" name="orderCount" th:value="${pt.price}" th:data-ptno="${pt.ptNo}" th:data-ptnm="${pt.ptNm}" th:disabled = "${pt.stCount == 0}">
                 <br>
@@ -72,7 +72,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
                         <!-- <img class="imgPay" src="/user/pay/iMAGES/회색통장.png"></img>
                         <img class="off" src="/user/pay/iMAGES/컬러통장.png"></img> -->
                     </span>
-                <div  class="text1">계좌이체</div>
+                <div  class="text1">카드결제</div>
             </button>
             </li>
         </ul>

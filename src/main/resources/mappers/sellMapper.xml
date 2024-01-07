@@ -211,7 +211,33 @@
 	      JOIN TB_PT B ON (B.PT_NO = A.PT_NO)
 	     WHERE LIST_NO = #{ listNo }
 	</select >
-
+	
+	<insert id="sellRegist">
+		INSERT
+		    INTO TB_SELL
+		( SELL_NO
+		, USER_NO
+		, SELL_NM
+		, SELL_ADDRESS
+		, SELL_CATEGORY_NM
+		, SELL_TYPE
+		, SELL_PHONE
+		, SELL_STATUS
+		, SELL_REQ_DATE
+		, SELLER_NO
+		)VALUES
+		( 'SE'||(SEQ_SELL.NEXTVAL)
+		, #{ user.userNo}
+		, #{ sellNm }
+		, #{ sellAddress }
+		, #{ sellCategoryNm }
+		, #{ sellType }
+		, #{ sellPhone }
+		, #{ sellStatus }
+		, SYSDATE
+		, #{ sellerNo }
+		)
+	</insert>
 	<insert id="insertSellList">
 		INSERT 
 			INTO TB_LIST

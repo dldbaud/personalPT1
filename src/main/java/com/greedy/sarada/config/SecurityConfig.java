@@ -42,7 +42,9 @@ public class SecurityConfig {
 			return http
         		.csrf().disable()
                 .authorizeRequests()
-//                .antMatchers("/board/**", "/thumbnail/**", "/member/update", "/member/delete").hasRole("MEMBER")
+                .antMatchers("/sell/**", "/admin/**").hasRole("ADMIN")
+                .antMatchers("/sell/**").hasRole("SELL")
+//                .antMatchers("/user/findId").hasRole("USER")
                 // 관리자만 사용 가능한 기능은 현재는 없음
                 .anyRequest().permitAll()
                 .and()

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.greedy.sarada.admin.service.AdminService;
+import com.greedy.sarada.common.exception.sell.SellRegistException;
 import com.greedy.sarada.common.exception.user.InsertReplyException;
 import com.greedy.sarada.common.exception.user.MemberModifyException;
 import com.greedy.sarada.common.exception.user.MemberRegistException;
@@ -35,7 +38,10 @@ import com.greedy.sarada.common.exception.user.insertOrderException;
 import com.greedy.sarada.common.exception.user.insertOrderItemException;
 import com.greedy.sarada.common.exception.user.insertPayException;
 import com.greedy.sarada.common.paging.ResponseDto;
+import com.greedy.sarada.sell.dto.CategoryDto;
+import com.greedy.sarada.sell.dto.RefCategoryDto;
 import com.greedy.sarada.sell.dto.SellDto;
+import com.greedy.sarada.sell.service.SellService;
 import com.greedy.sarada.user.dto.OrderDto;
 import com.greedy.sarada.user.dto.PayCompleteRequest;
 import com.greedy.sarada.user.dto.RefundDto;
@@ -62,15 +68,20 @@ public class UserController {
 	    private final UserService userService;
 	    private final AuthenticationService authenticationService;
 	    private final MailService mailService;
+	    private final SellService sellService;
+	    private final AdminService adminService;
+	    
 		
 	    public UserController(PasswordEncoder passwordEncoder, MessageSourceAccessor messageSourceAccessor, UserService userService, AuthenticationService authenticationService
-	    		,MailService mailService
+	    		,MailService mailService, SellService sellService, AdminService adminService
 	    		) {
 	    	this.passwordEncoder = passwordEncoder;
 	    	this.messageSourceAccessor = messageSourceAccessor;
 	    	this.userService = userService;
 	    	this.authenticationService = authenticationService;
 	    	this.mailService = mailService;
+	    	this.sellService = sellService;
+	    	this.adminService = adminService;
 	    }
 	    
 	    @GetMapping("/test/login")
@@ -580,6 +591,121 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+    @GetMapping("/productDetail")
+    public String productDetail(@RequestParam String listNo, 
+    		@RequestParam(defaultValue="1") int page,
+    		@AuthenticationPrincipal UserDto user,
+    		Model model) {
+    	
+    	ReplyDto loadReply = new ReplyDto();
+    	loadReply.setRefListNo(listNo);
+    	
+    	log.info(listNo);
+    	Map<String, Object> productDetails = sellService.productDetails(listNo);
+    	Map<String, Object> replyListAndPaging = userService.selectReplyList(loadReply, page);
+    	model.addAttribute("replylist", replyListAndPaging.get("replyList"));
+    	model.addAttribute("paging", replyListAndPaging.get("paging"));
+    	
+    	if(user != null) {
+    		ReplyDto replyCheck = userService.replyCheck(listNo, user);
+    		OrderDto order = new OrderDto();
+    		order.setUserNo(user.getUserNo());
+    		order.setListNo(listNo);
+    		List<OrderDto> orderCheck = userService.orderCheck(order);
+    		
+    		model.addAttribute("replyCheck", replyCheck);
+    		model.addAttribute("orderCheck", orderCheck);
+    		log.info("[sellController] replyCheck : {}", replyCheck);
+    		log.info("[sellController] orderCheck : {}", orderCheck);
+    	}
+    	
+    	model.addAttribute("sList", productDetails.get("sList"));
+    	model.addAttribute("sPtList", productDetails.get("sPtList"));
+    	model.addAttribute("sFilelist", productDetails.get("sFilelist"));
+    	
+    	log.info("[sellController] productDetail{}", productDetails);
+    	log.info("[sellController] replyListAndPaging : {}", replyListAndPaging);
+    	return "user/pay/productDetail";
+    }
+    
+    /* 메인 페이지 이미지 비동기 로드*/  
+    @GetMapping(value = "/listView", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<ResponseDto> getListView(
+  		  @RequestParam(defaultValue="1") int page, 
+  			@RequestParam(required=false) String searchCondition, 
+  			@RequestParam(required=false) String searchValue
+  		  ) {
+   
+        Map<String, String> searchMap = new HashMap<>();
+  		searchMap.put("searchCondition", searchCondition);
+  		searchMap.put("searchValue", searchValue);
+  		
+  		log.info("[AdminController] searchMap : {}", searchMap);
+  		
+  		Map<String, Object> boardListAndPaging = adminService.findListViewPageing(page,searchMap);
+        // 이미지 파일 경로 추가
+//        for (ListDto item : boardListAndPaging) {
+//        	FileDto file = item.getFileMain();
+//        	file.setMainFilePath(file.getMainFilePath() + file.getSavedFileNm());
+//        	item.setFileMain(file);
+//        }
+        
+
+  		return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK, "조회 성공", boardListAndPaging));
+
+    }
+    
+	/* 사업자 등록 페이지 */
+	@GetMapping("/sellRegist")
+    public String sellSellRegist(@AuthenticationPrincipal UserDto user,
+    		Model model) {
+    	
+    	SellDto sellResist =sellService.findSellRegist(user);
+    	if(sellResist != null) {
+    		String[] address = sellResist.getSellAddress().split("\\$");    		
+    		model.addAttribute("address", address);
+    	}
+
+    	model.addAttribute("sellResist", sellResist);
+    	
+    	log.info("[판매자 신청 정보 확인] : {}", sellResist);
+    	return "user/sell/sellRegist";
+    }
 	
+	/* 판매자 등록 */
+	@PostMapping("/sellRegist")
+	public String sellRegist(@ModelAttribute SellDto sellUser, @RequestParam String zipCode,
+			@RequestParam String address1, @RequestParam String address2, @AuthenticationPrincipal UserDto loginUser,
+			RedirectAttributes rttr) throws SellRegistException {
+
+		String address = zipCode + "$" + address1 + "$" + address2;
+		String status = "대기";
+		sellUser.setSellAddress(address);
+		sellUser.setSellStatus(status);
+		sellUser.setUser(loginUser);
+
+		log.info("[sellController] regist request sell : {}", sellUser);
+
+		sellService.registUser(sellUser);
+
+		rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("sell.regist"));
+
+		return "redirect:/";
+	}
+	
+	/*상위카테고리 코드 조회*/
+	@GetMapping(value = "/RefCategory", produces = "application/json; charset=UTF-8")
+	public @ResponseBody List<RefCategoryDto> findRefCategoryList() {
+		
+		return sellService.findAllRefCategory();
+	}
+
+	@GetMapping(value = "/category/{categoryCode}", produces = "application/json; charset=UTF-8")
+	public @ResponseBody List<CategoryDto> findCategoryList(@PathVariable String categoryCode) {
+		
+		log.info("categoryCode{}", categoryCode);
+		
+		return sellService.findAllCategoryList(categoryCode);
+	}
 }
 

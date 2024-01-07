@@ -27,12 +27,12 @@ window.addEventListener('load', function () {
     if(document.getElementById("sellRegist")){
         
         const $sellRegist = document.getElementById("sellRegist");
-        if (pathname === '/sell/sellRegist') {
+        if (pathname === '/user/sellRegist') {
             $sellRegist.style.color = 'blue';
           }
         $sellRegist.onclick = function() {
             console.log("야")
-            location.href="/sell/sellRegist";
+            location.href="/user/sellRegist";
         }
 
     }
@@ -67,7 +67,7 @@ window.addEventListener('load', function () {
         
             if (document.getElementById("sellCategory")) {
                 $.ajax({
-                    url: "/sell/RefCategory",
+                    url: "/user/RefCategory",
                     //응답 데이타 그대로 전송
                     success: function (data) {
                         console.log(data); //배열 전송 
