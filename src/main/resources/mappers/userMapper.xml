@@ -76,6 +76,7 @@
 		<result property="orderNo" column="ORDER_NO"/>
 		<result property="orderCount" column="ORDER_COUNT"/>
 		<result property="ptNm" column="PT_NM"/>
+		<result property="ptSize" column="PT_SIZE"/>
 		<association property="pt" resultMap="ptResultMap" />
 	</resultMap>
 	
@@ -89,6 +90,7 @@
 		<result property="ptAuthor" column="PT_AUTHOR"/>			
 		<result property="listNo" column="LIST_NO"/>				
 		<result property="ptBundle" column="PT_BUNDLE"/>
+		<association property="category" resultMap="sellCategoryResultMap" />
 	</resultMap>
 	
 	<resultMap id="refundResultMap" type="com.greedy.sarada.user.dto.RefundDto">
@@ -111,6 +113,12 @@
 		<result property="replyDate" column="REPLY_DATE"/>
 		
 		<association property="writer" resultMap="userResultMap"/>
+	</resultMap>
+	
+	<resultMap id="sellCategoryResultMap" type="com.greedy.sarada.sell.dto.CategoryDto">
+		<id property="categoryCode" column="CATEGORY_CODE"/>
+		<result property="categoryName" column="CATEGORY_NAME"/>
+		<result property="refCategory" column="REF_CATEGORY"/>
 	</resultMap>
 	
 	<select id="findByUserId" resultMap="userResultMap">
@@ -253,7 +261,7 @@
 		  AND ID = #{ id }
 	</update>
 	
-	<select id="findByUserById" resultMap="userResultMap">
+	<select id="findByUserById" resultType="String">
 		SELECT
 		       ID
 		  FROM TB_USER
@@ -355,13 +363,16 @@
 			 , B.PT_NO
 	         , B.ORDER_COUNT
 			 , B.PT_NM
+			 , B.PT_SIZE
 			 , C.PRICE
 			 , D.SAVED_FILE_NM
 			 , D.FILE_PATH
 			 , D.MAIN_FILE_PATH
+			 , E.REF_CATEGORY
 		  FROM TB_ORDER A
 		  JOIN ORDER_ITEM B ON (A.ORDER_NO = B.ORDER_NO)
 		  JOIN TB_PT C ON (B.PT_NO = C.PT_NO)
+		  JOIN TB_CATEGORY E ON(C.CATEGORY_CODE = E.CATEGORY_CODE)
 		  LEFT JOIN TB_FILE D ON (C.PT_NO = D.PT_NO)
 		 WHERE A.USER_NO = #{ userNo }
 		   AND A.ORDER_NO = #{ orderNo }
@@ -381,12 +392,14 @@
 		, PT_NO
 		, ORDER_COUNT
 		, PT_NM
+		, PT_SIZE
 		)VALUES
 		( 'OR'||(SEQ_ORDERITEM.NEXTVAL)
 		, #{ orderNo }
 		, #{ ptNo }
 		, #{ orderCount }
 		, #{ ptNm }
+		, #{ ptSize }
 		)
 	</insert>
 	<insert id="insertOrder">

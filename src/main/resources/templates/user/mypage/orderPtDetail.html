@@ -21,6 +21,9 @@
                   <tr>
                     <th>주문날짜</th>
                     <th>상품이름</th>
+                    <th:block th:if="${orderPtDetail.orderItem.size() > 0}">
+                      <th th:if="${orderPtDetail.orderItem[0].ptSize != null}">사이즈</th>
+                  </th:block>
                     <th>가격</th>
                     <th>수량</th>
                   </tr>
@@ -28,10 +31,13 @@
                 <tbody>
                     <!-- iterStat.first 인덱스.첫번째 참 0-1방지 -->
                     <th:block th:each="orderItem, iterStat : ${orderPtDetail.orderItem}">
-                        <tr th:if="${iterStat.first or orderItem.ptNm != orderPtDetail.orderItem[iterStat.index - 1].ptNm}">
+                        <tr th:if="${iterStat.first or orderItem.ptNm != orderPtDetail.orderItem[iterStat.index - 1].ptNm or orderItem.ptSize != orderPtDetail.orderItem[iterStat.index - 1].ptSize}">
                             <td th:text="${orderPtDetail.orderDate}"></td>
                             <td th:text="${orderItem.ptNm}"></td>
-                            <td th:text="${orderItem.pt.price}"></td>
+                            <th:block th:if="${orderItem.ptSize != null}">
+                              <td th:text="${orderItem.ptSize}"></td>
+                            </th:block>
+                            <td th:text="${orderItem.pt.price * orderItem.orderCount}"></td>
                             <td th:text="${orderItem.orderCount}"></td>
                         </tr>
                     </th:block>

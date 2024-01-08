@@ -68,7 +68,7 @@
 
             <th:block th:if="${ sellResist != null and sellResist.sellStatus == '승인'}">
 
-                <h3 align="center">사업자 등록 정보</h3>
+                <h3 align="center">사업자 신청 현황 : 승인</h3>
                 <form action="/user/sellRegist" method="post">
                     <table>
                         <tr>
@@ -114,7 +114,7 @@
 
             <th:block th:if="${ sellResist != null and sellResist.sellStatus == '대기'}">
 
-            <h3 align="center">사업자 신청중</h3>
+            <h3 align="center">사업자 신청 현황 : 대기</h3>
             <form action="/user/sellRegist" method="post">
                 <table>
                     <tr>
@@ -157,6 +157,53 @@
                 </table>
             </form>
         </th:block>
+
+        <th:block th:if="${ sellResist != null and sellResist.sellStatus == '거절'}">
+
+        <h3 align="center">사업자 신청 현황 : 거절</h3>
+        <form action="/user/sellRegist" method="post">
+            <table>
+                <tr>
+                    <th>상호 (영업명)</th>
+                    <td colspan="3"><input class="sellInput" type="text" name="sellNm" th:value="${sellResist.sellNm}" readonly></td>
+                </tr>
+                
+                <tr>
+                    <th>사업자 등록번호</th>
+                    <td colspan="3"><input class="sellInput" type="text" name="sellerNo" th:value="${sellResist.sellerNo}" readonly></td>
+                </tr>
+                
+                <tr>
+                    <th>업종 및 업태</th>
+                    <td colspan="3"><input id="sellCategory" class="sellInput" th:value="${sellResist.sellCategoryNm}"></input></td>
+                </tr>
+                
+                <tr>
+                    <th>사업자 종류</th>
+                    <td colspan="3"><input id="sellCategory" class="sellInput" th:value="${sellResist.sellType}"></input></td>
+                </tr>
+                
+                <tr>
+                    <th>사업자 연락처</th>
+                    <td colspan="3"><input class="sellInput" type="tel" name="sellPhone" th:value="${sellResist.sellPhone}"></input></td>
+                </tr>
+                <tr>
+                    <th>우편번호</th>
+                    <td><input class="sellInput" type="text" name="zipCode" id="zipCode" th:value="${ #lists.size(address) > 0? address[0]: '' }"/><td>
+                </tr>
+                <tr>
+                    <th>주소</th>
+                    <td colspan="2"><input class="sellInput" type="text" name="address1" id="address1"   th:value="${ #lists.size(address) > 1 ? address[1] : '' }"/><td>
+                </tr>
+                <tr>
+                    <th>상세주소</th>
+                    <td colspan="2"><input class="sellInput" type="text" name="address2" id="address2" th:value="${ #lists.size(address) > 2 ? address[2] : '' }"/><td>
+    
+                </tr>
+            </table>
+            <button type="submit">제출</button>
+        </form>
+    </th:block>
         </div>
         </div>
     </div>

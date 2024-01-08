@@ -273,7 +273,7 @@ public class UserController {
 	    }
 	    
 	    @GetMapping("/refund")
-	    public String payRefund(@RequestParam(value="orderNo") String orderNo
+	    public String payRefund(@AuthenticationPrincipal UserDto user, @RequestParam(value="orderNo") String orderNo
 	    		,@RequestParam(value="userNo") String userNo
 	    		,@RequestParam(value="amount") String amount
 	    		,RedirectAttributes rttr
@@ -317,7 +317,7 @@ public class UserController {
 				refund.setOrderNo(orderNo);
 				refund.setRefundPrice(refundMoney);
 				refund.setListNm(listNm);
-				refund.setUserNo(userNo);
+				refund.setUserNo(user.getUserNo());
 				userService.insertRefund(refund);
 				rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("refund.success"));
 				return "redirect:/";
@@ -374,7 +374,7 @@ public class UserController {
 			String result = "";
 			if(id != null) {
 				model.addAttribute("id", id);
-				result = "/user/login/findIdResult";
+				result = "user/login/findIdResult";
 			} else {
 				rttr.addFlashAttribute("message", messageSourceAccessor.getMessage("user.noId"));
 				result = "redirect:/user/findId";

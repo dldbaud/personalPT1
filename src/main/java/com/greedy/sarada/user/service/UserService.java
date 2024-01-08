@@ -122,7 +122,7 @@ public class UserService {
 			orderItemDto.setPtNm(pt.getPtNm());
 			orderItemDto.setPtNo(pt.getPtNo());
 			orderItemDto.setOrderCount(pt.getStCount());
-			
+			orderItemDto.setPtSize(pt.getPtSize());
 			int rsesult = mapper.insertOrderItem(orderItemDto);
 			
 			if(!( rsesult > 0)) {
@@ -336,7 +336,8 @@ public class UserService {
 			//현재 상품의 number가 0일 경우에만 
 			if(number <= 0) {
 				log.info("[UserService] number :{}", number);
-				ptStCountMinus.add(pt.getPtNm() + "의 상품 재고가 부족합니다.");
+				int count = pt.getStCount() + number;
+				ptStCountMinus.add(pt.getPtNm() + "의 상품 재고가 부족합니다. 남은 수량 : " + count);
 			}
 		}
 		

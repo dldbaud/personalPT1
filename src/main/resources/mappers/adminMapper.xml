@@ -148,12 +148,12 @@
         SELECT 
         	   COUNT(*)
           FROM TB_LIST A
+        <if test="searchCondition == 'title'">
           JOIN TB_REF_CATEGORY B ON(A.REF_CATEGORY_CODE = B.REF_CATEGORY)
           JOIN TB_CATEGORY C ON(B.REF_CATEGORY = C.REF_CATEGORY)
-        <if test="searchCondition == 'title'">
         <where>
             <if test="searchCondition == 'title'">
-                C.CATEGORY_NAME '%' || #{ searchValue } || '%'
+                C.CATEGORY_NAME LIKE '%' || #{ searchValue } || '%'
             </if>
         </where>        
         </if>

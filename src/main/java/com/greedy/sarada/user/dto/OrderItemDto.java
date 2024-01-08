@@ -14,5 +14,6 @@ public class OrderItemDto {
 	private String ptNo;
 	private int orderCount;
 	private String ptNm;
+	private String ptSize;
 	private PtDto pt;
 }

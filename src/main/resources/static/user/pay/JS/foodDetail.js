@@ -93,6 +93,7 @@ window.addEventListener('load', function () {
                     ptNo: checkbox.getAttribute('data-ptno'),
                     ptNm: checkbox.getAttribute('data-ptnm'),
                     price: checkbox.getAttribute('value'),
+                    ptSize: checkbox.getAttribute('data-ptSize'),
                     stCount: $numberBoxs[index].getAttribute('value')
                 };
                 

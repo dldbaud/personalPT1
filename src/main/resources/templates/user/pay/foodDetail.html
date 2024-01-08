@@ -30,9 +30,10 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
 
     <div class="countBox">
         <div th:each="pt : ${sPtList}">
-            <div th:if="${pt.category.categoryCode != 114}" th:class="${pt.stCount == 0} ? 'disabled' : ''">
+            <div th:if="${pt.category.categoryCode != 104}" th:class="${pt.stCount == 0} ? 'disabled' : ''">
                 <label th:for="${'checkBox' + pt.ptNo}" th:text="${pt.ptNm}"></label>
-                <input type="checkbox" th:id="${'checkBox' + pt.ptNo}" class="checkBox" name="orderCount" th:value="${pt.price}" th:data-ptno="${pt.ptNo}" th:data-ptnm="${pt.ptNm}" th:disabled = "${pt.stCount == 0}">
+                <span th:if="${pt.category.categoryCode == 110 OR pt.category.categoryCode == 101 OR pt.category.categoryCode == 111}" th:text="${pt.ptSize}"></span>
+                <input type="checkbox" th:id="${'checkBox' + pt.ptNo}" class="checkBox" name="orderCount" th:value="${pt.price}" th:data-ptno="${pt.ptNo}" th:data-ptnm="${pt.ptNm}" th:data-ptSize="${pt.ptSize}" th:disabled = "${pt.stCount == 0}">
                 <br>
                 <br>
                 <label th:for="${'ptCount' + pt.ptNo}">수량 : </label>
@@ -116,7 +117,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
             </div>
         </div>
         <th:block sec:authorize="isAuthenticated()">
-            <th:block th:if="${replyCheck == null and orderCheck != null}">
+            <th:block th:if="${replyCheck == null and not orderCheck.isEmpty()}">
                 <div class="replyInsert">
                     <textarea class="replyWrite"  id="replyWrite" placeholder="댓글을 입력하세요"></textarea>
                     <button id="replyWriteBtn">댓글 작성</button>

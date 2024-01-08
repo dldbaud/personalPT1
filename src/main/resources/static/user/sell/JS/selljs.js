@@ -42,7 +42,7 @@ window.addEventListener('load', function () {
 
             if (document.getElementById("sellCategory")) {
                 $.ajax({
-                    url: "/sell/RefCategory",
+                    url: "/user/RefCategory",
                     //응답 데이타 그대로 전송
                     success: function (data) {
                         console.log(data); //배열 전송 
@@ -171,7 +171,7 @@ window.addEventListener('load', function () {
         /* 하위 카테고리 코드 조회 */
         function categoryView(categoryCode) {
             $.ajax({
-                url: `/sell/category/${categoryCode}`,
+                url: `/user/category/${categoryCode}`,
                 //응답 데이타 그대로 전송
                 success: function (data) {
                     console.log(data); //배열 전송 

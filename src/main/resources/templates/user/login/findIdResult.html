@@ -18,7 +18,8 @@
     
     <div class="wrapper">
         <form class="login2" action="/user/findId" method="post">
-            <input type="text" class="id" name="id" th:value="[[${ id }]]" readonly/>
+            <h3>아이디</h3>
+            <input type="text" class="id" name="id" th:value="${id}" readonly/>
         </form>
     </div>
 </body>
